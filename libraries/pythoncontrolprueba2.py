@@ -37,7 +37,7 @@ from IPython import display
 from google.colab import output
 output.enable_custom_widget_manager()
 
-def funcionplotea2():
+def funcionplotea():
   fig = plt.figure(figsize = (5,5))
   ax = fig.add_subplot(1,1,1)
   ax.plot([0,1],[0,1])
