@@ -7,14 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1KpayN8S1upxnwpr-v3RrgGGA_38xu9cg
 """
 
-# Commented out IPython magic to ensure Python compatibility.
-#Clonar github con los repositorios
-!git clone https://github.com/SIMPHYSICLAB/simphysiclab
-import simphysiclab.libraries.SIMPHYSICLAB_SISTEMAS as SIS
-import simphysiclab.libraries.SIMPHYSICLAB_LDR as LDR
-import simphysiclab.libraries.SIMPHYSICLAB_PID as PID
-print("Librerias de github instaladas...")
-
 #Standard Python libraries:
 import math
 import random
