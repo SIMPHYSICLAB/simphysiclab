@@ -8,6 +8,12 @@ Original file is located at
 """
 
 # Commented out IPython magic to ensure Python compatibility.
+#Clonar github con los repositorios
+!wget {f"https://raw.githubusercontent.com/SIMPHYSICLAB/simphysiclab/main/libraries/simphysiclab_sistemas.py"}
+!wget {f"https://raw.githubusercontent.com/SIMPHYSICLAB/simphysiclab/main/libraries/simphysiclab_ldr.py"}
+import simphysiclab_sistemas as SIS
+import simphysiclab_ldr as LDR
+
 #Standard Python libraries:
 import math
 import random
@@ -37,11 +43,11 @@ import ipywidgets as widgets
 """# **FUNCIONES PARA LA IMPLEMENTACION DE CONTROLADORES TIPO P, TIPO PI, TIPO PD Y TIPO PID**"""
 
 def regTrans_areaIntersectionWithPoints(ax,x,y,maxX,maxY,theta=None,Wd=None,sgm=None):
-  xMp,yMp=restriccionMp(ax,theta,40,40)
+  xMp,yMp=SIS.restriccionMp(ax,theta,40,40)
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=restriccionTp(ax,Wd,40,40)
+  xTp,yTp=SIS.restriccionTp(ax,Wd,40,40)
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=restriccionTs(ax,sgm,40,40)
+  xTs,yTs=SIS.restriccionTs(ax,sgm,40,40)
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
    #n_puntos = 200

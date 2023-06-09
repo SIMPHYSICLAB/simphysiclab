@@ -8,6 +8,10 @@ Original file is located at
 """
 
 # Commented out IPython magic to ensure Python compatibility.
+#Clonar github con los repositorios
+!wget {f"https://raw.githubusercontent.com/SIMPHYSICLAB/simphysiclab/main/libraries/simphysiclab_sistemas.py"}
+import simphysiclab_sistemas as SIS
+
 #Standard Python libraries:
 import math
 import random
@@ -130,8 +134,8 @@ def rupturaOingreso(TF):
   return solutionsRoot
 
 def LDR_Automatico(ax,TF,xmax,ymax,maxK=0,stepK=0.01):
-  num,den,gain=InfoTF("num_den",TF)
-  TF=CrearTF("num_den",num,den)
+  num,den,gain=SIS.InfoTF("num_den",TF)
+  TF=SIS.CrearTF("num_den",num,den)
   if maxK==0:
     if ax!=None:
       rlist, klist = control.root_locus(TF,grid=False,xlim=[-xmax[0],xmax[1]],ylim=[-ymax[0],ymax[1]],ax=ax,print_gain =False)
