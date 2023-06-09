@@ -9,7 +9,7 @@ Original file is located at
 
 # Commented out IPython magic to ensure Python compatibility.
 #Clonar github con los repositorios
-!wget {f"https://raw.githubusercontent.com/SIMPHYSICLAB/simphysiclab/main/libraries/simphysiclab_sistemas.py"}
+#!wget {f"https://raw.githubusercontent.com/SIMPHYSICLAB/simphysiclab/main/libraries/simphysiclab_sistemas.py"}
 import simphysiclab_sistemas as SIS
 
 #Standard Python libraries:
