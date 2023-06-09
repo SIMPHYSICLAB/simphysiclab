@@ -53,6 +53,7 @@ def checkIfIsLDR(ax,ceros,polos):
 def dibujarAsintotas(ax,ceros,polos):
   k=len(polos)-len(ceros)
   q = sympy.symbols('k')
+  ia=(sum(polos)-sum(ceros))/(len(polos)-len(ceros))
   print(str(180*(2*q+1)/(len(polos)-len(ceros)))+ "%, para k>0, donde k= 0,+1,+2,+3,...")
   for i in range(0,k):
     print("k=",i,", ",(180*(2*i+1)/(len(polos)-len(ceros))),"%")
