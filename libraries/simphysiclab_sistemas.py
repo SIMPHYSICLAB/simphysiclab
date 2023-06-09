@@ -317,6 +317,38 @@ def regPermanent(G,H):
   #Se calcula el error en regimen permanente para cada tipo de error
   return [Merrp.subs(s, 0), 1/(1+Merrp.subs(s, 0))] , [Merrv.subs(s, 0), 1/(Merrv.subs(s, 0))] ,[Merra.subs(s, 0), 1/(Merra.subs(s, 0))]
 
+def pintar_ejes(ax,step,xmax,ymax):
+  xmin=-xmax
+  ymin=-ymax
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
+  # Establecemos en 0,0 el origen del eje de coordenadas para representar
+  # las marcas de la escala de los ejes
+  ax.spines['bottom'].set_position('zero')
+  ax.spines['left'].set_position('zero')
+  # Borramos las marcas en un lado de la grafica para mejorar el diseño
+  ax.spines['top'].set_visible(False)
+  ax.spines['right'].set_visible(False)
+  # Escribimos el nombre de cada ejes
+  ax.set_xlabel('Real', size=14, labelpad=-24, x=1.03)
+  ax.set_ylabel('Im', size=14, labelpad=-21, y=1.02, rotation=0)
+  # Creamos las marcas principales personalizadas para determinar la posición 
+  # de las etiquetas de cada marca
+  ticks_frequency = step
+  x_ticks = np.arange(xmin, xmax+1, ticks_frequency)
+  y_ticks = np.arange(ymin, ymax+1, ticks_frequency)
+  ax.set_xticks(x_ticks[x_ticks != 0])
+  ax.set_yticks(y_ticks[y_ticks != 0])  
+  # Creamos las marcas menores colocadas en cada entero para habilitar el dibujo de 
+  # las líneas de cuadrícula menores: tenga en cuenta que esto no tiene efecto en 
+  ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
+  ax.set_yticks(np.arange(ymin, ymax+1), minor=True)  
+  # Dibujamos las lineas de la cuadrícula
+  ax.grid(which='both', color='grey', linewidth=1, linestyle='-', alpha=0.2)
+  # Dibujamos las flechas
+  arrow_fmt = dict(markersize=4, color='black', clip_on=False)
+  ax.plot((1), (0), marker='>', transform=ax.get_yaxis_transform(), **arrow_fmt)
+  ax.plot((0), (1), marker='^', transform=ax.get_xaxis_transform(), **arrow_fmt)
+
 #Valor final, maximo, tiempo establecimiento
 def pintar_parametros_grafica(ax,y,t):
   b=y[len(t)-1]
