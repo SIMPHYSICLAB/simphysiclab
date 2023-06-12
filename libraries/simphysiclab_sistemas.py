@@ -118,6 +118,7 @@ def CrearTF(tipo,num,den,simbol=0):
       return control.tf(numcastfloat, dencastfloat)
   elif tipo =="ceros_polos":
     if checkIfParameter(num,den)=="sympy":
+      print("Error")
       return "Error."
     else:
       if simbol==0:
@@ -252,6 +253,25 @@ def TFSymtem(G,H,k=1):
       return M
     #elif checkIfTFParameter(G)=="sympy" and checkIfTFParameter(H)=="sympy" and libraryType(k)=="sympy":
     #  return "Error. Only one function with k and the k parameter"
+
+def EstabilidadDelSistema(G):
+  if checkIfTFParameter(G)=="sympy"
+    ceros_G=control.zero(G)
+    polos_G=control.pole(G)
+    ceros_G=[round(i,2) for i in ceros_G]
+    polos_G=[round(i,2) for i in polos_G]
+    EstableInestable=0
+    for i in polos_G:
+      if i.real>=0:
+        if EstableInestable==0:
+          print("Sistema Inestable")
+          EstableInestable=1
+        print("Polo inestable en:")
+        print(i)
+    if EstableInestable==0:
+      print("Sistema Estable")
+  else:
+    print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
 
 def pintar_Funcion(ax,ceros,polos):
   for i in range(len(polos)) :
