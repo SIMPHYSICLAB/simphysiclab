@@ -45,10 +45,10 @@ def libraryType(TF):
 """YA NO SE UTILIZA"""
 
 def libraryDetection(TF):
-  if (type(TF)==sympy.core.symbol.Symbol or type(TF)==sympy.core.Pow or type(TF)==sympy.core.mul.Mul):
-    return "sympy"
+  if type(G).__module__.split('.')[0]=="sympy":
+    return 1
   else:
-    return "other"
+    return 0
 
 """TIPO DE LA FUNCION ATENDIENDO A OTROS PARAMETROS"""
 
