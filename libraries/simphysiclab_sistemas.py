@@ -388,3 +388,27 @@ def pintar_parametros_grafica(ax,y,t):
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
   #return [100*(a/b),a,b,tp,ts,errp]
+
+def regTrans_areaIntersectionWithPoints(ax,x,y,maxX,maxY,theta=None,Wd=None,sgm=None):
+  xMp,yMp=SIS.restriccionMp(ax,theta,40,40)
+  path1  = mpath.Path(np.column_stack([xMp,yMp]))
+  xTp,yTp=SIS.restriccionTp(ax,Wd,40,40)
+  path2 = mpath.Path(np.column_stack([xTp,yTp]))
+  xTs,yTs=SIS.restriccionTs(ax,sgm,40,40)
+  path3 = mpath.Path(np.column_stack([xTs,yTs]))
+
+   #n_puntos = 200
+   #x = np.random.uniform(-15, 15, n_puntos)
+   #y = np.random.uniform(-15, 15, n_puntos)
+
+  puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
+  puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
+  puntos_dentro = path1.contains_points(np.column_stack([x, y]))
+
+  intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
+  intersectionf= np.logical_and(intersection, puntos_dentro)
+  # Graficamos los puntos que se encuentran dentro del área delimitada
+  if ax!=None:
+    ax.scatter(x[intersectionf], y[intersectionf], color='g')
+
+  return x[intersectionf], y[intersectionf]
