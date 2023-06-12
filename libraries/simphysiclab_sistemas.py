@@ -256,22 +256,20 @@ def TFSymtem(G,H,k=1):
 
 def EstabilidadDelSistema(G):
   if checkIfTFParameter(G)=="sympy":
-    ceros_G=control.zero(G)
-    polos_G=control.pole(G)
-    ceros_G=[round(i,2) for i in ceros_G]
-    polos_G=[round(i,2) for i in polos_G]
+    print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
+  else:
+    ceros,polos,gain=InfoTF("ceros_polos",G)
+    ceros=[np.round(i,2) for i in ceros]
+    polos=[np.round(i,2) for i in polos]
     EstableInestable=0
-    for i in polos_G:
+    for i in polos:
       if i.real>=0:
         if EstableInestable==0:
           print("Sistema Inestable")
           EstableInestable=1
-        print("Polo inestable en:")
-        print(i)
+        print("Polo inestable en:",i,", ")
     if EstableInestable==0:
       print("Sistema Estable")
-  else:
-    print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
 
 def pintar_Funcion(ax,ceros,polos):
   for i in range(len(polos)) :
