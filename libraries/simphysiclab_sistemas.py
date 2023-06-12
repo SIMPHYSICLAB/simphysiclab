@@ -255,7 +255,7 @@ def TFSymtem(G,H,k=1):
     #  return "Error. Only one function with k and the k parameter"
 
 def EstabilidadDelSistema(G):
-  if checkIfTFParameter(G)=="sympy"
+  if checkIfTFParameter(G)=="sympy":
     ceros_G=control.zero(G)
     polos_G=control.pole(G)
     ceros_G=[round(i,2) for i in ceros_G]
