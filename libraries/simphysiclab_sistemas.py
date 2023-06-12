@@ -55,7 +55,7 @@ def libraryDetection(TF):
 def checkIfParameter(TF):
   if libraryType(TF)=="sympy":
     symbolappearance=[]
-    G1,num,den,gain=InfoTF("num_den",TF)
+    num,den,gain=InfoTF("num_den",TF)
     #Comprobar si contiene algun simbolico la expresión
     for i in np.concatenate((num, den), axis=0):
       try:
