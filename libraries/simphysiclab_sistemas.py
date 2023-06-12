@@ -52,21 +52,24 @@ def libraryDetection(TF):
 
 """TIPO DE LA FUNCION ATENDIENDO A OTROS PARAMETROS"""
 
-def checkIfParameter(TF):
+def checkIfTFParameter(TF):
   if libraryType(TF)=="sympy":
     symbolappearance=[]
     num,den,gain=InfoTF("num_den",TF)
-    #Comprobar si contiene algun simbolico la expresión
-    for i in np.concatenate((num, den), axis=0):
+    return checkIfParameter(num,den)
+  else:
+    return "other"
+
+def checkIfParameter(num,den):
+  symbolappearance=[]
+  for i in np.concatenate((num, den), axis=0):
       try:
         testrealnumber=float(i)
         symbolappearance.append(0)
       except:
         symbolappearance.append(1)
-    if symbolappearance.count(1)>0:
-      return "sympy"
-    else:
-      return "other"
+  if symbolappearance.count(1)>0:
+    return "sympy"
   else:
     return "other"
 
@@ -114,18 +117,34 @@ def CrearTF(tipo,num,den,simbol=0):
       #Crear la función de transferencia con los valores guardados en formato float
       return control.tf(numcastfloat, dencastfloat)
   elif tipo =="ceros_polos":
-    s = control.tf('s')
-    numcp = 1
-    dencp = 1
-    if len(num)==0 and len(den)==0:
-      TF=control.tf(1, 1)
+    if checkIfParameter(num,den)=="sympy":
+      return "Error."
     else:
-      for i in range(len(num)):
-        numcp = numcp * (s + num[i])
-      for j in range(len(den)):
-        dencp = dencp * (s + den[j])
-      TF=numcp/dencp
-      
+      if simbol==0:
+        s = control.tf('s')
+        numcp = 1
+        dencp = 1
+        if len(num)==0 and len(den)==0:
+          TF=control.tf(1, 1)
+        else:
+          for i in range(len(num)):
+            numcp = numcp * (s + num[i])
+          for j in range(len(den)):
+            dencp = dencp * (s + den[j])
+          TF=numcp/dencp
+      elif simbol==1:
+        s=sympy.symbols('s')
+        numcp = 1
+        dencp = 1
+        if len(num)==0 and len(den)==0:
+          TF=sympy.factor(numcp/dencp)
+        else:
+          for i in range(len(num)):
+            numcp = numcp * (s + num[i])
+          for j in range(len(den)):
+            dencp = dencp * (s + den[j])
+          TF=sympy.factor(numcp/dencp)
+    
     return TF
 
 #Recibir información
@@ -180,10 +199,10 @@ def InfoTF(tipo,TF):
 
 #Sistema de retroalimentación M, a partir de G H y k
 def TFSymtem(G,H,k=1):
-  #if checkIfParameter(G)=="sympy" and checkIfParameter(H)=="sympy":#Este if hace que si las dos funciones de transferencia tengan sympy salte error
+  #if checkIfTFParameter(G)=="sympy" and checkIfTFParameter(H)=="sympy":#Este if hace que si las dos funciones de transferencia tengan sympy salte error
   #  return "Error. Only one function with k and the k parameter"
   #else:
-    if (checkIfParameter(G)=="sympy" or checkIfParameter(H)=="sympy") and libraryType(k)=="sympy":
+    if (checkIfTFParameter(G)=="sympy" or checkIfTFParameter(H)=="sympy") and libraryType(k)=="sympy":
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -194,7 +213,7 @@ def TFSymtem(G,H,k=1):
       M=(G/(1+(G*H)))
       M=sympy.simplify(M)
       return M
-    elif (checkIfParameter(G)=="sympy" or checkIfParameter(H)=="sympy") and libraryType(k)!="sympy":
+    elif (checkIfTFParameter(G)=="sympy" or checkIfTFParameter(H)=="sympy") and libraryType(k)!="sympy":
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -205,7 +224,7 @@ def TFSymtem(G,H,k=1):
       M=(G/(1+(G*H)))
       M=sympy.simplify(M)
       return M
-    elif (checkIfParameter(G)!="sympy" and checkIfParameter(H)!="sympy") and libraryType(k)=="sympy":
+    elif (checkIfTFParameter(G)!="sympy" and checkIfTFParameter(H)!="sympy") and libraryType(k)=="sympy":
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -216,7 +235,7 @@ def TFSymtem(G,H,k=1):
       M=(G/(1+(G*H)))
       M=sympy.simplify(M)
       return M
-    elif (checkIfParameter(G)!="sympy" and checkIfParameter(H)!="sympy") and libraryType(k)!="sympy":
+    elif (checkIfTFParameter(G)!="sympy" and checkIfTFParameter(H)!="sympy") and libraryType(k)!="sympy":
       numG,denG,gainG=InfoTF("num_den",G)
       numH,denH,gainH=InfoTF("num_den",H)
       if libraryType(G)=="sympy" and libraryType(H)=="sympy":
@@ -231,7 +250,7 @@ def TFSymtem(G,H,k=1):
         M=control.feedback(K_G,H)
         ceros,polos,gain=InfoTF("ceros_polos",M)
       return M
-    #elif checkIfParameter(G)=="sympy" and checkIfParameter(H)=="sympy" and libraryType(k)=="sympy":
+    #elif checkIfTFParameter(G)=="sympy" and checkIfTFParameter(H)=="sympy" and libraryType(k)=="sympy":
     #  return "Error. Only one function with k and the k parameter"
 
 def pintar_Funcion(ax,ceros,polos):
