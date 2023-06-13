@@ -129,9 +129,9 @@ def CrearTF(tipo,num,den,simbol=0):
           TF=control.tf(1, 1)
         else:
           for i in range(len(num)):
-            numcp = numcp * (s + num[i])
+            numcp = numcp * (s - num[i])
           for j in range(len(den)):
-            dencp = dencp * (s + den[j])
+            dencp = dencp * (s - den[j])
           TF=numcp/dencp
       elif simbol==1:
         s=sympy.symbols('s')
@@ -141,9 +141,9 @@ def CrearTF(tipo,num,den,simbol=0):
           TF=sympy.factor(numcp/dencp)
         else:
           for i in range(len(num)):
-            numcp = numcp * (s + num[i])
+            numcp = numcp * (s - num[i])
           for j in range(len(den)):
-            dencp = dencp * (s + den[j])
+            dencp = dencp * (s - den[j])
           TF=sympy.factor(numcp/dencp)
     
     return TF
