@@ -363,10 +363,10 @@ def routhCasoEspecial(pol):
 def invL(TF,real):
   if real==1:
     s = sympy.symbols('s')
-    t = sympy.Symbol('t')
+    t = sympy.Symbol('t', positive=True)
   else:
     s = sympy.symbols('s')
-    t = sympy.Symbol('t', positive=True)
+    t = sympy.Symbol('t')
   return sympy.inverse_laplace_transform(TF, s, t)
 
 def respuestaEscalon(ax,TF,limit):
