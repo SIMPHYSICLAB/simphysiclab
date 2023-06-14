@@ -360,9 +360,13 @@ def routhCasoEspecial(pol):
         A[i,pij]=derivative.coeffs()[pij]
   return A
 
-def invL(TF):
-  s = sympy.symbols('s')
-  t = sympy.Symbol('t')
+def invL(TF,real):
+  if real==1:
+    s = sympy.symbols('s')
+    t = sympy.Symbol('t')
+  else:
+    s = sympy.symbols('s')
+    t = sympy.Symbol('t', positive=True)
   return sympy.inverse_laplace_transform(TF, s, t)
 
 def respuestaEscalon(ax,TF,limit):
@@ -429,6 +433,22 @@ def restriccionMp(ax,theta,maxX,maxY):
     ax.plot(x1, y1, c='brown', ls='--', lw=1, alpha=1)
     ax.fill(x1, y1, alpha=0.2, color='r', hatch='/')
   return x1,y1
+
+def tipo_respuesta_2do_orden(TF):
+  ceros,polos,gain=InfoTF("ceros_polos",TF)
+  if (polos[0].real and polos[1].real)==0:
+    print('Sistema de 2do orden inestable')
+    tipo=1
+  elif polos[0]==polos[1]:
+    print('Sistema de 2do orden críticamente amortiguado')
+    tipo=3
+  elif (polos[0].real == polos[1].real):
+    print('Sistema de 2do orden subamortiguado')
+    tipo=2
+  else:
+    print('Sistema de 2do orden sobreamortiguado')
+    tipo=4
+  return tipo
 
 def determina_orden(TF):
   num,den,gain=InfoTF("num_den",TF)
