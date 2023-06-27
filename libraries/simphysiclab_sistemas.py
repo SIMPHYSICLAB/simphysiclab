@@ -705,7 +705,7 @@ def ecuacionCaracteristicaRouth(filaRouth,gradoPol,potencia):
         B=list(filaRouth)
         i=0
         longitud=gradoPol-potencia+2
-        for x in range(1,longitud):
+        for x in range(1,longitud):f
           if x%2==0:
             C.append(0)
           else:
@@ -1024,6 +1024,45 @@ def dibujarPolosCeros(ax,TF):
     ax.scatter(polos[i].real, polos[i].imag, s=200,c='r', marker="x")
   for j in range(len(ceros)) :
     ax.scatter(ceros[j].real, ceros[j].imag, s=200,c='b', marker="o")
+
+def polosDominantes(TF, polo):
+  """
+  input:
+        TF: función de transferencia.
+  output:
+        DominanteONoDominante: True o False depenendiendo de si es o no dominante el polo evaluado
+  código:
+        ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+
+        # Verificar si hay un cero cercano al polo
+        for c in ceros:
+            if abs(polo - c) < 0.01:  # Ajusta el valor de tolerancia según sea necesario
+                return False
+
+        # Encontrar el polo de baja frecuencia más cercano
+        min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
+
+        # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
+        if polo.real >= 10 * min_low_freq_pole.real:
+            return True
+
+        return False
+  """
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+
+  # Verificar si hay un cero cercano al polo
+  for c in ceros:
+      if abs(polo - c) < 0.01:  # Ajusta el valor de tolerancia según sea necesario
+          return False
+
+  # Encontrar el polo de baja frecuencia más cercano
+  min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
+
+  # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
+  if polo.real >= 10 * min_low_freq_pole.real:
+      return True
+
+  return False
 
 def tipoRespuesta2orden(TF):
 
