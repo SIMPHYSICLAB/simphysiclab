@@ -730,7 +730,8 @@ def routhCasoEspecial(TF):
   num,den,gain=InfoTF("num_den",TF)
   #Forzar libreria sympy
 
-  pol=generarTF("num_den",den,[1],1)
+  #pol=generarTF("num_den",den,[1],1)
+  pol=den
 
   s = sympy.Symbol('s')
   coefsPar=coeficientesPares(pol)
