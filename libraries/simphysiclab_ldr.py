@@ -959,46 +959,6 @@ def norma7confluenciaDispersionMetodoAlt(ax,TF):
       validSolveCP.append(complex(j.as_real_imag()[0],j.as_real_imag()[1]))
   return solveCP,validSolveCP
 
-def ecuacionCaracteristicaRouth(filaRouth,gradoPol,potencia):
-
-  """
-  input:
-        filaRouth: lista de indices de la fila de la tabla de Routh.
-        gradoPol: Grado del polinomio máximo.
-        potencia: Grado del polinomio de la fila de Routh que se esta evaluando.
-  output:
-        C: indices arreglados del polinomio caracteristico extraido de la tabla de routh
-
-  código:
-        C=[]
-        B=list(filaRouth)
-        print("B",list(B))
-        i=0
-        longitud=gradoPol-potencia+2
-        print(longitud)
-        for x in range(1,longitud):
-          if x%2==0:
-            C.append(0)
-          else:
-            C.append(B[i])
-            i=i+1
-        return C
-  """
-
-  C=[]
-  B=list(filaRouth)
-  print("B",list(B))
-  i=0
-  longitud=gradoPol-potencia+2
-  print(longitud)
-  for x in range(1,longitud):
-    if x%2==0:
-      C.append(0)
-    else:
-      C.append(B[i])
-      i=i+1
-  return C
-
 def norma8corteEjeImaginario(ax,G,H):
 
   """
@@ -1050,7 +1010,7 @@ def norma8corteEjeImaginario(ax,G,H):
         for i in range(sP.degree(),-1,-1):
           es=A[i, :]
           print("es: ",es,i,sP.degree(),i)
-          C=ecuacionCaracteristicaRouth(es,sP.degree(),i)
+          C=SIS.ecuacionCaracteristicaRouth(es,sP.degree(),i)
           print("sa",solution_set.args[1])
           TFsubs=sympy.Poly(C,s).subs(k,solution_set.args[0])
           ss=sympy.solve(TFsubs)
@@ -1100,7 +1060,7 @@ def norma8corteEjeImaginario(ax,G,H):
   for i in range(sP.degree(),-1,-1):
     es=A[i, :]
     print("es: ",es,i,sP.degree(),i)
-    C=ecuacionCaracteristicaRouth(es,sP.degree(),i)
+    C=SIS.ecuacionCaracteristicaRouth(es,sP.degree(),i)
     print("sa",solution_set.args[1])
     TFsubs=sympy.Poly(C,s).subs(k,solution_set.args[0])
     ss=sympy.solve(TFsubs)

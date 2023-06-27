@@ -690,6 +690,46 @@ def estabilidadRouth(TF,simbolo=None):
       else:
         print("estable")
 
+def ecuacionCaracteristicaRouth(filaRouth,gradoPol,potencia):
+
+  """
+  input:
+        filaRouth: lista de indices de la fila de la tabla de Routh.
+        gradoPol: Grado del polinomio máximo.
+        potencia: Grado del polinomio de la fila de Routh que se esta evaluando.
+  output:
+        C: indices arreglados del polinomio caracteristico extraido de la tabla de routh
+
+  código:
+        C=[]
+        B=list(filaRouth)
+        print("B",list(B))
+        i=0
+        longitud=gradoPol-potencia+2
+        print(longitud)
+        for x in range(1,longitud):
+          if x%2==0:
+            C.append(0)
+          else:
+            C.append(B[i])
+            i=i+1
+        return C
+  """
+
+  C=[]
+  B=list(filaRouth)
+  print("B",list(B))
+  i=0
+  longitud=gradoPol-potencia+2
+  print(longitud)
+  for x in range(1,longitud):
+    if x%2==0:
+      C.append(0)
+    else:
+      C.append(B[i])
+      i=i+1
+  return C
+
 def routhCasoEspecial(TF):
 
   '''
