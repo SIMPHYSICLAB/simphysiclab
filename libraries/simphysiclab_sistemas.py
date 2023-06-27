@@ -1048,7 +1048,7 @@ def polosDominantes(TF, polo):
 
         return False
   """
-  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+  ceros,polos,gain=InfoTF("ceros_polos",TF)
 
   # Verificar si hay un cero cercano al polo
   for c in ceros:
