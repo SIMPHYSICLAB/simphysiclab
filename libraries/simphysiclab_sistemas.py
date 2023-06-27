@@ -567,7 +567,7 @@ def estabilidadTF(TF):
     output:
 
     código:
-          if parametrosLibreriaEnTF(G)=="sympy":
+          if parametrosLibreriaEnTF(TF)=="sympy":
             print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
           else:
             ceros,polos,gain=InfoTF("ceros_polos",TF)
@@ -584,7 +584,7 @@ def estabilidadTF(TF):
               print("Sistema Estable")
   '''
 
-  if parametrosLibreriaEnTF(G)=="sympy":
+  if parametrosLibreriaEnTF(TF)=="sympy":
     print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
   else:
     ceros,polos,gain=InfoTF("ceros_polos",TF)
