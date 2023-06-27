@@ -470,7 +470,7 @@ def comprobarLimitesConRestriccionesLDR(ax,limites,paso,TF,theta=None,wd=None,sg
         x = np.array(x)
         y = np.array(y)
 
-        x,y=SIS.regTrans_areaIntersectionWithPoints(ax,[[xmin,xmax],[ymin,ymax]],x,y,theta,wd,sgm)
+        x,y=SIS.puntosEnAreaValidaSegunRestricciones(ax,[[xmin,xmax],[ymin,ymax]],x,y,theta,wd,sgm)
 
         Ymaxlimit=[]
         Yminlimit=[]
@@ -514,7 +514,7 @@ def comprobarLimitesConRestriccionesLDR(ax,limites,paso,TF,theta=None,wd=None,sg
   x = np.array(x)
   y = np.array(y)
 
-  x,y=SIS.regTrans_areaIntersectionWithPoints(ax,[[xmin,xmax],[ymin,ymax]],x,y,theta,wd,sgm)
+  x,y=SIS.puntosEnAreaValidaSegunRestricciones(ax,[[xmin,xmax],[ymin,ymax]],x,y,theta,wd,sgm)
 
   Ymaxlimit=[]
   Yminlimit=[]
