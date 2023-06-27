@@ -1308,7 +1308,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
 
-def regTrans_areaIntersectionWithPoints(ax,limites,x,y,theta=None,wd=None,sgm=None):
+def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=None):
 
   """
   input:
@@ -1373,7 +1373,7 @@ def regTrans_areaIntersectionWithPoints(ax,limites,x,y,theta=None,wd=None,sgm=No
 
   return x[intersectionf], y[intersectionf]
 
-def regTrans_areaIntersectionWithBorders(ax,limites,paso,theta=None,wd=None,sgm=None):
+def areaValidaSegunRestricciones(ax,limites,paso,theta=None,wd=None,sgm=None):
 
   """
   input:
