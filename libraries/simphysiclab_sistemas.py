@@ -703,10 +703,8 @@ def ecuacionCaracteristicaRouth(filaRouth,gradoPol,potencia):
   código:
         C=[]
         B=list(filaRouth)
-        print("B",list(B))
         i=0
         longitud=gradoPol-potencia+2
-        print(longitud)
         for x in range(1,longitud):
           if x%2==0:
             C.append(0)
@@ -718,10 +716,8 @@ def ecuacionCaracteristicaRouth(filaRouth,gradoPol,potencia):
 
   C=[]
   B=list(filaRouth)
-  print("B",list(B))
   i=0
   longitud=gradoPol-potencia+2
-  print(longitud)
   for x in range(1,longitud):
     if x%2==0:
       C.append(0)
