@@ -1162,7 +1162,7 @@ def regimenPermanent(G,H,VectorError):
 
   ka=Ma.subs(s, 0)
   ea=1/(Ma.subs(s, 0))
-  if VectorError.count(2) > 2
+  if VectorError.count(2) > 2:
     VectorErrorReturn.append([ka,ea])
 
   return  VectorErrorReturn
