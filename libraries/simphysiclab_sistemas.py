@@ -1032,7 +1032,7 @@ def polosDominantes(TF, polo):
   output:
         DominanteONoDominante: True o False depenendiendo de si es o no dominante el polo evaluado
   código:
-        ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+        ceros,polos,gain=InfoTF("ceros_polos",TF)
 
         # Verificar si hay un cero cercano al polo
         for c in ceros:
@@ -1506,11 +1506,11 @@ def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=N
         xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
         InfinityValue=1000
-        xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
+        xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
         path1  = mpath.Path(np.column_stack([xMp,yMp]))
-        xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
+        xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
         path2 = mpath.Path(np.column_stack([xTp,yTp]))
-        xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
+        xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
         path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
         puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
@@ -1531,11 +1531,11 @@ def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=N
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
   InfinityValue=1000
-  xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
+  xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
+  xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
+  xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
   puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
@@ -1570,11 +1570,11 @@ def areaValidaSegunRestricciones(ax,limites,paso,theta=None,wd=None,sgm=None):
         xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
         InfinityValue=1000
-        xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
+        xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
         path1  = mpath.Path(np.column_stack([xMp,yMp]))
-        xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
+        xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
         path2 = mpath.Path(np.column_stack([xTp,yTp]))
-        xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
+        xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
         path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
         x=[]
@@ -1599,11 +1599,11 @@ def areaValidaSegunRestricciones(ax,limites,paso,theta=None,wd=None,sgm=None):
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
   InfinityValue=1000
-  xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
+  xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
+  xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
+  xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
   x=[]
