@@ -1064,6 +1064,109 @@ def polosDominantes(TF, polo):
 
   return False
 
+def regimenPermanent(G,H,VectorError):
+  """
+  input:
+        TF: función de transferencia.
+        VectorError: puede ser 0 para el error y constante de posición,  1 para el error y constante de velocidad y 2 para el error y constante de acceleración. Se pueden combinar en el vector
+  output:
+        VectorErrorReturn: vector que contiene tuplas de los errores de posición, velocidad y acceleración.
+
+        [kp: constante del error de posición , ep: error de posición en régimen permanente]
+        [kv: constante del error de velocidad , ev: error de velocidad en régimen permanente]
+        [ka: constante del derror de acceleración ,ea: error de acceleración en régimen permanente]
+
+  código:
+        s = sympy.Symbol('s')
+
+        #Forzar libreria sympy
+        num,den,gain=SIS.InfoTF("num_den",G)
+        numcK=[]
+        for i in num:
+          numcK.append(float(i)*gain)
+        num=SIS.generarTF("num_den",numcK,[1],1)
+        den=SIS.generarTF("num_den",den,[1],1)
+        G=num/den
+        #Forzar libreria sympy
+
+        #Forzar libreria sympy
+        num,den,gain=SIS.InfoTF("num_den",H)
+        numcK=[]
+        for i in num:
+          numcK.append(float(i)*gain)
+        num=SIS.generarTF("num_den",numcK,[1],1)
+        den=SIS.generarTF("num_den",den,[1],1)
+        H=num/den
+        #Forzar libreria sympy
+
+        Mp=G*H
+        Mv=s*G*H
+        Ma=s*s*G*H
+
+        VectorErrorReturn=[]
+
+        kp=Mp.subs(s, 0),
+        ep=1/(1+Mp.subs(s, 0))
+        if VectorError.count(0) > 0:
+          VectorErrorReturn.append([kp,ep])
+
+        kv=Mv.subs(s, 0),
+        ev=1/(Mv.subs(s, 0))
+        if VectorError.count(1) > 1:
+          VectorErrorReturn.append([kv,ev])
+
+        ka=Ma.subs(s, 0)
+        ea=1/(Ma.subs(s, 0))
+        if VectorError.count(2) > 2
+          VectorErrorReturn.append([ka,ea])
+
+        return  VectorErrorReturn
+  """
+  s = sympy.Symbol('s')
+
+  #Forzar libreria sympy
+  num,den,gain=SIS.InfoTF("num_den",G)
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  num=SIS.generarTF("num_den",numcK,[1],1)
+  den=SIS.generarTF("num_den",den,[1],1)
+  G=num/den
+  #Forzar libreria sympy
+
+  #Forzar libreria sympy
+  num,den,gain=SIS.InfoTF("num_den",H)
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  num=SIS.generarTF("num_den",numcK,[1],1)
+  den=SIS.generarTF("num_den",den,[1],1)
+  H=num/den
+  #Forzar libreria sympy
+
+  Mp=G*H
+  Mv=s*G*H
+  Ma=s*s*G*H
+
+  VectorErrorReturn=[]
+
+  kp=Mp.subs(s, 0),
+  ep=1/(1+Mp.subs(s, 0))
+  if VectorError.count(0) > 0:
+    VectorErrorReturn.append([kp,ep])
+
+  kv=Mv.subs(s, 0),
+  ev=1/(Mv.subs(s, 0))
+  if VectorError.count(1) > 1:
+    VectorErrorReturn.append([kv,ev])
+
+  ka=Ma.subs(s, 0)
+  ea=1/(Ma.subs(s, 0))
+  if VectorError.count(2) > 2
+    VectorErrorReturn.append([ka,ea])
+
+  return  VectorErrorReturn
+
 def tipoRespuesta2orden(TF):
 
   """
