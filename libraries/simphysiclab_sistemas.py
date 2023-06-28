@@ -1117,7 +1117,7 @@ def regimenPermanent(G,H,VectorError):
 
         ka=Ma.subs(s, 0)
         ea=1/(Ma.subs(s, 0))
-        if VectorError.count(2) > 2
+        if VectorError.count(2) > 2:
           VectorErrorReturn.append([ka,ea])
 
         return  VectorErrorReturn
@@ -1125,22 +1125,22 @@ def regimenPermanent(G,H,VectorError):
   s = sympy.Symbol('s')
 
   #Forzar libreria sympy
-  num,den,gain=SIS.InfoTF("num_den",G)
+  num,den,gain=InfoTF("num_den",G)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
-  num=SIS.generarTF("num_den",numcK,[1],1)
-  den=SIS.generarTF("num_den",den,[1],1)
+  num=generarTF("num_den",numcK,[1],1)
+  den=generarTF("num_den",den,[1],1)
   G=num/den
   #Forzar libreria sympy
 
   #Forzar libreria sympy
-  num,den,gain=SIS.InfoTF("num_den",H)
+  num,den,gain=InfoTF("num_den",H)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
-  num=SIS.generarTF("num_den",numcK,[1],1)
-  den=SIS.generarTF("num_den",den,[1],1)
+  num=generarTF("num_den",numcK,[1],1)
+  den=generarTF("num_den",den,[1],1)
   H=num/den
   #Forzar libreria sympy
 
