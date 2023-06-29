@@ -357,7 +357,8 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
     for j in tolerancia:
       angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
       if boolV:
-        ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c=colors_list[index], marker="o")
+        ax.scatter(x[i],y[i],s=25, marker="o")
+        #ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c=colors_list[index], marker="o")
         maxDcrmnt-=dcrmnt
         index+=1
 
