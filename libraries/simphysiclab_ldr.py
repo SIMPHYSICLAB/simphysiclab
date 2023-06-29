@@ -343,7 +343,7 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
   tolerancia=list(reversed(np.sort(tolerancia)))
   dcrmnt=5
   for i in range(len(x)):
-    maxDcrmnt=(len(tolerancia)+1)*dcrmnt
+    maxDcrmnt=(len(tolerancia)+1)*dcrmnt+20
     index=0
     for j in tolerancia:
       angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
