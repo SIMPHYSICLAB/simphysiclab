@@ -228,22 +228,22 @@ def LDRmanual(ax,G,H,limites,rango):
 
   código:
         #Forzar libreria sympy
-        num,den,gain=InfoTF("num_den",G)
+        num,den,gain=SIS.InfoTF("num_den",G)
         numcK=[]
         for i in num:
           numcK.append(float(i)*gain)
-        num=generarTF("num_den",numcK,[1],1)
-        den=generarTF("num_den",den,[1],1)
+        num=SIS.generarTF("num_den",numcK,[1],1)
+        den=SIS.generarTF("num_den",den,[1],1)
         G=num/den
         #Forzar libreria sympy
 
         #Forzar libreria sympy
-        num,den,gain=InfoTF("num_den",H)
+        num,den,gain=SIS.InfoTF("num_den",H)
         numcK=[]
         for i in num:
           numcK.append(float(i)*gain)
-        num=generarTF("num_den",numcK,[1],1)
-        den=generarTF("num_den",den,[1],1)
+        num=SIS.generarTF("num_den",numcK,[1],1)
+        den=SIS.generarTF("num_den",den,[1],1)
         H=num/den
         #Forzar libreria sympy
 
@@ -260,22 +260,22 @@ def LDRmanual(ax,G,H,limites,rango):
               ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
   """
   #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",G)
+  num,den,gain=SIS.InfoTF("num_den",G)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
+  num=SIS.generarTF("num_den",numcK,[1],1)
+  den=SIS.generarTF("num_den",den,[1],1)
   G=num/den
   #Forzar libreria sympy
 
   #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",H)
+  num,den,gain=SIS.InfoTF("num_den",H)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
+  num=SIS.generarTF("num_den",numcK,[1],1)
+  den=SIS.generarTF("num_den",den,[1],1)
   H=num/den
   #Forzar libreria sympy
 
