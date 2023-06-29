@@ -336,7 +336,11 @@ def barridoCriterios(ax,TF,limites,paso):
   x = np.array(x)
   y = np.array(y)
   for i in range(len(x)):
-    angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]))
+
+    angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),0.1)
+    if boolV:
+      ax.scatter(x[i],y[i],s=25,c='b', marker="o")
+    angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),0)
     if boolV:
       ax.scatter(x[i],y[i],s=25,c='r', marker="o")
 
