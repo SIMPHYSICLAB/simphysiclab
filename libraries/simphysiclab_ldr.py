@@ -55,12 +55,15 @@ import control
 import sympy
 from tbcontrol.symbolic import routh
 
+#Import utilities libraries
+import matplotlib.colors as colors
 
 #Plot python libraries interactive
 # %matplotlib ipympl
 sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
+
 
 from google.colab import output
 output.enable_custom_widget_manager()
@@ -322,6 +325,7 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
           if boolV:
             ax.scatter(x[i],y[i],s=25,c='r', marker="o")
   """
+  colors_list = list(colors.BASE_COLORS.values())
 
   xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
 
@@ -340,12 +344,13 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
   dcrmnt=5
   for i in range(len(x)):
     maxDcrmnt=(len(tolerancia)+1)*dcrmnt
-
+    index=0
     for j in tolerancia:
       angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
       if boolV:
-        ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c='b', marker="o")
+        ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c=colors_list[index], marker="o")
       maxDcrmnt-=dcrmnt
+      index+=1
 
 def comprobarLimitesLDR(G,H):
 
