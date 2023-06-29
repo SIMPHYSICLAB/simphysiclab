@@ -340,8 +340,8 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
   x=[]
   y=[]
-  for iX in np.arange(-xmin, xmax, paso):
-    for iY in np.arange(-ymin, ymax, paso):
+  for iX in np.arange(xmin, xmax, paso):
+    for iY in np.arange(ymin, ymax, paso):
       x.append(iX)
       y.append(iY)
   x = np.array(x)
