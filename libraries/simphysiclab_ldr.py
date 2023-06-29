@@ -351,15 +351,16 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
   y = np.array(y)
   tolerancia=list(reversed(np.sort(tolerancia)))
   dcrmnt=15
-  for i in range(len(x)):
+
+  for j in tolerancia:
     maxDcrmnt=(len(tolerancia)+1)*dcrmnt+dcrmnt
     index=0
-    for j in tolerancia:
+    for i in range(len(x)):
       angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
       if boolV:
         ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c=colors_list[index], marker="o")
-        maxDcrmnt-=dcrmnt
-        index+=1
+    maxDcrmnt-=dcrmnt
+    index+=1
 
 def comprobarLimitesLDR(G,H):
 
