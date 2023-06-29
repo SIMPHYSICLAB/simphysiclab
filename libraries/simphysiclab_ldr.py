@@ -358,8 +358,8 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
       angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
       if boolV:
         ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c=colors_list[index], marker="o")
-      maxDcrmnt-=dcrmnt
-      index+=1
+        maxDcrmnt-=dcrmnt
+        index+=1
 
 def comprobarLimitesLDR(G,H):
 
