@@ -291,7 +291,7 @@ def LDRmanual(ax,G,H,limites,rango):
       if ptA.as_real_imag()[0]>xmin:
         ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
 
-def barridoCriterios(ax,TF,limites,paso):
+def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
   """
   input:
@@ -300,6 +300,7 @@ def barridoCriterios(ax,TF,limites,paso):
         H: función de transferencia H.
         limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         paso: unidad minima para el incremento.
+        tolerancia: vector para dibujar puntos que cumplan los requisitos de tolerancia especificados, ordenar el vector de mayor a menor
   output:
 
   código:
@@ -335,14 +336,16 @@ def barridoCriterios(ax,TF,limites,paso):
       y.append(iY)
   x = np.array(x)
   y = np.array(y)
+  tolerancia=tolerancia.sort(reverse=True)
+  dcrmnt=5
   for i in range(len(x)):
+    maxDcrmnt=(len(tolerancia)+1)*dcrmnt
 
-    angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),0.1)
-    if boolV:
-      ax.scatter(x[i],y[i],s=25,c='b', marker="o")
-    angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),0)
-    if boolV:
-      ax.scatter(x[i],y[i],s=25,c='r', marker="o")
+    for j in tolerancia:
+      angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
+      if boolV:
+        ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c='b', marker="o")
+      maxDcrmnt-=dcrmn
 
 def comprobarLimitesLDR(G,H):
 
