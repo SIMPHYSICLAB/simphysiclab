@@ -350,7 +350,6 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
   x = np.array(x)
   y = np.array(y)
   tolerancia=list(reversed(np.sort(tolerancia)))
-  print("tolerancia: ",tolerancia)
   dcrmnt=15
   for i in range(len(x)):
     maxDcrmnt=(len(tolerancia)+1)*dcrmnt+dcrmnt
