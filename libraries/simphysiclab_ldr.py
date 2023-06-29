@@ -307,6 +307,8 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
   output:
 
   código:
+        colors_list = list(colors.BASE_COLORS.values())
+
         xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
 
         maxX=xmax
@@ -320,10 +322,17 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
             y.append(iY)
         x = np.array(x)
         y = np.array(y)
+        tolerancia=list(reversed(np.sort(tolerancia)))
+        dcrmnt=10
         for i in range(len(x)):
-          angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]))
-          if boolV:
-            ax.scatter(x[i],y[i],s=25,c='r', marker="o")
+          maxDcrmnt=(len(tolerancia)+1)*dcrmnt+20
+          index=0
+          for j in tolerancia:
+            angulos,boolV=criterioArgumento(TF,complex(x[i],y[i]),j)
+            if boolV:
+              ax.scatter(x[i],y[i],s=maxDcrmnt-dcrmnt,c=colors_list[index], marker="o")
+            maxDcrmnt-=dcrmnt
+            index+=1
   """
   colors_list = list(colors.BASE_COLORS.values())
 
@@ -341,7 +350,7 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
   x = np.array(x)
   y = np.array(y)
   tolerancia=list(reversed(np.sort(tolerancia)))
-  dcrmnt=5
+  dcrmnt=10
   for i in range(len(x)):
     maxDcrmnt=(len(tolerancia)+1)*dcrmnt+20
     index=0
