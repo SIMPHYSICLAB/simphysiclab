@@ -338,13 +338,10 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
   xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
 
-  maxX=xmax
-  maxY=ymax
-
   x=[]
   y=[]
-  for iX in np.arange(-maxX, maxX, paso):
-    for iY in np.arange(-maxY, maxY, paso):
+  for iX in np.arange(-xmin, xmax, paso):
+    for iY in np.arange(-ymin, ymax, paso):
       x.append(iX)
       y.append(iY)
   x = np.array(x)
