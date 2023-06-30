@@ -119,33 +119,37 @@ def criterioArgumento(TF,punto,tolerancia=0):
         punto: cero o polo del sistema.
         tolerancia: rango de validez del angulo a evaluar, 0 por defecto
   output:
-
+        angulos: angulo para el punto dado
+        criterio del argumento:
   código:
-        ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+        def criterioArgumento(TF,punto,tolerancia=0):
+          ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
 
-        angulos=0;
-        angulosCum=[]
+          angulos=0;
+          angulosCum=[]
 
-        for p in polos:
-          diff=(punto-p)
-          if type(diff)!=complex:
-            diff=complex(diff,0)
-          angle=math.degrees(math.atan2(diff.imag, diff.real))
-          angulosCum.append(angle)
-          angulos-=angle
+          for p in polos:
+            diff=(punto-p)
+            if type(diff)!=complex:
+              diff=complex(diff,0)
+            angle=math.degrees(math.atan2(diff.imag, diff.real))
+            angulosCum.append(angle)
+            angulos-=angle
 
-        for c in ceros:
-          diff=(punto-c)
-          if type(diff)!=complex:
-            diff=complex(diff,0)
-          angle=math.degrees(math.atan2(diff.imag, diff.real))
-          angulosCum.append(angle)
-          angulos+=angle
+          for c in ceros:
+            diff=(punto-c)
+            if type(diff)!=complex:
+              diff=complex(diff,0)
+            angle=math.degrees(math.atan2(diff.imag, diff.real))
+            angulosCum.append(angle)
+            angulos+=angle
 
-        if abs(round(angulos))!=0 and abs(abs(round(angulos))-180)<=tolerancia:
-          return angulos,True
-        else:
-          return angulos,False
+          q=sympy.Symbol('q')
+
+          if abs(round(angulos))!=0 and abs(abs(round(angulos%360))-180)<=tolerancia:
+            return angulos,True
+          else:
+            return angulos,False
   """
 
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
@@ -169,7 +173,9 @@ def criterioArgumento(TF,punto,tolerancia=0):
     angulosCum.append(angle)
     angulos+=angle
 
-  if abs(round(angulos))!=0 and abs(abs(round(angulos))-180)<=tolerancia:
+  q=sympy.Symbol('q')
+
+  if abs(round(angulos))!=0 and abs(abs(round(angulos%360))-180)<=tolerancia:
     return angulos,True
   else:
     return angulos,False
@@ -340,6 +346,7 @@ def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
   x=[]
   y=[]
+  print(xmin,xmax,ymin,ymax)
   for iX in np.arange(xmin, xmax, paso):
     for iY in np.arange(ymin, ymax, paso):
       x.append(iX)
