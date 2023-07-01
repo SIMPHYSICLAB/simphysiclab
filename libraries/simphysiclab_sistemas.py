@@ -290,6 +290,18 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 
+def devolverPolos_Ceros(polosCeros):
+    pole_values = list(polosCeros.keys())
+    multiplicities = list(polosCeros.values())
+
+    all_poles = []
+    for i in range(len(pole_values)):
+        current_pole = pole_values[i]
+        current_multiplicity = multiplicities[i]
+        all_poles.extend([current_pole] * current_multiplicity)
+
+    return all_poles
+
 def InfoTF(tipo,TF):
 
     '''
@@ -381,8 +393,12 @@ def InfoTF(tipo,TF):
         gain=sympy.Poly(n, sympy.symbols('s')).coeffs()[0]
         num=sympy.Poly(n, sympy.symbols('s'))
         den=sympy.Poly(d, sympy.symbols('s'))
-        ceros=sympy.solve(num,sympy.symbols('s'))
-        polos=sympy.solve(den,sympy.symbols('s'))
+
+        #ceros=sympy.solve(num,sympy.symbols('s'))
+        ceros = devolverPolos_Ceros(sympy.roots(num,sympy.symbols('s')))
+        #polos=sympy.solve(den,sympy.symbols('s'))
+        polos = devolverPolos_Ceros(sympy.roots(den,sympy.symbols('s')))
+
         return ceros,polos,gain
       else:
         gain=TF.num[0][0][0]
