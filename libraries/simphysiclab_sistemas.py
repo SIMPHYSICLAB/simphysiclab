@@ -1001,11 +1001,12 @@ def zoom(fig,limites):
   cx.set_ylim(ymin, ymax)  # Set the y-axis limits
   return cx
 
-def dibujarPolosCeros(ax,TF):
+def dibujarPolosCeros(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
 
@@ -1017,6 +1018,10 @@ def dibujarPolosCeros(ax,TF):
         for j in range(len(ceros)) :
           ax.scatter(ceros[j].real, ceros[j].imag, s=200,c='b', marker="o")
   """
+
+  xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
 
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
