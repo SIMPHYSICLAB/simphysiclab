@@ -892,11 +892,12 @@ def norma6anguloIndividual(TF,ceroPolo):
     anguloCeroPolo=angrdv*(180/math.pi)
   return anguloCeroPolo
 
-def norma6angulos(ax,TF):
+def norma6angulos(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
         [[angulosPolos,listaPolos],[angulosCeros,listaCeros]]: lista de angulos de polo y ceros y su correspondencia.
@@ -916,6 +917,11 @@ def norma6angulos(ax,TF):
         return [[angulosPolos,listaPolos],[angulosCeros,listaCeros]]
   """
 
+  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
+
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
+
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
   angulosCeros=[]
   listaCeros=[]
@@ -929,11 +935,12 @@ def norma6angulos(ax,TF):
     listaPolos.append(p)
   return [[angulosPolos,listaPolos],[angulosCeros,listaCeros]]
 
-def norma7confluenciaDispersion(ax,TF):
+def norma7confluenciaDispersion(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
         solveCP,validSolveCP: ceros y polos como solución posible de la intersección entre ramas y eje X y puntos validos.
@@ -959,6 +966,11 @@ def norma7confluenciaDispersion(ax,TF):
         return solveCP,validSolveCP
   """
 
+  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
+
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
+
   sgm=sympy.symbols('sgm')
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
   cerosSum=0
@@ -973,16 +985,17 @@ def norma7confluenciaDispersion(ax,TF):
 
   validSolveCP=[]
   for j in solveCP:
-    if criterioArgumento(G,complex(j.as_real_imag()[0],j.as_real_imag()[1]))[1]:
+    if criterioArgumento(TF,complex(j.as_real_imag()[0],j.as_real_imag()[1]))[1]:
       ax.plot(j.as_real_imag()[0],j.as_real_imag()[1],'o')
       validSolveCP.append(complex(j.as_real_imag()[0],j.as_real_imag()[1]))
   return solveCP,validSolveCP
 
-def norma7confluenciaDispersionMetodoAlt(ax,TF):
+def norma7confluenciaDispersionMetodoAlt(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
         solveCP,validSolveCP: ceros y polos como solución posible de la intersección entre ramas y eje X y puntos validos
@@ -1015,6 +1028,11 @@ def norma7confluenciaDispersionMetodoAlt(ax,TF):
         return solveCP,validSolveCP
   """
 
+  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
+
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
+
   #Forzar libreria sympy
   s=sympy.symbols('s')
   num,den,gain=SIS.InfoTF("num_den",TF)
@@ -1041,11 +1059,12 @@ def norma7confluenciaDispersionMetodoAlt(ax,TF):
       validSolveCP.append(complex(j.as_real_imag()[0],j.as_real_imag()[1]))
   return solveCP,validSolveCP
 
-def norma8corteEjeImaginario(ax,G,H):
+def norma8corteEjeImaginario(ax,limites,G,H):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         G: función de transferencia G del sistema.
         H: función de transferencia H del sistema.
   output:
@@ -1100,6 +1119,11 @@ def norma8corteEjeImaginario(ax,G,H):
             for i in ss:
               ax.plot(i.as_real_imag()[0],i.as_real_imag()[1],'o')
   """
+
+  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
+
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
 
   #Forzar libreria sympy
   numG,denG,gainG=SIS.InfoTF("num_den",G)
