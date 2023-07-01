@@ -789,11 +789,12 @@ def norma4interseccionAsintotas(TF):
   interAsin=int((sum(polos)-sum(ceros))/(len(polos)-len(ceros)))
   return interAsin
 
-def norma4dibujarAsintotas(ax,TF):
+def norma4dibujarAsintotas(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
 
@@ -812,6 +813,9 @@ def norma4dibujarAsintotas(ax,TF):
           y = 0 + np.sin(phi) * L
           ax.plot(x, y,'--')
   """
+  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
 
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
   k=len(polos)-len(ceros)
