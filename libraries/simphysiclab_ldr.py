@@ -1054,7 +1054,7 @@ def norma7confluenciaDispersionMetodoAlt(ax,limites,TF):
 
   validSolveCP=[]
   for j in solveCP:
-    if criterioArgumento(G,complex(j.as_real_imag()[0],j.as_real_imag()[1]))[1]:
+    if criterioArgumento(TF,complex(j.as_real_imag()[0],j.as_real_imag()[1]))[1]:
       ax.plot(j.as_real_imag()[0],j.as_real_imag()[1],'o')
       validSolveCP.append(complex(j.as_real_imag()[0],j.as_real_imag()[1]))
   return solveCP,validSolveCP
