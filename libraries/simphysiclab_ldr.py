@@ -1159,9 +1159,6 @@ def norma8corteEjeImaginario(ax,limites,G,H):
   solve_equation_subs=sympy.solve([e > 0 for e in equation_subs], k)
   solution_set=solve_equation_subs.as_set()
 
-  fig = plt.figure(figsize = (5,5))
-  ax = fig.add_subplot(1,1,1)
-
   print("solution_set: ",solution_set)
   for i in range(sP.degree(),-1,-1):
     es=A[i, :]
