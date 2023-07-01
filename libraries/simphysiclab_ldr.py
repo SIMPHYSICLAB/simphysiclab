@@ -925,7 +925,7 @@ def norma6angulos(ax,TF):
   angulosPolos=[]
   listaPolos=[]
   for p in polos:
-    angulosPolos.append(norma6anguloIndividual(TF,c))
+    angulosPolos.append(norma6anguloIndividual(TF,p))
     listaPolos.append(p)
   return [[angulosPolos,listaPolos],[angulosCeros,listaCeros]]
 
