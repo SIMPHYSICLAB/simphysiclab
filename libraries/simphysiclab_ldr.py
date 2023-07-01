@@ -711,11 +711,12 @@ def norma2ramasInfinito(TF):
   print("Norma 2: Punto de comienzo Polos y punto final Ceros o Infinito (Nº polos-Nº ceros):")
   print(" Número de ramas que tienden al infinito:"+str(len(polos)-len(ceros)))
 
-def norma3ejeReal(ax,TF):
+def norma3ejeReal(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
 
@@ -735,6 +736,9 @@ def norma3ejeReal(ax,TF):
                   alpha=0.5,
                   marker='o')
   """
+  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
 
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
 
