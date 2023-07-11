@@ -51,13 +51,13 @@ import control
 import sympy
 from tbcontrol.symbolic import routh
 
-
-#Plot python libraries interactive
+#Plot python graphic libraries and interactive
 import matplotlib
 # %matplotlib ipympl
 sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
+import matplotlib.colors as colors
 
 from google.colab import output
 output.enable_custom_widget_manager()
@@ -1528,158 +1528,3 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         ts=t[i-1]
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
-
-def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None):
-
-  """
-  input:
-          ax: ventana donde se dibujará la imagen.
-          limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
-          x: componente X de los puntos a evaluar.
-          y: componente Y de los puntos a evaluar.
-          theta: límite de la restricción, Sobreoscilación.
-          wd: límite de la restricción, Tiempo de pico.
-          sgm: límite de la restricción, Tiempo de establecimiento.
-  output:
-          x: componente de los puntos X que cumplen todas la restricciones.
-          y: componente de los puntos Y que cumplen todas la restricciones.
-
-  código:
-        xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-        InfinityValue=1000
-        xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
-        path1  = mpath.Path(np.column_stack([xMp,yMp]))
-        xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
-        path2 = mpath.Path(np.column_stack([xTp,yTp]))
-        xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
-        path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-        puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-        puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-        puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-        intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-        intersectionf= np.logical_and(intersection, puntos_dentro)
-
-        ax.set(xlim=(xmin, xmax), ylim=(ymin, ymax), aspect='equal');
-
-        if ax!=None:
-          ax.scatter(x[intersectionf], y[intersectionf], color='g')
-
-        return x[intersectionf], y[intersectionf]
-  """
-
-  rlist,klist=LDR.LDRautomatico(None,TF,[[-1,1],[-1,1]],False,np.arange(0,10000,0.1))
-
-  x=[]
-  y=[]
-  countK=0
-  for k in rlist:
-    for kindx in range(0,len(k)):
-      x.append(k[kindx].real)
-      y.append(abs(k[kindx].imag))
-    countK=countK+1
-  x = np.array(x)
-  y = np.array(y)
-
-  xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
-  path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
-  path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
-  path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-  puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-  puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-  puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-  intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-  intersectionf= np.logical_and(intersection, puntos_dentro)
-
-  xI=x[intersectionf]
-  yI=y[intersectionf]
-
-  xD=[]
-  yD=[]
-
-  for intrf in range(0,len(xI)):
-    if (SIS.polosDominantes(TF, complex(x[intrf],y[intrf]))==True):
-      xD.append(x[intrf])
-      yD.append(y[intrf])
-
-  xD = np.array(xD)
-  yD = np.array(yD)
-
-  return xD, yD
-
-def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
-
-  """
-  input:
-        ax: ventana donde se dibujará la imagen.
-        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
-        paso: unidad minima para el incremento.
-        theta: límite de la restricción, Sobreoscilación.
-        wd: límite de la restricción, Tiempo de pico.
-        sgm: límite de la restricción, Tiempo de establecimiento.
-  output:
-        x: componente de los puntos X que cumplen todas la restricciones.
-        y: componente de los puntos Y que cumplen todas la restricciones.
-
-  código:
-        xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-        InfinityValue=1000
-        xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
-        path1  = mpath.Path(np.column_stack([xMp,yMp]))
-        xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
-        path2 = mpath.Path(np.column_stack([xTp,yTp]))
-        xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
-        path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-        x=[]
-        y=[]
-        for iX in np.arange(xmin, xmax, paso):
-          for iY in np.arange(ymin, ymax, paso):
-            x.append(iX)
-            y.append(iY)
-        x = np.array(x)
-        y = np.array(y)
-
-        puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-        puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-        puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-        intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-        intersectionf= np.logical_and(intersection, puntos_dentro)
-
-        return x[intersectionf], y[intersectionf]
-  """
-
-  xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-  xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
-  path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
-  path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
-  path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-  x=[]
-  y=[]
-  for iX in np.arange(-100, 100, paso):
-    for iY in np.arange(-100, 100, paso):
-      x.append(iX)
-      y.append(iY)
-  x = np.array(x)
-  y = np.array(y)
-
-  puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-  puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-  puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-  intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-  intersectionf= np.logical_and(intersection, puntos_dentro)
-
-  return x[intersectionf], y[intersectionf]

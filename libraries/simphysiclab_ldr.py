@@ -55,15 +55,13 @@ import control
 import sympy
 from tbcontrol.symbolic import routh
 
-#Import utilities libraries
-import matplotlib.colors as colors
-
-#Plot python libraries interactive
+#Plot python graphic libraries and interactive
+import matplotlib
 # %matplotlib ipympl
 sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
-
+import matplotlib.colors as colors
 
 from google.colab import output
 output.enable_custom_widget_manager()
