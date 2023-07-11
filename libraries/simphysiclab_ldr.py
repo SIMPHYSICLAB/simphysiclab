@@ -668,14 +668,10 @@ def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
       else:
         plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
   except:
-    print(2)
     if rangeK==None:
-      print(3)
       if ax!=None:
-        print(5)
         plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
       else:
-        print(6)
         plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
     else:
       if ax!=None:
