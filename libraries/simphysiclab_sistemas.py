@@ -53,6 +53,7 @@ from tbcontrol.symbolic import routh
 
 
 #Plot python libraries interactive
+import matplotlib
 # %matplotlib ipympl
 sympy.init_printing()
 import matplotlib.pyplot as plt
