@@ -1529,7 +1529,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
 
-def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=None):
+def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None):
 
   """
   input:
@@ -1570,14 +1570,24 @@ def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=N
         return x[intersectionf], y[intersectionf]
   """
 
-  xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  rlist,klist=LDR.LDRautomatico(None,TF,[[-1,1],[-1,1]],False,np.arange(0,10000,0.1))
 
-  InfinityValue=1000
-  xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
+  x=[]
+  y=[]
+  countK=0
+  for k in rlist:
+    for kindx in range(0,len(k)):
+      x.append(k[kindx].real)
+      y.append(abs(k[kindx].imag))
+    countK=countK+1
+  x = np.array(x)
+  y = np.array(y)
+
+  xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
+  xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
+  xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
   puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
@@ -1587,14 +1597,23 @@ def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=N
   intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
   intersectionf= np.logical_and(intersection, puntos_dentro)
 
-  ax.set(xlim=(xmin, xmax), ylim=(ymin, ymax), aspect='equal');
+  xI=x[intersectionf]
+  yI=y[intersectionf]
 
-  if ax!=None:
-    ax.scatter(x[intersectionf], y[intersectionf], color='g')
+  xD=[]
+  yD=[]
 
-  return x[intersectionf], y[intersectionf]
+  for intrf in range(0,len(xI)):
+    if (SIS.polosDominantes(TF, complex(x[intrf],y[intrf]))==True):
+      xD.append(x[intrf])
+      yD.append(y[intrf])
 
-def areaValidaSegunRestricciones(ax,limites,paso,theta=None,wd=None,sgm=None):
+  xD = np.array(xD)
+  yD = np.array(yD)
+
+  return xD, yD
+
+def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
 
   """
   input:
@@ -1640,18 +1659,17 @@ def areaValidaSegunRestricciones(ax,limites,paso,theta=None,wd=None,sgm=None):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
-  InfinityValue=1000
-  xMp,yMp=restriccionMp(ax,theta,InfinityValue,InfinityValue)
+  xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=restriccionTp(ax,wd,InfinityValue,InfinityValue)
+  xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=restriccionTs(ax,sgm,InfinityValue,InfinityValue)
+  xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
   x=[]
   y=[]
-  for iX in np.arange(xmin, xmax, paso):
-    for iY in np.arange(ymin, ymax, paso):
+  for iX in np.arange(-100, 100, paso):
+    for iY in np.arange(-100, 100, paso):
       x.append(iX)
       y.append(iY)
   x = np.array(x)
