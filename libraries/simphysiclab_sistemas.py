@@ -999,11 +999,11 @@ def dibujarEjes(ax,paso,limites):
   ax.plot((1), (0), marker='>', transform=ax.get_yaxis_transform(), **arrow_fmt)
   ax.plot((0), (1), marker='^', transform=ax.get_xaxis_transform(), **arrow_fmt)
 
-def zoom(fig,limites):
+def zoom(figOrAx,limites):
 
   """
   input:
-        fig: figura que utilizará como referencia para la copia
+        figOrAx: figura o ejes que se utilizarán como referencia para la copia
         limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
   output:
         cx: devuelve la ventana en la que se ha dibujado
@@ -1011,8 +1011,12 @@ def zoom(fig,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
-  fig2=copy.deepcopy(fig)
-  cx = fig2.get_axes()[0]
+  if type(figOrAx)==matplotlib.figure.Figure:
+    fig2=copy.deepcopy(figOrAx)
+    cx = fig2.get_axes()[0]
+  elif type(figOrAx)==matplotlib.axes._axes.Axes:
+    cx=copy.deepcopy(figOrAx)
+
   cx.set_xlim(xmin, xmax)  # Set the x-axis limits
   cx.set_ylim(ymin, ymax)  # Set the y-axis limits
   return cx
