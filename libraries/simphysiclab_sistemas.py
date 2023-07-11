@@ -1317,6 +1317,11 @@ def dibujarRestriccionMp(ax,theta,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
+  xmin=10000*xmin
+  xmax=10000*xmax
+  ymin=10000*ymin
+  ymax=10000*ymax
+
   if theta!=None:
     x1 = [-xmax * math.cos(theta), 0,0, -xmax * math.cos(theta)]
     y1 = [-ymax * math.sin(theta), 0,0,  ymax * math.sin(theta)]
@@ -1364,6 +1369,11 @@ def dibujarRestriccionTp(ax,wd,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
+  xmin=10000*xmin
+  xmax=10000*xmax
+  ymin=10000*ymin
+  ymax=10000*ymax
+
   if wd!=None:
     x21 = [0, 0, -xmax, -xmax]
     y21 = [ymax, wd, wd, ymax]
@@ -1406,6 +1416,11 @@ def dibujarRestriccionTs(ax,sigma,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
+
+  xmin=10000*xmin
+  xmax=10000*xmax
+  ymin=10000*ymin
+  ymax=10000*ymax
 
   if sigma!=None:
     x3= [-xmax,-sigma,-sigma,-xmax]
@@ -1489,6 +1504,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
   print("a: ",a)
   print("valor final: ",b)
   print("max: ",a+b)
+
   if a>0:
 
     tp=t[np.argmax(y)]
