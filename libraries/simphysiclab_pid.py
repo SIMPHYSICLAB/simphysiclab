@@ -132,7 +132,6 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None):
 
         return xD, yD
   """
-
   rlist,klist=LDR.LDRautomatico(None,TF,[[-1,1],[-1,1]],False,np.arange(0,10000,0.1))
 
   x=[]
@@ -167,9 +166,9 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None):
   yD=[]
 
   for intrf in range(0,len(xI)):
-    if (SIS.polosDominantes(TF, complex(x[intrf],y[intrf]))==True):
-      xD.append(x[intrf])
-      yD.append(y[intrf])
+    if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
+      xD.append(xI[intrf])
+      yD.append(yI[intrf])
 
   xD = np.array(xD)
   yD = np.array(yD)
