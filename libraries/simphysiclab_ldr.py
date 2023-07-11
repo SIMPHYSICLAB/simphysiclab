@@ -771,8 +771,6 @@ def norma4nAsintotas(TF):
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
   nAsintotas=len(polos)-len(ceros)
 
-  print("Número de asíntotas: "+str(nAsintotas))
-
   return nAsintotas
 
 def norma4interseccionAsintotas(TF):
