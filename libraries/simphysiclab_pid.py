@@ -73,31 +73,31 @@ import ipywidgets as widgets
 
 """
 
-def puntoEnAreaValidaSegunRestricciones(TF,x,y,theta=None,wd=None,sgm=None,maxK=1000,paso=0.1):
+def puntoEnAreaValidaSegunRestricciones(TF,punto,theta=None,wd=None,sgm=None,maxK=1000,paso=0.1):
+
   """
   input:
         TF: función de transferencia.
-        x,y: puntos a evaluar, si pertenecen al LDR y estan dentro de las restricciones
+        punto: punto a evaluar, si pertenecen al LDR y estan dentro de las restricciones
         theta: límite de la restricción, Sobreoscilación.
         wd: límite de la restricción, Tiempo de pico.
         sgm: límite de la restricción, Tiempo de establecimiento.
         maxK: max value of K 1000.
         paso: paso para el calculo de K, desde 0 hasta maxK, cada valor de paso.
   output:
-        xD,yD: lista de puntos xD e yD puntos validos según restricciones que cumplen los requisitos de dominancia.
+        True or False: dependiendo de si el punto cumple las condiciones o no.
   código:
-        rlist,klist=LDR.LDRautomatico(None,TF,[[-1,1],[-1,1]],False,np.arange(0,maxK,paso))
-
         x=[]
         y=[]
-        countK=0
-        for k in rlist:
-          for kindx in range(0,len(k)):
-            x.append(k[kindx].real)
-            y.append(abs(k[kindx].imag))
-          countK=countK+1
-        x = np.array(x)
-        y = np.array(y)
+
+        x.append(punto.real)
+        y.append(punto.imag)
+
+        if LDR.criterioArgumento(TF,punto)[1]==True:
+          x = np.array(x)
+          y = np.array(y)
+        else:
+          return False
 
         xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
         path1  = mpath.Path(np.column_stack([xMp,yMp]))
@@ -106,7 +106,6 @@ def puntoEnAreaValidaSegunRestricciones(TF,x,y,theta=None,wd=None,sgm=None,maxK=
         xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
         path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
-        print([xMp,yMp],[xTp,yTp],[nxTp,nyTp],[xTs,yTs])
         puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
         puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
         puntos_dentro = path1.contains_points(np.column_stack([x, y]))
@@ -128,14 +127,23 @@ def puntoEnAreaValidaSegunRestricciones(TF,x,y,theta=None,wd=None,sgm=None,maxK=
         xD = np.array(xD)
         yD = np.array(yD)
 
-        return xD, yD
+        if xD!=None:
+          return True
+        else:
+          return False
   """
 
-  if LDR.criterioArgumento(TF,complex(x,y))[1]==True:
+  x=[]
+  y=[]
+
+  x.append(float(punto.real))
+  y.append(float(punto.imag))
+
+  if LDR.criterioArgumento(TF,punto)[1]==True:
     x = np.array(x)
     y = np.array(y)
   else:
-    return None,None
+    return False
 
   xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
@@ -165,7 +173,10 @@ def puntoEnAreaValidaSegunRestricciones(TF,x,y,theta=None,wd=None,sgm=None,maxK=
   xD = np.array(xD)
   yD = np.array(yD)
 
-  return xD, yD
+  if xD!=None:
+    return True
+  else:
+    return False
 
 def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=1000,paso=0.1):
   """
