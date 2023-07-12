@@ -1193,6 +1193,29 @@ def regimenPermanente(G,H,VectorError):
 
   return  VectorErrorReturn
 
+def errCriterio(err,errPunto):
+  """
+  input:
+        err: en porcentaje, restricción de error del sistema
+        errPunto: en porcentaje, error del sistema para cierto punto
+  output:
+        True or False, si cumple o no
+  código:
+        if errp>errPunto:
+          print("Cumple el criterio de regimen permanente")
+          return True
+        else
+          print("No cumple el criterio de regimen permanente")
+          return False
+  """
+
+  if errp>errPunto:
+    print("Cumple el criterio de regimen permanente")
+    return True
+  else
+    print("No cumple el criterio de regimen permanente")
+    return False
+
 def tipoRespuesta2orden(TF):
 
   """
