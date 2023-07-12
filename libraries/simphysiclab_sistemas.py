@@ -1177,12 +1177,12 @@ def regimenPermanente(G,H,VectorError):
   VectorErrorReturn=[]
 
   kp=Mp.subs(s, 0),
-  ep=1/(1+Mp.subs(s, 0))
+  ep=100*(1/(1+Mp.subs(s, 0)))
   if VectorError.count("errP") > 0:
     VectorErrorReturn.append([kp,ep])
 
   kv=Mv.subs(s, 0),
-  ev=1/(Mv.subs(s, 0))
+  ev=100*(1/(Mv.subs(s, 0)))
   if VectorError.count("errV") > 0:
     VectorErrorReturn.append([kv,ev])
 
