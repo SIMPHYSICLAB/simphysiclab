@@ -1133,17 +1133,17 @@ def regimenPermanente(G,H,VectorError):
 
         kp=Mp.subs(s, 0),
         ep=1/(1+Mp.subs(s, 0))
-        if VectorError.count("ErrP") > 0:
+        if VectorError.count("errP") > 0:
           VectorErrorReturn.append([kp,ep])
 
         kv=Mv.subs(s, 0),
         ev=1/(Mv.subs(s, 0))
-        if VectorError.count("ErrV") > 0:
+        if VectorError.count("errV") > 0:
           VectorErrorReturn.append([kv,ev])
 
         ka=Ma.subs(s, 0)
         ea=1/(Ma.subs(s, 0))
-        if VectorError.count("ErrA") > 0:
+        if VectorError.count("errA") > 0:
           VectorErrorReturn.append([ka,ea])
 
         return  VectorErrorReturn
@@ -1178,17 +1178,17 @@ def regimenPermanente(G,H,VectorError):
 
   kp=Mp.subs(s, 0),
   ep=1/(1+Mp.subs(s, 0))
-  if VectorError.count("ErrP") > 0:
+  if VectorError.count("errP") > 0:
     VectorErrorReturn.append([kp,ep])
 
   kv=Mv.subs(s, 0),
   ev=1/(Mv.subs(s, 0))
-  if VectorError.count("ErrV") > 0:
+  if VectorError.count("errV") > 0:
     VectorErrorReturn.append([kv,ev])
 
   ka=Ma.subs(s, 0)
   ea=1/(Ma.subs(s, 0))
-  if VectorError.count("ErrA") > 0:
+  if VectorError.count("errA") > 0:
     VectorErrorReturn.append([ka,ea])
 
   return  VectorErrorReturn
