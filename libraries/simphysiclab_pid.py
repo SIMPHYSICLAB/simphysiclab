@@ -376,3 +376,51 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
   intersectionf= np.logical_and(intersection, puntos_dentro)
 
   return x[intersectionf], y[intersectionf]
+
+def CalculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
+  """
+  input:
+        G: función de transferencia.
+        H: función de transferencia.
+        theta: límite de la restricción, Sobreoscilación.
+        wd: límite de la restricción, Tiempo de pico.
+        sgm: límite de la restricción, Tiempo de establecimiento.
+  output:
+        valor de K si hubiera punto maximo o minimo significativo en el sistema que cumpliera las condiciones
+  código:
+        puntoMin,puntoMax=PID.comprobarLimitesConRestriccionesLDR(G*H,theta,wd,sgm)
+
+        if puntoMax!=None:
+          KPuntoMax=LDR.criterioModulo(G*H,complex(puntoMax[0],puntoMax[1]))
+
+          if KPuntoMax!=None:
+            return KPuntoMax,complex(puntoMax[0],puntoMax[1]),"Punto Máximo"
+          else:
+            return None
+
+        elif puntoMin!=None:
+          KPuntoMax=LDR.criterioModulo(G*H,complex(puntoMin[0],puntoMin[1]))
+
+          if puntoMin!=None:
+            return puntoMin,complex(puntoMin[0],puntoMin[1]),"Punto Mínimo"
+          else:
+            return None
+  """
+
+  puntoMin,puntoMax=PID.comprobarLimitesConRestriccionesLDR(G*H,theta,wd,sgm)
+
+  if puntoMax!=None:
+    KPuntoMax=LDR.criterioModulo(G*H,complex(puntoMax[0],puntoMax[1]))
+
+    if KPuntoMax!=None:
+      return KPuntoMax,complex(puntoMax[0],puntoMax[1]),"Punto Máximo"
+    else:
+      return None
+
+  elif puntoMin!=None:
+    KPuntoMax=LDR.criterioModulo(G*H,complex(puntoMin[0],puntoMin[1]))
+
+    if puntoMin!=None:
+      return puntoMin,complex(puntoMin[0],puntoMin[1]),"Punto Mínimo"
+    else:
+      return None
