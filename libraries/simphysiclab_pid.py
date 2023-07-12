@@ -173,17 +173,19 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
 
   return xD, yD
 
-def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None):
+def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000,paso=0.1):
   """
   input:
         TF: función de transferencia.
         theta: límite de la restricción, Sobreoscilación.
         wd: límite de la restricción, Tiempo de pico.
         sgm: límite de la restricción, Tiempo de establecimiento.
+        maxK: max value of K 1000.
+        paso: paso para el calculo de K, desde 0 hasta maxK, cada valor de paso.
   output:
         [[xfist,yfirst],[xlast,ylast]]: componente x e y del primer punto con parte imaginaria, componente x e y del último punto con parte imaginaria.
   código:
-        x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm)
+        x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
         findElement=[element for element in y if element != 0][0]
         findLastElement=[element for element in reversed(y) if element != 0][0]
         firstElementComplex=np.where(y == findElement)[0][0]
@@ -193,7 +195,7 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None):
         else:
           return [x[firstElementComplex],y[firstElementComplex]],None
   """
-  x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm)
+  x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
   findElement=[element for element in y if element != 0][0]
   findLastElement=[element for element in reversed(y) if element != 0][0]
   firstElementComplex=np.where(y == findElement)[0][0]
