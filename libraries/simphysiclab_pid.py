@@ -77,12 +77,13 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   """
   input:
         TF: función de transferencia.
-  output:
         theta: límite de la restricción, Sobreoscilación.
         wd: límite de la restricción, Tiempo de pico.
         sgm: límite de la restricción, Tiempo de establecimiento.
         maxK: max value of K 1000.
         paso: paso para el calculo de K, desde 0 hasta maxK, cada valor de paso.
+  output:
+        xD,yD: lista de puntos xD e yD puntos validos según restricciones que cumplen los requisitos de dominancia.
   código:
         rlist,klist=LDR.LDRautomatico(None,TF,[[-1,1],[-1,1]],False,np.arange(0,maxK,paso))
 
@@ -171,6 +172,36 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   yD = np.array(yD)
 
   return xD, yD
+
+def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None):
+  """
+  input:
+        TF: función de transferencia.
+        theta: límite de la restricción, Sobreoscilación.
+        wd: límite de la restricción, Tiempo de pico.
+        sgm: límite de la restricción, Tiempo de establecimiento.
+  output:
+        [[xfist,yfirst],[xlast,ylast]]: componente x e y del primer punto con parte imaginaria, componente x e y del último punto con parte imaginaria.
+  código:
+        x,y=PID.puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm)
+        findElement=[element for element in y if element != 0][0]
+        findLastElement=[element for element in reversed(y) if element != 0][0]
+        firstElementComplex=np.where(y == findElement)[0][0]
+        LastElementComplex=np.where(y == findLastElement)[0][0]
+        if y[LastElementComplex]<100:
+          return [x[firstElementComplex],y[firstElementComplex]],[x[LastElementComplex],y[LastElementComplex]]
+        else:
+          return [x[firstElementComplex],y[firstElementComplex]],None
+  """
+  x,y=PID.puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm)
+  findElement=[element for element in y if element != 0][0]
+  findLastElement=[element for element in reversed(y) if element != 0][0]
+  firstElementComplex=np.where(y == findElement)[0][0]
+  LastElementComplex=np.where(y == findLastElement)[0][0]
+  if y[LastElementComplex]<100:
+    return [x[firstElementComplex],y[firstElementComplex]],[x[LastElementComplex],y[LastElementComplex]]
+  else:
+    return [x[firstElementComplex],y[firstElementComplex]],None
 
 def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None):
 
