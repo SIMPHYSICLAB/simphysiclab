@@ -1090,11 +1090,11 @@ def polosDominantes(TF, polo):
 
   return False
 
-def regimenPermanent(G,H,VectorError):
+def regimenPermanente(G,H,VectorError):
   """
   input:
         TF: función de transferencia.
-        VectorError: puede ser 0 para el error y constante de posición,  1 para el error y constante de velocidad y 2 para el error y constante de acceleración. Se pueden combinar en el vector
+        VectorError: puede ser errP para el error y constante de posición,  errV para el error y constante de velocidad y errA para el error y constante de acceleración. Se pueden combinar en el vector.
   output:
         VectorErrorReturn: vector que contiene tuplas de los errores de posición, velocidad y acceleración.
 
@@ -1133,17 +1133,17 @@ def regimenPermanent(G,H,VectorError):
 
         kp=Mp.subs(s, 0),
         ep=1/(1+Mp.subs(s, 0))
-        if VectorError.count(0) > 0:
+        if VectorError.count("ErrP") > 0:
           VectorErrorReturn.append([kp,ep])
 
         kv=Mv.subs(s, 0),
         ev=1/(Mv.subs(s, 0))
-        if VectorError.count(1) > 0:
+        if VectorError.count("ErrV") > 0:
           VectorErrorReturn.append([kv,ev])
 
         ka=Ma.subs(s, 0)
         ea=1/(Ma.subs(s, 0))
-        if VectorError.count(2) > 0:
+        if VectorError.count("ErrA") > 0:
           VectorErrorReturn.append([ka,ea])
 
         return  VectorErrorReturn
@@ -1178,17 +1178,17 @@ def regimenPermanent(G,H,VectorError):
 
   kp=Mp.subs(s, 0),
   ep=1/(1+Mp.subs(s, 0))
-  if VectorError.count(0) > 0:
+  if VectorError.count("ErrP") > 0:
     VectorErrorReturn.append([kp,ep])
 
   kv=Mv.subs(s, 0),
   ev=1/(Mv.subs(s, 0))
-  if VectorError.count(1) > 0:
+  if VectorError.count("ErrV") > 0:
     VectorErrorReturn.append([kv,ev])
 
   ka=Ma.subs(s, 0)
   ea=1/(Ma.subs(s, 0))
-  if VectorError.count(2) > 0:
+  if VectorError.count("ErrA") > 0:
     VectorErrorReturn.append([ka,ea])
 
   return  VectorErrorReturn
