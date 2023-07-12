@@ -198,7 +198,7 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None):
   findLastElement=[element for element in reversed(y) if element != 0][0]
   firstElementComplex=np.where(y == findElement)[0][0]
   LastElementComplex=np.where(y == findLastElement)[0][0]
-  if y[LastElementComplex]<100:
+  if y[LastElementComplex]<50:
     return [x[firstElementComplex],y[firstElementComplex]],[x[LastElementComplex],y[LastElementComplex]]
   else:
     return [x[firstElementComplex],y[firstElementComplex]],None
