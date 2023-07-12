@@ -1212,7 +1212,7 @@ def errCriterio(err,errPunto):
   if errp>errPunto:
     print("Cumple el criterio de regimen permanente")
     return True
-  else
+  else:
     print("No cumple el criterio de regimen permanente")
     return False
 
