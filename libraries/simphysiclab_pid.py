@@ -375,7 +375,16 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
   intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
   intersectionf= np.logical_and(intersection, puntos_dentro)
 
-  return x[intersectionf], y[intersectionf]
+  xI=x[intersectionf]
+  yI=y[intersectionf]
+
+  puntoMin,puntoMax=comprobarLimitesConRestriccionesLDR(G*H,theta,wd,sgm)
+
+  if puntoMax!=None:
+    return [xI[np.argmax(xI)],max(yI[np.where(xI== xI[np.argmax(xI)])])]
+
+  elif puntoMin!=None:
+    return puntoMin
 
 def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
   """
