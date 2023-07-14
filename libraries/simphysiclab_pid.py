@@ -377,7 +377,7 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
 
   return x[intersectionf], y[intersectionf]
 
-def CalculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
+def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
   """
   input:
         G: función de transferencia.
@@ -415,12 +415,24 @@ def CalculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
     if KPuntoMax!=None:
       return KPuntoMax,complex(puntoMax[0],puntoMax[1]),"Punto Máximo"
     else:
-      return None
+      return None,None,None
 
   elif puntoMin!=None:
-    KPuntoMax=LDR.criterioModulo(G*H,complex(puntoMin[0],puntoMin[1]))
+    KPuntoMin=LDR.criterioModulo(G*H,complex(puntoMin[0],puntoMin[1]))
 
     if puntoMin!=None:
-      return puntoMin,complex(puntoMin[0],puntoMin[1]),"Punto Mínimo"
+      return KPuntoMin,complex(puntoMin[0],puntoMin[1]),"Punto Mínimo"
     else:
-      return None
+      return None,None,None
+
+def calculoCeroZd(TF):
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+  polosNoConjugados=[]
+  for p in polos:
+    try:
+      if p.imag==0:
+        polosNoConjugados.append(p)
+    except:
+        polosNoConjugados.append(p)
+  ceroCancelaPolo=max(polosNoConjugados)
+  return ceroCancelaPolo
