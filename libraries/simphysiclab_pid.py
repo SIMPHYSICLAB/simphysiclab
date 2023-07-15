@@ -324,8 +324,6 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
         y: componente de los puntos Y que cumplen todas la restricciones.
 
   código:
-        xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
         xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
         path1  = mpath.Path(np.column_stack([xMp,yMp]))
         xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
@@ -349,7 +347,10 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
         intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
         intersectionf= np.logical_and(intersection, puntos_dentro)
 
-        return x[intersectionf], y[intersectionf]
+        xI=x[intersectionf]
+        yI=y[intersectionf]
+
+        return [xI[np.argmax(xI)],max(yI[np.where(xI== xI[np.argmax(xI)])])],[xI,yI]
   """
 
   xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
@@ -378,13 +379,7 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
   xI=x[intersectionf]
   yI=y[intersectionf]
 
-  puntoMin,puntoMax=comprobarLimitesConRestriccionesLDR(G*H,theta,wd,sgm)
-
-  if puntoMax!=None:
-    return [xI[np.argmax(xI)],max(yI[np.where(xI== xI[np.argmax(xI)])])]
-
-  elif puntoMin!=None:
-    return puntoMin
+  return [xI[np.argmax(xI)],max(yI[np.where(xI== xI[np.argmax(xI)])])],[xI,yI]
 
 def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
   """
@@ -416,7 +411,7 @@ def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
             return None
   """
 
-  puntoMin,puntoMax=PID.comprobarLimitesConRestriccionesLDR(G*H,theta,wd,sgm)
+  puntoMin,puntoMax=comprobarLimitesConRestriccionesLDR(G*H,theta,wd,sgm)
 
   if puntoMax!=None:
     KPuntoMax=LDR.criterioModulo(G*H,complex(puntoMax[0],puntoMax[1]))
@@ -445,3 +440,72 @@ def calculoCeroZd(TF):
         polosNoConjugados.append(p)
   ceroCancelaPolo=max(polosNoConjugados)
   return ceroCancelaPolo
+
+def calculoPoloPd(TF,Zd,pto_interes):
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+  ceros.append(complex(Zd,0))
+  TF=gain*SIS.generarTF("ceros_polos",ceros,polos)
+
+  angulos,valid=LDR.criterioArgumento(TF,pto_interes)
+
+  pd=-((pto_interes.imag)-(-math.tan(math.radians(angulos))*-pto_interes.real))/math.tan(math.radians(angulos))
+
+  return pd
+
+def calculoParteDiferencial(TF,pto_interes):
+  zd=calculoCeroZd(TF)
+  pd=calculoPoloPd(TF,zd,pto_interes)
+  PD=SIS.generarTF("ceros_polos",[zd],[pd])
+  K=LDR.criterioModulo(PD,pto_interes)
+  return [K,pd,zd,PD]
+
+def calculoZi(pt_interes):
+  try:
+    return pt_interes.real/6
+  except:
+    return pt_interes/6
+
+def calculoPi(TF,Zi,tipo_error,valor_error):
+  b = sympy.Symbol('b')
+  s = sympy.Symbol('s')
+
+  num,den,gain=SIS.InfoTF("num_den",TF)
+  Gp=gain*SIS.generarTF("num_den",num,den,1)
+  Rp=SIS.generarTF("num_den",[1,Zi],[1,b],1)
+
+  Merk=Gp*Rp
+  ecer=((1/(1+Merk.subs(s, 0)))/(valor_error))-1
+  pi=sympy.solve(ecer,b)
+  return pi
+
+def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,valor_error):
+  Kpunto,punto,tipoPunto=calculoParteProporcional(G,H,theta,wd,sgm)
+
+  if Kpunto!=None:
+    errP_punto=SIS.regimenPermanente(float(Kpunto)*G,H,[tipo_error])
+    errValue=SIS.errCriterio(valor_error,errP_punto[0][1])
+
+    #PI
+    #  #No cumple error
+    if errValue==False:
+      zi=calculoZi(Kpunto)
+      pi=calculoPi(float(Kpunto)*G*H,zi,tipo_error,valor_error)
+      return float(Kpunto)*(zi/pi)*G*H
+  else:
+    #PD
+    #  #calculoZi
+    #  #calculoPi
+    pto_interes,area_interes=areaValidaSegunRestricciones(theta,wd,sgm)
+    [K,pd,zd,PD]=calculoParteDiferencial(G*H,pto_interes)
+
+    errP_punto=SIS.regimenPermanente(float(K)*G*PD,H,[tipo_error])
+    errValue=SIS.errCriterio(valor_error,errP_punto[0][1])
+
+    if errValue==False:
+      #PI controlador real e ideal
+      zi=calculoZi(Kpunto)
+      pi=calculoPi(float(K)*PD,zi,tipo_error,valor_error)
+
+      return float(K)*PD*(zi/pi)
+    else:
+      return float(K)*PD
