@@ -114,7 +114,7 @@ def criterioArgumento(TF,punto,tolerancia=0):
   """
   input:
         TF: función de transferencia.
-        punto: cero o polo del sistema.
+        punto: cero o polo del sistema, expresado según complex(real,imag).
         tolerancia: rango de validez del angulo a evaluar, 0 por defecto
   output:
         angulos: angulo para el punto dado
@@ -183,7 +183,7 @@ def criterioModulo(TF,punto):
   """
   input:
         TF: función de transferencia.
-        punto: punto a evaluar.
+        punto: punto a evaluar, expresado según complex(real,imag).
   output:
 
   código:
@@ -511,110 +511,6 @@ def comprobarLimitesLDR(G,H):
         X.append(-1)
   return X,Y
 
-def comprobarLimitesConRestriccionesLDR(ax,limites,paso,TF,theta=None,wd=None,sgm=None):
-
-  """
-  input:
-        ax: ventana donde se dibujará la imagen.
-        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
-        paso: unidad minima para el incremento.
-        theta: límite de la restricción, Sobreoscilación.
-        wd: límite de la restricción, Tiempo de pico.
-        sgm: límite de la restricción, Tiempo de establecimiento.
-  output:
-        #Finito=-1,1;Infinito=-2,2
-        Ymaxlimit,Yminlimit
-        Ymaxlimit: tipo de límite en Y max.
-        Yminlimit: tipo de límite en Y min.
-
-  código:
-        xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
-        rlist,klist=LDRautomatico(ax,TF,[[xmin,xmax],[ymin,ymax]],np.arange(0,10000,paso))
-
-        x=[]
-        y=[]
-        countK=0
-        for k in rlist:
-          for kindx in range(0,len(k)):
-            x.append(k[kindx].real)
-            y.append(abs(k[kindx].imag))
-          countK=countK+1
-        x = np.array(x)
-        y = np.array(y)
-
-        x,y=SIS.puntosEnAreaValidaSegunRestricciones(ax,[[xmin,xmax],[ymin,ymax]],x,y,theta,wd,sgm)
-
-        Ymaxlimit=[]
-        Yminlimit=[]
-        #Chequear limite superior
-        if theta!=None:
-          print("Maximo Local Y")
-          ax.scatter(x[np.argmax(y)], max(y),s=25,c='b', marker="o")
-          Ymaxlimit=[x[np.argmin(y)], max(y)]
-        #Hay una cota superior
-        else:
-          if max(rlist.imag[:,1])>50:
-            print("Infinito Y")
-            Ymaxlimit=2
-          else:
-            print("buscar cota superior")
-            ax.scatter(x[np.argmax(y)], max(y),s=25,c='b', marker="o")
-            Ymaxlimit=[x[np.argmin(y)], max(y)]
-        #Chequear limite inferior
-        if wd!=None:
-          print("puede haber un minimo Local Y")
-          ax.scatter(x[np.argmin(y)], min(y),s=25,c='r', marker="o")
-          Yminlimit= [x[np.argmin(y)], min(y)]
-          #Hay una cota inferior
-        else:
-          print("no hay una cota inferior")
-          Yminlimit=1
-        return Ymaxlimit,Yminlimit
-  """
-
-  xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
-  rlist,klist=LDRautomatico(ax,TF,[[xmin,xmax],[ymin,ymax]],np.arange(0,10000,paso))
-
-  x=[]
-  y=[]
-  countK=0
-  for k in rlist:
-    for kindx in range(0,len(k)):
-      x.append(k[kindx].real)
-      y.append(abs(k[kindx].imag))
-    countK=countK+1
-  x = np.array(x)
-  y = np.array(y)
-
-  x,y=SIS.puntosEnAreaValidaSegunRestricciones(ax,[[xmin,xmax],[ymin,ymax]],x,y,theta,wd,sgm)
-
-  Ymaxlimit=[]
-  Yminlimit=[]
-  #Chequear limite superior
-  if theta!=None:
-    print("Maximo Local Y")
-    ax.scatter(x[np.argmax(y)], max(y),s=25,c='b', marker="o")
-    Ymaxlimit=[x[np.argmin(y)], max(y)]
-  #Hay una cota superior
-  else:
-    if max(rlist.imag[:,1])>50:
-      print("Infinito Y")
-      Ymaxlimit=2
-    else:
-      print("buscar cota superior")
-      ax.scatter(x[np.argmax(y)], max(y),s=25,c='b', marker="o")
-      Ymaxlimit=[x[np.argmin(y)], max(y)]
-  #Chequear limite inferior
-  if wd!=None:
-    print("puede haber un minimo Local Y")
-    ax.scatter(x[np.argmin(y)], min(y),s=25,c='r', marker="o")
-    Yminlimit= [x[np.argmin(y)], min(y)]
-    #Hay una cota inferior
-  else:
-    print("no hay una cota inferior")
-    Yminlimit=1
-  return Ymaxlimit,Yminlimit
-
 def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
 
   """
@@ -657,6 +553,7 @@ def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
 
   xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
   try:
+    print(rangeK)
     if rangeK.any()==None:
       if ax!=None:
         plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
