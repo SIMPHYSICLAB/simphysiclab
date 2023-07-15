@@ -491,6 +491,8 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       zi=calculoZi(Kpunto)
       pi=calculoPi(float(Kpunto)*G*H,zi,tipo_error,valor_error)
       return float(Kpunto)*(zi/pi)*G*H
+    else:
+      return float(Kpunto)
   else:
     #PD
     #  #calculoZi
