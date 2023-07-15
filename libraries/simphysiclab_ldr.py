@@ -552,29 +552,28 @@ def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
   """
 
   xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
-  try:
-    print(rangeK)
-    if rangeK.any()==None:
-      if ax!=None:
-        plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
-      else:
-        plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
+  #try:
+  if rangeK.any()==None:
+    if ax!=None:
+      plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
     else:
-      if ax!=None:
-        plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
-      else:
-        plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
-  except:
-    if rangeK==None:
-      if ax!=None:
-        plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
-      else:
-        plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
+      plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
+  else:
+    if ax!=None:
+      plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
     else:
-      if ax!=None:
-        plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
-      else:
-        plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
+      plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
+  #except:
+  #  if rangeK==None:
+  #    if ax!=None:
+  #      plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
+  #    else:
+  #      plist, klist = control.root_locus(TF,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
+  #  else:
+  #    if ax!=None:
+  #      plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],ax=ax,print_gain = gainPlot,plot=True)
+  #    else:
+  #      plist, klist = control.root_locus(TF,rangeK,grid=False,xlim=[xmin,xmax],ylim=[ymin,ymax],print_gain = gainPlot,plot=False)
 
   return plist, klist
 
