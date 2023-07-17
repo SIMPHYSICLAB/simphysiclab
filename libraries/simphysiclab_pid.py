@@ -301,9 +301,6 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000
   """
   x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
 
-  print(x)
-  print(y)
-
   if x!=None:
     findElement=[element for element in y if element != 0][0]
     findLastElement=[element for element in reversed(y) if element != 0][0]
@@ -517,6 +514,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       #PI controlador real e ideal
       zi=calculoZi(pto_interes)
       pi=calculoPi(float(K)*PD,zi,tipo_error,valor_error)
+      print(zi,pi)
       PI=SIS.generarTF("num_den",[1,-zi],[1-pi])
       return float(K)*PD*PI
     else:
