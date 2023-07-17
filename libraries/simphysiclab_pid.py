@@ -507,6 +507,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
     #  #calculoZi
     #  #calculoPi
     pto_interes,area_interes=areaValidaSegunRestricciones(theta,wd,sgm)
+    print('pto_interes',pto_interes)
     [K,pd,zd,PD]=calculoParteDiferencial(G*H,pto_interes)
 
     errP_punto=SIS.regimenPermanente(float(K)*G*PD,H,[tipo_error])
