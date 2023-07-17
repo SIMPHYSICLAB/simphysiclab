@@ -300,8 +300,8 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000
           return [x[firstElementComplex],y[firstElementComplex]],None
   """
   x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
-  print(x)
-  if x!=None:
+
+  if x.any()!=None:
     findElement=[element for element in y if element != 0][0]
     findLastElement=[element for element in reversed(y) if element != 0][0]
     firstElementComplex=np.where(y == findElement)[0][0]
