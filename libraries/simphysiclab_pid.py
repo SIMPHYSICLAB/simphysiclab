@@ -435,6 +435,7 @@ def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
       return KPuntoMin,complex(puntoMin[0],puntoMin[1]),"Punto Mínimo"
     else:
       return None,None,None
+  return None,None,None
 
 def calculoCeroZd(TF):
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
