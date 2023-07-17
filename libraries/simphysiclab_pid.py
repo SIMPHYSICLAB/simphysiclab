@@ -460,8 +460,8 @@ def calculoPoloPd(TF,Zd,pto_interes):
 def calculoParteDiferencial(TF,pto_interes):
   zd=calculoCeroZd(TF)
   pd=calculoPoloPd(TF,zd,pto_interes)
-  PD=SIS.generarTF("ceros_polos",[-zd],[-pd])
-  K=LDR.criterioModulo(PD,pto_interes)
+  PD=SIS.generarTF("ceros_polos",[zd],[pd])
+  K=LDR.criterioModulo(PD*TF,pto_interes)
   return [K,pd,zd,PD]
 
 def calculoZi(pt_interes):
