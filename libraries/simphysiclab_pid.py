@@ -300,14 +300,17 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000
           return [x[firstElementComplex],y[firstElementComplex]],None
   """
   x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
-  findElement=[element for element in y if element != 0][0]
-  findLastElement=[element for element in reversed(y) if element != 0][0]
-  firstElementComplex=np.where(y == findElement)[0][0]
-  LastElementComplex=np.where(y == findLastElement)[0][0]
-  if y[LastElementComplex]<50:
-    return [x[firstElementComplex],y[firstElementComplex]],[x[LastElementComplex],y[LastElementComplex]]
+  if x!=None:
+    findElement=[element for element in y if element != 0][0]
+    findLastElement=[element for element in reversed(y) if element != 0][0]
+    firstElementComplex=np.where(y == findElement)[0][0]
+    LastElementComplex=np.where(y == findLastElement)[0][0]
+    if y[LastElementComplex]<50:
+      return [x[firstElementComplex],y[firstElementComplex]],[x[LastElementComplex],y[LastElementComplex]]
+    else:
+      return [x[firstElementComplex],y[firstElementComplex]],None
   else:
-    return [x[firstElementComplex],y[firstElementComplex]],None
+    return None,None
 
 def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
 
