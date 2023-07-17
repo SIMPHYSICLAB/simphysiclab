@@ -481,7 +481,7 @@ def calculoPi(TF,Zi,tipo_error,valor_error):
   Merk=Gp*Rp
   ecer=((1/(1+Merk.subs(s, 0)))/(valor_error))-1
   pi=sympy.solve(ecer,b)
-  return pi
+  return pi[0]
 
 def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,valor_error):
   Kpunto,punto,tipoPunto=calculoParteProporcional(G,H,theta,wd,sgm)
