@@ -516,7 +516,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       zi=calculoZi(pto_interes)
       print(K)
       print(PD)
-      pi=calculoPi(float(K)*G,PD,zi,tipo_error,valor_error/100)
+      pi=calculoPi(float(K)*G*PD,zi,tipo_error,valor_error/100)
       print(zi,pi)
       PI=SIS.generarTF("num_den",[1,-zi],[1,-pi])
       return float(K),PD,PI
