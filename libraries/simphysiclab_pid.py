@@ -515,7 +515,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
 
     if errValue==False:
       #PI controlador real e ideal
-      zi=calculoZi(Kpunto)
+      zi=calculoZi(pto_interes)
       pi=calculoPi(float(K)*PD,zi,tipo_error,valor_error)
       PI=SIS.generarTF("num_den",[1,-zi],[1-pi])
       return float(K)*PD*PI
