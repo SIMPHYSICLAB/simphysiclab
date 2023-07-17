@@ -480,6 +480,7 @@ def calculoPi(TF,Zi,tipo_error,valor_error):
 
   Merk=Gp*Rp
   ecer=((1/(1+Merk.subs(s, 0)))/(valor_error))-1
+  print(ecer)
   pi=sympy.solve(ecer,b)
 
   return pi[0]
@@ -516,7 +517,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       zi=calculoZi(pto_interes)
       print(K)
       print(PD)
-      pi=calculoPi(float(K)*G*PD,zi,tipo_error,valor_error)
+      pi=calculoPi(float(K)*G*PD,zi,tipo_error,valor_error/100)
       print(zi,pi)
       PI=SIS.generarTF("num_den",[1,-zi],[1,-pi])
       return float(K),PD,PI
