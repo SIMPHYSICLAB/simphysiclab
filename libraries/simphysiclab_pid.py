@@ -470,15 +470,17 @@ def calculoZi(pt_interes):
   except:
     return pt_interes/6
 
-def calculoPi(TF,Zi,tipo_error,valor_error):
+def calculoPi(K,G,PD,Zi,tipo_error,valor_error):
   b = sympy.Symbol('b')
   s = sympy.Symbol('s')
 
-  num,den,gain=SIS.InfoTF("num_den",TF)
+  num,den,gain=SIS.InfoTF("num_den",G)
   Gp=gain*SIS.generarTF("num_den",num,den,1)
+  num,den,gain=SIS.InfoTF("num_den",PD)
+  PDp=gain*SIS.generarTF("num_den",num,den,1)
   Rp=SIS.generarTF("num_den",[1,Zi],[1,b],1)
 
-  Merk=Gp*Rp
+  Merk=K*Gp*PDp*Rp
   ecer=((1/(1+Merk.subs(s, 0)))/(valor_error))-1
   pi=sympy.solve(ecer,b)
   return pi[0]
@@ -515,7 +517,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       zi=calculoZi(pto_interes)
       print(K)
       print(PD)
-      pi=calculoPi(float(K)*G*PD,zi,tipo_error,valor_error/100)
+      pi=calculoPi(float(K),G,PD,zi,tipo_error,valor_error/100)
       print(zi,pi)
       PI=SIS.generarTF("num_den",[1,-zi],[1-pi])
       return float(K),PD,PI
