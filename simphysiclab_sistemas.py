@@ -51,12 +51,13 @@ import control
 import sympy
 from tbcontrol.symbolic import routh
 
-
-#Plot python libraries interactive
+#Plot python graphic libraries and interactive
+import matplotlib
 # %matplotlib ipympl
 sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
+import matplotlib.colors as colors
 
 from google.colab import output
 output.enable_custom_widget_manager()
@@ -290,6 +291,18 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 
+def devolverPolos_Ceros(polosCeros):
+    pole_values = list(polosCeros.keys())
+    multiplicities = list(polosCeros.values())
+
+    all_poles = []
+    for i in range(len(pole_values)):
+        current_pole = pole_values[i]
+        current_multiplicity = multiplicities[i]
+        all_poles.extend([current_pole] * current_multiplicity)
+
+    return all_poles
+
 def InfoTF(tipo,TF):
 
     '''
@@ -381,8 +394,12 @@ def InfoTF(tipo,TF):
         gain=sympy.Poly(n, sympy.symbols('s')).coeffs()[0]
         num=sympy.Poly(n, sympy.symbols('s'))
         den=sympy.Poly(d, sympy.symbols('s'))
-        ceros=sympy.solve(num,sympy.symbols('s'))
-        polos=sympy.solve(den,sympy.symbols('s'))
+
+        #ceros=sympy.solve(num,sympy.symbols('s'))
+        ceros = devolverPolos_Ceros(sympy.roots(num,sympy.symbols('s')))
+        #polos=sympy.solve(den,sympy.symbols('s'))
+        polos = devolverPolos_Ceros(sympy.roots(den,sympy.symbols('s')))
+
         return ceros,polos,gain
       else:
         gain=TF.num[0][0][0]
@@ -983,11 +1000,11 @@ def dibujarEjes(ax,paso,limites):
   ax.plot((1), (0), marker='>', transform=ax.get_yaxis_transform(), **arrow_fmt)
   ax.plot((0), (1), marker='^', transform=ax.get_xaxis_transform(), **arrow_fmt)
 
-def zoom(fig,limites):
+def zoom(figOrAx,limites):
 
   """
   input:
-        fig: figura que utilizará como referencia para la copia
+        figOrAx: figura o ejes que se utilizarán como referencia para la copia
         limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
   output:
         cx: devuelve la ventana en la que se ha dibujado
@@ -995,17 +1012,22 @@ def zoom(fig,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
-  fig2=copy.deepcopy(fig)
-  cx = fig2.get_axes()[0]
+  if type(figOrAx)==matplotlib.figure.Figure:
+    fig2=copy.deepcopy(figOrAx)
+    cx = fig2.get_axes()[0]
+  elif type(figOrAx)==matplotlib.axes._axes.Axes:
+    cx=copy.deepcopy(figOrAx)
+
   cx.set_xlim(xmin, xmax)  # Set the x-axis limits
   cx.set_ylim(ymin, ymax)  # Set the y-axis limits
   return cx
 
-def dibujarPolosCeros(ax,TF):
+def dibujarPolosCeros(ax,limites,TF):
 
   """
   input:
         ax: ventana donde se dibujará la imagen.
+        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
         TF: función de transferencia.
   output:
 
@@ -1017,6 +1039,10 @@ def dibujarPolosCeros(ax,TF):
         for j in range(len(ceros)) :
           ax.scatter(ceros[j].real, ceros[j].imag, s=200,c='b', marker="o")
   """
+
+  xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
 
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
@@ -1032,7 +1058,7 @@ def polosDominantes(TF, polo):
   output:
         DominanteONoDominante: True o False depenendiendo de si es o no dominante el polo evaluado
   código:
-        ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+        ceros,polos,gain=InfoTF("ceros_polos",TF)
 
         # Verificar si hay un cero cercano al polo
         for c in ceros:
@@ -1059,16 +1085,16 @@ def polosDominantes(TF, polo):
   min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
 
   # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
-  if polo.real >= 10 * min_low_freq_pole.real:
+  if polo.real<3*min_low_freq_pole.real:
       return True
 
   return False
 
-def regimenPermanent(G,H,VectorError):
+def regimenPermanente(G,H,VectorError):
   """
   input:
         TF: función de transferencia.
-        VectorError: puede ser 0 para el error y constante de posición,  1 para el error y constante de velocidad y 2 para el error y constante de acceleración. Se pueden combinar en el vector
+        VectorError: puede ser errP para el error y constante de posición,  errV para el error y constante de velocidad y errA para el error y constante de acceleración. Se pueden combinar en el vector.
   output:
         VectorErrorReturn: vector que contiene tuplas de los errores de posición, velocidad y acceleración.
 
@@ -1080,22 +1106,22 @@ def regimenPermanent(G,H,VectorError):
         s = sympy.Symbol('s')
 
         #Forzar libreria sympy
-        num,den,gain=SIS.InfoTF("num_den",G)
+        num,den,gain=InfoTF("num_den",G)
         numcK=[]
         for i in num:
           numcK.append(float(i)*gain)
-        num=SIS.generarTF("num_den",numcK,[1],1)
-        den=SIS.generarTF("num_den",den,[1],1)
+        num=generarTF("num_den",numcK,[1],1)
+        den=generarTF("num_den",den,[1],1)
         G=num/den
         #Forzar libreria sympy
 
         #Forzar libreria sympy
-        num,den,gain=SIS.InfoTF("num_den",H)
+        num,den,gain=InfoTF("num_den",H)
         numcK=[]
         for i in num:
           numcK.append(float(i)*gain)
-        num=SIS.generarTF("num_den",numcK,[1],1)
-        den=SIS.generarTF("num_den",den,[1],1)
+        num=generarTF("num_den",numcK,[1],1)
+        den=generarTF("num_den",den,[1],1)
         H=num/den
         #Forzar libreria sympy
 
@@ -1107,17 +1133,17 @@ def regimenPermanent(G,H,VectorError):
 
         kp=Mp.subs(s, 0),
         ep=1/(1+Mp.subs(s, 0))
-        if VectorError.count(0) > 0:
+        if VectorError.count("errP") > 0:
           VectorErrorReturn.append([kp,ep])
 
         kv=Mv.subs(s, 0),
         ev=1/(Mv.subs(s, 0))
-        if VectorError.count(1) > 1:
+        if VectorError.count("errV") > 0:
           VectorErrorReturn.append([kv,ev])
 
         ka=Ma.subs(s, 0)
         ea=1/(Ma.subs(s, 0))
-        if VectorError.count(2) > 2:
+        if VectorError.count("errA") > 0:
           VectorErrorReturn.append([ka,ea])
 
         return  VectorErrorReturn
@@ -1125,22 +1151,22 @@ def regimenPermanent(G,H,VectorError):
   s = sympy.Symbol('s')
 
   #Forzar libreria sympy
-  num,den,gain=SIS.InfoTF("num_den",G)
+  num,den,gain=InfoTF("num_den",G)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
-  num=SIS.generarTF("num_den",numcK,[1],1)
-  den=SIS.generarTF("num_den",den,[1],1)
+  num=generarTF("num_den",numcK,[1],1)
+  den=generarTF("num_den",den,[1],1)
   G=num/den
   #Forzar libreria sympy
 
   #Forzar libreria sympy
-  num,den,gain=SIS.InfoTF("num_den",H)
+  num,den,gain=InfoTF("num_den",H)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
-  num=SIS.generarTF("num_den",numcK,[1],1)
-  den=SIS.generarTF("num_den",den,[1],1)
+  num=generarTF("num_den",numcK,[1],1)
+  den=generarTF("num_den",den,[1],1)
   H=num/den
   #Forzar libreria sympy
 
@@ -1151,21 +1177,44 @@ def regimenPermanent(G,H,VectorError):
   VectorErrorReturn=[]
 
   kp=Mp.subs(s, 0),
-  ep=1/(1+Mp.subs(s, 0))
-  if VectorError.count(0) > 0:
+  ep=100*(1/(1+Mp.subs(s, 0)))
+  if VectorError.count("errP") > 0:
     VectorErrorReturn.append([kp,ep])
 
   kv=Mv.subs(s, 0),
-  ev=1/(Mv.subs(s, 0))
-  if VectorError.count(1) > 1:
+  ev=100*(1/(Mv.subs(s, 0)))
+  if VectorError.count("errV") > 0:
     VectorErrorReturn.append([kv,ev])
 
   ka=Ma.subs(s, 0)
   ea=1/(Ma.subs(s, 0))
-  if VectorError.count(2) > 2:
+  if VectorError.count("errA") > 0:
     VectorErrorReturn.append([ka,ea])
 
   return  VectorErrorReturn
+
+def errCriterio(err,errPunto):
+  """
+  input:
+        err: en porcentaje, restricción de error del sistema
+        errPunto: en porcentaje, error del sistema para cierto punto
+  output:
+        True or False, si cumple o no
+  código:
+        if errp>errPunto:
+          print("Cumple el criterio de regimen permanente")
+          return True
+        else
+          print("No cumple el criterio de regimen permanente")
+          return False
+  """
+
+  if err>errPunto:
+    print("Cumple el criterio de regimen permanente")
+    return True
+  else:
+    print("No cumple el criterio de regimen permanente")
+    return False
 
 def tipoRespuesta2orden(TF):
 
@@ -1296,6 +1345,11 @@ def dibujarRestriccionMp(ax,theta,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
+  xmin=10000*xmin
+  xmax=10000*xmax
+  ymin=10000*ymin
+  ymax=10000*ymax
+
   if theta!=None:
     x1 = [-xmax * math.cos(theta), 0,0, -xmax * math.cos(theta)]
     y1 = [-ymax * math.sin(theta), 0,0,  ymax * math.sin(theta)]
@@ -1343,6 +1397,11 @@ def dibujarRestriccionTp(ax,wd,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
+  xmin=10000*xmin
+  xmax=10000*xmax
+  ymin=10000*ymin
+  ymax=10000*ymax
+
   if wd!=None:
     x21 = [0, 0, -xmax, -xmax]
     y21 = [ymax, wd, wd, ymax]
@@ -1385,6 +1444,11 @@ def dibujarRestriccionTs(ax,sigma,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
+
+  xmin=10000*xmin
+  xmax=10000*xmax
+  ymin=10000*ymin
+  ymax=10000*ymax
 
   if sigma!=None:
     x3= [-xmax,-sigma,-sigma,-xmax]
@@ -1468,6 +1532,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
   print("a: ",a)
   print("valor final: ",b)
   print("max: ",a+b)
+
   if a>0:
 
     tp=t[np.argmax(y)]
@@ -1486,140 +1551,3 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         ts=t[i-1]
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
-
-def puntosEnAreaValidaSegunRestricciones(ax,limites,x,y,theta=None,wd=None,sgm=None):
-
-  """
-  input:
-          ax: ventana donde se dibujará la imagen.
-          limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
-          x: componente X de los puntos a evaluar.
-          y: componente Y de los puntos a evaluar.
-          theta: límite de la restricción, Sobreoscilación.
-          wd: límite de la restricción, Tiempo de pico.
-          sgm: límite de la restricción, Tiempo de establecimiento.
-  output:
-          x: componente de los puntos X que cumplen todas la restricciones.
-          y: componente de los puntos Y que cumplen todas la restricciones.
-
-  código:
-        xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-        InfinityValue=1000
-        xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
-        path1  = mpath.Path(np.column_stack([xMp,yMp]))
-        xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
-        path2 = mpath.Path(np.column_stack([xTp,yTp]))
-        xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
-        path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-        puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-        puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-        puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-        intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-        intersectionf= np.logical_and(intersection, puntos_dentro)
-
-        ax.set(xlim=(xmin, xmax), ylim=(ymin, ymax), aspect='equal');
-
-        if ax!=None:
-          ax.scatter(x[intersectionf], y[intersectionf], color='g')
-
-        return x[intersectionf], y[intersectionf]
-  """
-
-  xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-  InfinityValue=1000
-  xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
-  path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
-  path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
-  path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-  puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-  puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-  puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-  intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-  intersectionf= np.logical_and(intersection, puntos_dentro)
-
-  ax.set(xlim=(xmin, xmax), ylim=(ymin, ymax), aspect='equal');
-
-  if ax!=None:
-    ax.scatter(x[intersectionf], y[intersectionf], color='g')
-
-  return x[intersectionf], y[intersectionf]
-
-def areaValidaSegunRestricciones(ax,limites,paso,theta=None,wd=None,sgm=None):
-
-  """
-  input:
-        ax: ventana donde se dibujará la imagen.
-        limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
-        paso: unidad minima para el incremento.
-        theta: límite de la restricción, Sobreoscilación.
-        wd: límite de la restricción, Tiempo de pico.
-        sgm: límite de la restricción, Tiempo de establecimiento.
-  output:
-        x: componente de los puntos X que cumplen todas la restricciones.
-        y: componente de los puntos Y que cumplen todas la restricciones.
-
-  código:
-        xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-        InfinityValue=1000
-        xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
-        path1  = mpath.Path(np.column_stack([xMp,yMp]))
-        xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
-        path2 = mpath.Path(np.column_stack([xTp,yTp]))
-        xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
-        path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-        x=[]
-        y=[]
-        for iX in np.arange(xmin, xmax, paso):
-          for iY in np.arange(ymin, ymax, paso):
-            x.append(iX)
-            y.append(iY)
-        x = np.array(x)
-        y = np.array(y)
-
-        puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-        puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-        puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-        intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-        intersectionf= np.logical_and(intersection, puntos_dentro)
-
-        return x[intersectionf], y[intersectionf]
-  """
-
-  xmin,xmax,ymin,ymax=ajustarLimites(limites)
-
-  InfinityValue=1000
-  xMp,yMp=SIS.restriccionMp(ax,theta,InfinityValue,InfinityValue)
-  path1  = mpath.Path(np.column_stack([xMp,yMp]))
-  xTp,yTp=SIS.restriccionTp(ax,wd,InfinityValue,InfinityValue)
-  path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  xTs,yTs=SIS.restriccionTs(ax,sgm,InfinityValue,InfinityValue)
-  path3 = mpath.Path(np.column_stack([xTs,yTs]))
-
-  x=[]
-  y=[]
-  for iX in np.arange(xmin, xmax, paso):
-    for iY in np.arange(ymin, ymax, paso):
-      x.append(iX)
-      y.append(iY)
-  x = np.array(x)
-  y = np.array(y)
-
-  puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
-  puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
-  puntos_dentro = path1.contains_points(np.column_stack([x, y]))
-
-  intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
-  intersectionf= np.logical_and(intersection, puntos_dentro)
-
-  return x[intersectionf], y[intersectionf]
