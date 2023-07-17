@@ -300,8 +300,7 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000
           return [x[firstElementComplex],y[firstElementComplex]],None
   """
   x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
-  print(x)
-  print(y)
+
   if x!=None:
     findElement=[element for element in y if element != 0][0]
     findLastElement=[element for element in reversed(y) if element != 0][0]
