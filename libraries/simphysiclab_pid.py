@@ -386,7 +386,7 @@ def areaValidaSegunRestricciones(theta=None,wd=None,sgm=None,paso=0.1):
   xI=x[intersectionf]
   yI=y[intersectionf]
 
-  return [xI[np.argmax(xI)],max(yI[np.where(xI== xI[np.argmax(xI)])])],[xI,yI]
+  return complex(xI[np.argmax(xI)],max(yI[np.where(xI== xI[np.argmax(xI)])])),[xI,yI]
 
 def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
   """
