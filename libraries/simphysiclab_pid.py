@@ -300,7 +300,7 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000
           return [x[firstElementComplex],y[firstElementComplex]],None
   """
   x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
-
+  print(x)
   if x!=None:
     findElement=[element for element in y if element != 0][0]
     findLastElement=[element for element in reversed(y) if element != 0][0]
@@ -447,8 +447,10 @@ def calculoCeroZd(TF):
   return ceroCancelaPolo
 
 def calculoPoloPd(TF,Zd,pto_interes):
+
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
   ceros.append(complex(Zd,0))
+
   TF=gain*SIS.generarTF("ceros_polos",ceros,polos)
 
   angulos,valid=LDR.criterioArgumento(TF,pto_interes)
@@ -480,7 +482,7 @@ def calculoPi(TF,Zi,tipo_error,valor_error):
 
   Merk=Gp*Rp
   ecer=((1/(1+Merk.subs(s, 0)))/(valor_error))-1
-  print(ecer)
+
   pi=sympy.solve(ecer,b)
 
   return pi[0]
@@ -506,7 +508,7 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
     #  #calculoZi
     #  #calculoPi
     pto_interes,area_interes=areaValidaSegunRestricciones(theta,wd,sgm)
-    print('pto_interes',pto_interes)
+
     [K,pd,zd,PD]=calculoParteDiferencial(G*H,pto_interes)
 
     errP_punto=SIS.regimenPermanente(float(K)*G*PD,H,[tipo_error])
@@ -515,11 +517,8 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
     if errValue==False:
       #PI controlador real e ideal
       zi=calculoZi(pto_interes)
-      print(K)
-      print(PD)
       pi=calculoPi(float(K)*G*PD,zi,tipo_error,valor_error/100)
-      print(zi,pi)
       PI=SIS.generarTF("num_den",[1,-zi],[1,-pi])
       return float(K),PD,PI
     else:
-      return float(K)*PD
+      return float(K),PD
