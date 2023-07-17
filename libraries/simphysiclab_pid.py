@@ -498,9 +498,9 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
     #  #No cumple error
     if errValue==False:
       zi=calculoZi(Kpunto)
-      pi=calculoPi(float(Kpunto)*G*H,zi,tipo_error,valor_error)
+      pi=calculoPi(float(Kpunto)*G*H,zi,tipo_error,valor_error/100)
       PI=SIS.generarTF("num_den",[1,-zi],[1-pi])
-      return float(Kpunto)*PI*G*H
+      return float(Kpunto),PI
     else:
       return float(Kpunto)
   else:
