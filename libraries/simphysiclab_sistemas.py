@@ -75,8 +75,9 @@ def tipoLibreria(TF):
   output:
         libreria: nombre de la librería principal de la función de transferencia.
   código:
-        libreria=type(TF).__module__.split('.')[0]
-        return libreria
+        def tipoLibreria(TF):
+          libreria=type(TF).__module__.split('.')[0]
+          return libreria
   '''
   libreria=type(TF).__module__.split('.')[0]
   return libreria
@@ -588,8 +589,8 @@ def estabilidadTF(TF):
             print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
           else:
             ceros,polos,gain=InfoTF("ceros_polos",TF)
-            ceros=[np.round(i,2) for i in ceros]
-            polos=[np.round(i,2) for i in polos]
+            ceros=[np.round(float(i),2) for i in ceros]
+            polos=[np.round(float(i),2) for i in polos]
             EstableInestable=0
             for i in polos:
               if i.real>=0:
@@ -605,8 +606,8 @@ def estabilidadTF(TF):
     print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
   else:
     ceros,polos,gain=InfoTF("ceros_polos",TF)
-    ceros=[np.round(i,2) for i in ceros]
-    polos=[np.round(i,2) for i in polos]
+    ceros=[np.round(float(i),2) for i in ceros]
+    polos=[np.round(float(i),2) for i in polos]
     EstableInestable=0
     for i in polos:
       if i.real>=0:
@@ -616,6 +617,9 @@ def estabilidadTF(TF):
         print("Polo inestable en:",i,", ")
     if EstableInestable==0:
       print("Sistema Estable")
+      return 1
+    else:
+      return 0
 
 def estabilidadRouth(TF,simbolo=None):
 
