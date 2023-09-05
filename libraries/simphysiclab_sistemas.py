@@ -663,7 +663,7 @@ def estabilidadCardano(TF):
   if has_zero!=True:
     lastValue=np.sign(coeffs)
     indices = np.where(lastValue < 0)
-    if len(indices)==0:
+    if len(indices[0])==0:
       print("Cumple los dos criterios de Cardano, se debe analizar la estabilidad según Ruth para asegurar Estabilidad.")
     else:
       print("Inestable. No cumple el segundo criterio de Cardano.")
