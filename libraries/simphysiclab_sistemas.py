@@ -621,6 +621,55 @@ def estabilidadTF(TF):
     else:
       return 0
 
+def estabilidadCardano(TF):
+
+  '''
+    input:
+          TF: función de transferencia.
+    output:
+
+    código:
+          num,den,gain=SIS.InfoTF("num_den",TF)
+
+          coeffs = []
+          for d in den:
+            if d.atoms(sympy.Number)==set():
+              coeffs.append(1)
+            else:
+              coeffs.append(d)
+
+          has_zero = any(x == 0 for x in coeffs)
+          if has_zero!=True:
+            lastValue=np.sign(coeffs)
+            indices = np.where(lastValue < 0)
+            if len(indices)==0:
+              print("Pasa los dos criterios de Cardano, se debe analizar la estabilidad según Ruth para asegurar Estabilidad.")
+            else:
+              print("Inestable. Falló el segundo criterio de Cardano.")
+          else:
+            print("Inestable. Falló el primer criterio de Cardano.")
+  '''
+
+  num,den,gain=SIS.InfoTF("num_den",TF)
+
+  coeffs = []
+  for d in den:
+    if d.atoms(sympy.Number)==set():
+      coeffs.append(1)
+    else:
+      coeffs.append(d)
+
+  has_zero = any(x == 0 for x in coeffs)
+  if has_zero!=True:
+    lastValue=np.sign(coeffs)
+    indices = np.where(lastValue < 0)
+    if len(indices)==0:
+      print("Cumple los dos criterios de Cardano, se debe analizar la estabilidad según Ruth para asegurar Estabilidad.")
+    else:
+      print("Inestable. No cumple el segundo criterio de Cardano.")
+  else:
+    print("Inestable. No cumple el primer criterio de Cardano.")
+
 def estabilidadRouth(TF,simbolo=None):
 
   '''
