@@ -650,7 +650,7 @@ def estabilidadCardano(TF):
             print("Inestable. Falló el primer criterio de Cardano.")
   '''
 
-  num,den,gain=SIS.InfoTF("num_den",TF)
+  num,den,gain=InfoTF("num_den",TF)
 
   coeffs = []
   for d in den:
