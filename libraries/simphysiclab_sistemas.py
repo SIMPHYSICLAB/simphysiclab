@@ -1604,3 +1604,68 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         ts=t[i-1]
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
+
+def parametrosTipoRegimen(ax,y,t)
+
+
+  """
+  input:
+        y: valores de la señal para la respuesta en regimen permanente
+        t: vector de tiempos correspondiente a los valores de la señal en regimen permanente
+  output:
+
+  código:
+        fv=y[len(t)-1]
+
+        max5fv=fv+fv*(5/100)
+        min5fv=fv-fv*(5/100)
+
+        rp=[]
+        yp=[]
+        pto_y=max5fv
+        for i in range(len(y)):
+          if pto_y-y[i]<0:
+            rp=t[i-1]
+            yp=pto_y
+            break
+        if rp!=None:
+          pto_y=min5fv
+          for i in range(len(y)):
+            if pto_y-y[i]<0:
+              rp=t[i-1]
+              yp=pto_y
+              break
+
+        ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
+        ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
+        ax.plot([rp, len(t)], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+        ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
+        ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
+  """
+
+  fv=y[len(t)-1]
+
+  max5fv=fv+fv*(5/100)
+  min5fv=fv-fv*(5/100)
+
+  rp=[]
+  yp=[]
+  pto_y=max5fv
+  for i in range(len(y)):
+    if pto_y-y[i]<0:
+      rp=t[i-1]
+      yp=pto_y
+      break
+  if rp!=None:
+    pto_y=min5fv
+    for i in range(len(y)):
+      if pto_y-y[i]<0:
+        rp=t[i-1]
+        yp=pto_y
+        break
+
+  ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
+  ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
+  ax.plot([rp, len(t)], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+  ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
+  ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
