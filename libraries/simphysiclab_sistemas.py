@@ -1100,7 +1100,7 @@ def zoom(figOrAx,limites):
   return cx
 
 def dibujarPolosCeros(ax,limites,TF,tono=1.0):
-
+  #REVISAR EDUARDO#
   """
   input:
         ax: ventana donde se dibujará la imagen.
@@ -1618,15 +1618,16 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
   ax.annotate('a+b=%s'%round(a+b,3),(0,b+a),(0,b+a))
   ax.annotate('vf=%s'%round(b,3),(t[len(t)-1],b),(t[len(t)-1],b))
 
-  print("Sobreoscilacion: ",100*(a/b),"%")
+
   print("Errp: ",errp)
-  print("b: ",b)
-  print("a: ",a)
   print("valor final: ",b)
-  print("max: ",a+b)
+
 
   if a>0:
-
+    print("Sobreoscilacion: ",100*(a/b),"%")
+    print("b: ",b)
+    print("a: ",a)
+    print("max: ",a+b)
     tp=t[np.argmax(y)]
     print("tp: ",tp,"s")
     ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
@@ -1642,6 +1643,8 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
       if pto_y-y[i]<0:
         ts=t[i-1]
         break
+    ax.plot([0, ts], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
+    ax.plot([ts, ts], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
 
 def parametrosTipoRegimen(ax,y,t):
@@ -1705,6 +1708,6 @@ def parametrosTipoRegimen(ax,y,t):
 
   ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
   ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
-  ax.plot([rp, len(t)], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+  ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
   ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
   ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
