@@ -560,6 +560,18 @@ def inversaLaplace(TF,positivos):
           inverse_laplace_transform: devuelve la transformada inversa de laplace
 
     código:
+          #Forzar libreria control
+          num,den,gain=InfoTF("num_den",TF)
+
+          numcK=[]
+          for i in num:
+            numcK.append(float(i)*gain)
+          denc=[]
+          for i in den:
+            denc.append(float(i))
+          TF=generarTF("num_den",numcK,denc,1)
+          #Forzar libreria control
+
           if positivos==1:
             s = sympy.symbols('s')
             t = sympy.Symbol('t', positive=True)
@@ -568,6 +580,18 @@ def inversaLaplace(TF,positivos):
             t = sympy.Symbol('t')
           return sympy.inverse_laplace_transform(TF, s, t)
   '''
+
+  #Forzar libreria control
+  num,den,gain=InfoTF("num_den",TF)
+
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  denc=[]
+  for i in den:
+    denc.append(float(i))
+  TF=generarTF("num_den",numcK,denc,1)
+  #Forzar libreria control
 
   if positivos==1:
     s = sympy.symbols('s')
