@@ -1161,6 +1161,8 @@ def polosDominantes(TF, polo):
   # Encontrar el polo de baja frecuencia más cercano
   min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
 
+  print(min_low_freq_pole)
+
   # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
   if polo.real>3*min_low_freq_pole.real:
       return True
