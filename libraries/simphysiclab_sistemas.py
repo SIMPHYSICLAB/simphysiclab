@@ -599,7 +599,7 @@ def inversaLaplace(TF,positivos):
   else:
     s = sympy.symbols('s')
     t = sympy.Symbol('t')
-  return sympy.inverse_laplace_transform(TF, s, t)
+  return sympy.inverse_laplace_transform(TF, s, t),t
 
 def estabilidadTF(TF):
 
