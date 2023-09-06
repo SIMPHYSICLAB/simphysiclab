@@ -1605,7 +1605,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         break
     ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
 
-def parametrosTipoRegimen(ax,y,t)
+def parametrosTipoRegimen(ax,y,t):
 
 
   """
