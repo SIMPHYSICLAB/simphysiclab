@@ -586,10 +586,10 @@ def inversaLaplace(TF,positivos):
 
   numcK=[]
   for i in num:
-    numcK.append(float(i)*gain)
+    numcK.append(i*gain)
   denc=[]
   for i in den:
-    denc.append(float(i))
+    denc.append(i)
   TF=generarTF("num_den",numcK,denc,1)
   #Forzar libreria control
 
