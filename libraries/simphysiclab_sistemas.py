@@ -560,7 +560,7 @@ def inversaLaplace(TF,positivos):
           inverse_laplace_transform: devuelve la transformada inversa de laplace
 
     código:
-          #Forzar libreria control
+          #Forzar libreria sympy
           num,den,gain=InfoTF("num_den",TF)
 
           numcK=[]
@@ -570,7 +570,7 @@ def inversaLaplace(TF,positivos):
           for i in den:
             denc.append(float(i))
           TF=generarTF("num_den",numcK,denc,1)
-          #Forzar libreria control
+          #Forzar libreria sympy
 
           if positivos==1:
             s = sympy.symbols('s')
@@ -581,7 +581,7 @@ def inversaLaplace(TF,positivos):
           return sympy.inverse_laplace_transform(TF, s, t)
   '''
 
-  #Forzar libreria control
+  #Forzar libreria sympy
   num,den,gain=InfoTF("num_den",TF)
 
   numcK=[]
@@ -591,7 +591,7 @@ def inversaLaplace(TF,positivos):
   for i in den:
     denc.append(i)
   TF=generarTF("num_den",numcK,denc,1)
-  #Forzar libreria control
+  #Forzar libreria sympy
 
   if positivos==1:
     s = sympy.symbols('s')
@@ -1120,6 +1120,19 @@ def dibujarPolosCeros(ax,limites,TF):
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
+
+  #Forzar libreria control
+  num,den,gain=InfoTF("num_den",TF)
+
+  numcK=[]
+  for i in num:
+    numcK.append(i*gain)
+  denc=[]
+  for i in den:
+    denc.append(i)
+  TF=generarTF("num_den",numcK,denc)
+  #Forzar libreria control
+
 
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
