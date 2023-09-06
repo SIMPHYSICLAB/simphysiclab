@@ -1099,7 +1099,7 @@ def zoom(figOrAx,limites):
   cx.set_ylim(ymin, ymax)  # Set the y-axis limits
   return cx
 
-def dibujarPolosCeros(ax,limites,TF):
+def dibujarPolosCeros(ax,limites,TF,tono=1.0):
 
   """
   input:
@@ -1137,9 +1137,9 @@ def dibujarPolosCeros(ax,limites,TF):
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
   for i in range(len(polos)) :
-    ax.scatter(polos[i].real, polos[i].imag, s=200,c='r', marker="x")
+    ax.scatter(polos[i].real, polos[i].imag, s=200,color=(tono, 0, 0), marker="x")
   for j in range(len(ceros)) :
-    ax.scatter(ceros[j].real, ceros[j].imag, s=200,c='b', marker="o")
+    ax.scatter(ceros[j].real, ceros[j].imag, s=200,color=(0, 0, tono), marker="o")
 
 def polosDominantes(TF, polo):
   """
