@@ -303,7 +303,7 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   figs=fig
   Gs=G
   Hs=H
-  ani = FuncAnimation(fig, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
+  ani = FuncAnimation(figs, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
   #for i in rangoK:
   #  M=SIS.realimentacion(G,H,i)
   #  ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
