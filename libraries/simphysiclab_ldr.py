@@ -62,6 +62,9 @@ sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
 import matplotlib.colors as colors
+from matplotlib.animation import FuncAnimation
+from IPython.display import HTML
+
 
 from google.colab import output
 output.enable_custom_widget_manager()
@@ -222,7 +225,7 @@ def criterioModulo(TF,punto):
 
   return polosden/(cerosnum*gain)
 
-def LDRmanual(ax,G,H,limites,rangoK):
+def LDRmanual(fig,ax,G,H,limites,rangoK):
 
   """
   input:
@@ -266,6 +269,11 @@ def LDRmanual(ax,G,H,limites,rangoK):
             if ptA.as_real_imag()[0]>xmin:
               ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
   """
+  global ax
+  global fig
+  global G
+  global H
+
   #Forzar libreria sympy
   num,den,gain=SIS.InfoTF("num_den",G)
   numcK=[]
@@ -291,15 +299,38 @@ def LDRmanual(ax,G,H,limites,rangoK):
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
 
-  artists=[]
-  for i in rangoK:
-    M=SIS.realimentacion(G,H,i)
-    ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
-    for ptA in polos:
-      if ptA.as_real_imag()[0]>xmin:
-        point=ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
-        artists.append(artists)
-  return artists
+  ani = FuncAnimation(fig, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
+  #for i in rangoK:
+  #  M=SIS.realimentacion(G,H,i)
+  #  ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
+  #  for ptA in polos:
+  #    if ptA.as_real_imag()[0]>xmin:
+  #      ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+  return HTML(ani.to_jshtml())
+def updateScatterLDRmanual(frame):
+  global ax
+  global fig
+  global G
+  global H
+  M=SIS.realimentacion(G,H,frame)
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
+  for ptA in polos:
+    if ptA.as_real_imag()[0]>xmin:
+      ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+
+# Initialize an empty scatter plot
+def updateScatterLDRmanual(frame):
+      if frame == 0:
+          # Show the first point
+        ax.scatter([2,4], [3,4], s=100)
+      elif frame == 1:
+          # Show the second point after 1 second
+          ax.scatter([2,4], [4,4], s=100)
+
+# Create the animation
+ani = FuncAnimation(fig, update, frames=2, interval=1000, repeat=False)
+# Display the animation as HTML
+HTML(ani.to_jshtml())
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
