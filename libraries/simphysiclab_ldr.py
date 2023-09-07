@@ -303,7 +303,7 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   figs=fig
   Gs=G
   Hs=H
-  ani = FuncAnimation(figs, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
+  ani = FuncAnimation(fig, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
   #for i in rangoK:
   #  M=SIS.realimentacion(G,H,i)
   #  ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
@@ -322,20 +322,6 @@ def updateScatterLDRmanual(frame):
   for ptA in polos:
     if ptA.as_real_imag()[0]>xmin:
       ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
-
-# Initialize an empty scatter plot
-def updateScatterLDRmanual(frame):
-      if frame == 0:
-          # Show the first point
-        ax.scatter([2,4], [3,4], s=100)
-      elif frame == 1:
-          # Show the second point after 1 second
-          ax.scatter([2,4], [4,4], s=100)
-
-# Create the animation
-ani = FuncAnimation(fig, update, frames=2, interval=1000, repeat=False)
-# Display the animation as HTML
-HTML(ani.to_jshtml())
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
