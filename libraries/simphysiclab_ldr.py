@@ -273,6 +273,7 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   global figs
   global Gs
   global Hs
+  global xmins
 
   #Forzar libreria sympy
   num,den,gain=SIS.InfoTF("num_den",G)
@@ -303,6 +304,8 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   figs=fig
   Gs=G
   Hs=H
+  xmins=xmin
+
   ani = FuncAnimation(fig, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
   #for i in rangoK:
   #  M=SIS.realimentacion(G,H,i)
@@ -317,6 +320,7 @@ def updateScatterLDRmanual(frame):
   global figs
   global Gs
   global Hs
+  global xmins
   M=SIS.realimentacion(Gs,Hs,frame)
   ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
   for ptA in polos:
