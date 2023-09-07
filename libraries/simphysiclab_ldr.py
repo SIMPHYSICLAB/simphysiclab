@@ -222,7 +222,7 @@ def criterioModulo(TF,punto):
 
   return polosden/(cerosnum*gain)
 
-def LDRmanual(ax,G,H,limites,rango):
+def LDRmanual(ax,G,H,limites,rangoK):
 
   """
   input:
@@ -230,7 +230,7 @@ def LDRmanual(ax,G,H,limites,rango):
         G: función de transferencia G.
         H: función de transferencia H.
         limites: formato de entrada en el que pueden faltar algun componente de los cuatro valores [[-x,x],[-y,y]].
-        rango: np.arange(0,100,0.1)
+        rangoK: np.arange(0,100,0.1)
   output:
 
   código:
@@ -291,12 +291,14 @@ def LDRmanual(ax,G,H,limites,rango):
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
 
-  for i in rango:
+  for i in rangoK:
     M=SIS.realimentacion(G,H,i)
     ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
     for ptA in polos:
       if ptA.as_real_imag()[0]>xmin:
         ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+        print('k: ',i)
+        plt.pause(0.1)
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
