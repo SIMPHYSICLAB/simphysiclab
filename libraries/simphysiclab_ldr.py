@@ -291,15 +291,15 @@ def LDRmanual(ax,G,H,limites,rangoK):
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
 
+  artists=[]
   for i in rangoK:
     M=SIS.realimentacion(G,H,i)
     ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
     for ptA in polos:
       if ptA.as_real_imag()[0]>xmin:
-        ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
-        time.sleep(0.1)
-        plt.show(block=False)
-        print('k: ',i)
+        point=ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+        artists.append(artists)
+  return artists
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
