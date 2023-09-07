@@ -297,8 +297,9 @@ def LDRmanual(ax,G,H,limites,rangoK):
     for ptA in polos:
       if ptA.as_real_imag()[0]>xmin:
         ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+        time.sleep(0.1)
+        plt.show(block=False)
         print('k: ',i)
-        plt.pause(0.1)
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
