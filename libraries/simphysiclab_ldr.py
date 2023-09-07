@@ -269,10 +269,10 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
             if ptA.as_real_imag()[0]>xmin:
               ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
   """
-  global ax
-  global fig
-  global G
-  global H
+  global axs
+  global figs
+  global Gs
+  global Hs
 
   #Forzar libreria sympy
   num,den,gain=SIS.InfoTF("num_den",G)
@@ -299,6 +299,10 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
 
+  axs=ax
+  figs=fig
+  Gs=G
+  Hs=H
   ani = FuncAnimation(fig, updateScatterLDRmanual, frames=rangoK, interval=1000, repeat=False)
   #for i in rangoK:
   #  M=SIS.realimentacion(G,H,i)
@@ -307,11 +311,12 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   #    if ptA.as_real_imag()[0]>xmin:
   #      ax.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
   return HTML(ani.to_jshtml())
+
 def updateScatterLDRmanual(frame):
-  global ax
-  global fig
-  global G
-  global H
+  global axs
+  global figs
+  global Gs
+  global Hs
   M=SIS.realimentacion(G,H,frame)
   ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
   for ptA in polos:
