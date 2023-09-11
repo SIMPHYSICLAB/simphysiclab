@@ -326,6 +326,7 @@ def updateScatterLDRmanual(frame):
   for ptA in polos:
     if ptA.as_real_imag()[0]>xmins:
       axs.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+      axs.annotate('K=%s s'%frame,(0,-5),(0,-5))
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
