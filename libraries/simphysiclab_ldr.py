@@ -343,6 +343,7 @@ def updateScatterLDRmanual(frame):
 
       plt.cla()
       SIS.dibujarEjes(axs,1,[[xmins,xmaxs],[ymins,ymaxs]])
+      SIS.dibujarPolosCeros(axs,[[xmins,xmaxs],[ymins,ymaxs]],Gs*Hs)
       axs.set_xlim(xmins, xmaxs)
       axs.set_ylim(ymins, ymaxs)
       for p in points:
