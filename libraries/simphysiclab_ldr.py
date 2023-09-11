@@ -274,6 +274,10 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   global Gs
   global Hs
   global xmins
+  global xmaxs
+  global ymins
+  global ymaxs
+  global points
 
   #Forzar libreria sympy
   num,den,gain=SIS.InfoTF("num_den",G)
@@ -305,7 +309,10 @@ def LDRmanual(fig,ax,G,H,limites,rangoK):
   Gs=G
   Hs=H
   xmins=xmin
-
+  xmaxs=xmax
+  ymins=ymin
+  ymaxs=ymax
+  points=[]
   ani = FuncAnimation(fig, updateScatterLDRmanual, frames=rangoK, interval=0.00000000000000001, repeat=False)
   #for i in rangoK:
   #  M=SIS.realimentacion(G,H,i)
@@ -321,12 +328,25 @@ def updateScatterLDRmanual(frame):
   global Gs
   global Hs
   global xmins
+  global xmaxs
+  global ymins
+  global ymaxs
+  global points
+
+  ptA.as_real_imag()[0],ptA.as_real_imag()[1]
+
   M=SIS.realimentacion(Gs,Hs,frame)
   ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
   for ptA in polos:
     if ptA.as_real_imag()[0]>xmins:
+
+      points.append([ptA.as_real_imag()[0],ptA.as_real_imag()[1]])
+
       plt.cla()
-      axs.scatter(ptA.as_real_imag()[0],ptA.as_real_imag()[1],s=25,c='r', marker="o")
+      axs.set_xlim(xmins, xmaxs)
+      axs.set_ylim(ymins, ymaxs)
+      for p in points:
+        axs.scatter(p[0],p[1],s=25,c='r', marker="o")
       axs.annotate('K=%s s'%round(frame,2),(0,-5),(0,-5))
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
