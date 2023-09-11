@@ -333,7 +333,6 @@ def updateScatterLDRmanual(frame):
   global ymaxs
   global points
 
-  ptA.as_real_imag()[0],ptA.as_real_imag()[1]
 
   M=SIS.realimentacion(Gs,Hs,frame)
   ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
