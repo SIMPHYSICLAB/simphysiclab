@@ -262,8 +262,17 @@ def generarTF(tipo,num,den,simbol=0):
       return control.tf(numcastfloat, dencastfloat)
   elif tipo =="ceros_polos":
     if parametrosLibereriaEnPol(num,den)=="sympy":
-      print("Error")
-      return "Error."
+      s=sympy.symbols('s')
+      numcp = 1
+      dencp = 1
+      if len(num)==0 and len(den)==0:
+        TF=sympy.factor(numcp/dencp)
+      else:
+        for i in range(len(num)):
+          numcp = numcp * (s - num[i])
+        for j in range(len(den)):
+          dencp = dencp * (s - den[j])
+        TF=sympy.factor(numcp/dencp)
     else:
       if simbol==0:
         s = control.tf('s')
