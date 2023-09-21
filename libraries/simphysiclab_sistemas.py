@@ -1175,18 +1175,19 @@ def polosDominantes(TF, polo):
   """
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
-  # Verificar si hay un cero cercano al polo
-  for c in ceros:
-      if abs(polo - c) < 0.01:  # Ajusta el valor de tolerancia según sea necesario
-          return False
 
   # Encontrar el polo de baja frecuencia más cercano
   min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
 
-  print(min_low_freq_pole)
+  print("Polo Dominante: ",min_low_freq_pole)
+
+ # Verificar si hay un cero cercano al polo
+  for c in ceros:
+      if abs(polo - c) < abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
+          return False
 
   # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
-  if polo.real>3*min_low_freq_pole.real:
+  if abs(polo.real)<=6*abs(min_low_freq_pole.real):
       return True
 
   return False
