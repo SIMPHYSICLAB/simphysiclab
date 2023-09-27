@@ -1620,7 +1620,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
   a=max(y)-b
   errp=1-y[len(t)-1]
 
-  ax.set(xlim=(-4, t[len(t)-1]+1), ylim=(ymin-1, ymax+1), aspect='equal')
+  ax.set(xlim=(-4, t[len(t)-1]+1), ylim=(-1, max(y)+1), aspect='equal')
 
   ax.plot([0, 0], [0, y[len(t)-1]], c='green', ls='--', lw=1, alpha=1)
   ax.annotate('b=%s'%round(b,3),(0,b/2),(0,b/2))
