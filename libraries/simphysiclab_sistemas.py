@@ -1632,15 +1632,26 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
 
   if a>0:
     ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
-    ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
+    ax.annotate('a=%s'%round(a,3),(-0.2,b+a/2),(-0.2,b+a/2))
     ax.annotate('a+b=%s'%round(a+b,3),(0,b+a),(0,b+a))
+    ax.annotate('Mp=%s %'%round((a/b)*100),(-0.4,(b+a)/2),(-0.4,(b+a)/2))
 
     print("Sobreoscilacion: ",100*(a/b),"%")
     print("b: ",b)
     print("a: ",a)
+    print("Mp: ",(a/b)*100)
     print("max: ",a+b)
+
     tp=t[np.argmax(y)]
     print("tp: ",tp,"s")
+
+    vfind=t[np.argmax(y)]
+    for i in range(len(y)):
+      if vfind-y[i]<0:
+        tr=t[i-1]
+        break
+    print("tr: ",tr,"s")
+
     ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
     ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
     ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
