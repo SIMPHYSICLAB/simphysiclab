@@ -1665,11 +1665,12 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     round_K=round(np.max(y),5)
     for i in range(len(y)):
       if pto_y-y[i]<0:
-        ts=t[i-1]
+        T=t[i-1]
         break
-    ax.plot([0, ts], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
-    ax.plot([ts, ts], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
-    ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
+    ax.plot([0, 0], [T, np.max(y)], c='y', ls='--', lw=1, alpha=1)
+    ax.plot([0, T], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
+    ax.plot([T, T], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
+    ax.annotate('T=%s s'%round(T,3),(T,pto_y-0.1),(T,pto_y-0.1))
 
 def parametrosTipoRegimen(ax,y,t):
 
