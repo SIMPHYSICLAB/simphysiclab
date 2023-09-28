@@ -1635,7 +1635,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
     ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
     ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
-    ax.annotate('Mp=%s'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
+    ax.annotate('Mp=%s%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
 
     print("Sobreoscilacion: ",100*(a/b),"%")
     print("b: ",b)
