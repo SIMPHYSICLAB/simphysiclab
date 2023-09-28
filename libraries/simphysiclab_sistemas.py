@@ -1659,6 +1659,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     ax.plot([tp, tp], [0, y[np.argmax(y)]], c='red', ls='--', lw=1, alpha=1)
     ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
   else:
+    print((y[1] - y[0]) / (t[1] - t[0]))
     pto_y=0.632*np.max(y)
     round_pto_y=round(pto_y,5)
     round_K=round(np.max(y),5)
