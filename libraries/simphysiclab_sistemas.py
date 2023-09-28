@@ -604,7 +604,7 @@ def inversaLaplace(TF,positivos):
 
   if positivos==1:
     s = sympy.symbols('s')
-    t = sympy.Symbol('t', positive=True)
+    t = sympy.Symbol('t',  real=True,positive=True)
   else:
     s = sympy.symbols('s')
     t = sympy.Symbol('t')
