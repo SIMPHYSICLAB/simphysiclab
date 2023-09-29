@@ -1648,14 +1648,13 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
 
     tr=[]
     ytr=[]
-    vfind=t[np.argmax(y)]
+    vfind=y[len(t)-1]
     for i in range(len(y)):
-      print(vfind-y[i])
-      if vfind-y[i]<0.2:
+      print(vfind,y[i])
+      if vfind-y[i]<0.1:
         tr=t[i-1]
         ytr=y[i]
         break
-    print("tr: ",tr,"s")
 
     ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
     ax.annotate('tr=%s s'%round(tr,3),(tr,0.1),(tr,0.1))
