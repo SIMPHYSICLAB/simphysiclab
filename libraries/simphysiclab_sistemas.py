@@ -1650,6 +1650,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     ytr=[]
     vfind=t[np.argmax(y)]
     for i in range(len(y)):
+      print(vfind-y[i])
       if vfind-y[i]<0.2:
         tr=t[i-1]
         ytr=y[i]
