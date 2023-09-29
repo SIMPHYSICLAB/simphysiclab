@@ -1657,8 +1657,8 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         break
 
     ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
-    ax.annotate('tr=%s s'%round(tr,3),(tr,0.1),(tr,0.1))
-    ax.plot([0, tr], [ytr, ytr], c='green', ls='--', lw=1, alpha=1)
+    ax.annotate('tr=%s s'%round(tr,3),(tr,-0.1),(tr,-0.1))
+    ax.plot([tr, tr], [0, ytr], c='green', ls='--', lw=1, alpha=1)
     ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
     ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
     ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
