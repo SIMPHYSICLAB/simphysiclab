@@ -1650,7 +1650,6 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     ytr=[]
     vfind=y[len(t)-1]
     for i in range(len(y)):
-      print(vfind,y[i])
       if vfind-y[i]<0:
         tr=t[i-1]
         ytr=y[i]
