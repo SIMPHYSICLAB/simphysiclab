@@ -1651,7 +1651,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     vfind=y[len(t)-1]
     for i in range(len(y)):
       print(vfind,y[i])
-      if vfind-y[i]<0.1:
+      if vfind-y[i]<0:
         tr=t[i-1]
         ytr=y[i]
         break
@@ -1669,7 +1669,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     round_pto_y=round(pto_y,5)
     round_K=round(np.max(y),5)
     for i in range(len(y)):
-      if pto_y-y[i]<0.1:
+      if pto_y-y[i]<0:
         T=t[i-1]
         break
     ax.plot([0, T], [0, np.max(y)], c='y', ls='--', lw=1, alpha=1)
@@ -1725,14 +1725,14 @@ def parametrosTipoRegimen(ax,y,t):
   yp=[]
   pto_y=max5fv
   for i in range(len(y)):
-    if pto_y-y[i]<0.1:
+    if pto_y-y[i]<0:
       rp=t[i-1]
       yp=pto_y
       break
   if rp!=None:
     pto_y=min5fv
     for i in range(len(y)):
-      if pto_y-y[i]<0.1:
+      if pto_y-y[i]<0:
         rp=t[i-1]
         yp=pto_y
         break
