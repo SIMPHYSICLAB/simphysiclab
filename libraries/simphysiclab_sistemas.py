@@ -1735,7 +1735,7 @@ def parametrosTipoRegimen(ax,y,t):
     #    rp=t[i-1]
     #    yp=pto_y
     #    break
-    for i in range(len(y),0,-1):
+    for i in range(len(y)-1,1,-1):
       if pto_y-y[i]<0:
         rp=t[i-1]
         yp=pto_y
