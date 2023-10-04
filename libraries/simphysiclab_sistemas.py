@@ -1730,7 +1730,12 @@ def parametrosTipoRegimen(ax,y,t):
       break
   if rp!=None:
     pto_y=min5fv
-    for i in range(len(y)):
+    #for i in range(len(y)):
+    #  if pto_y-y[i]<0:
+    #    rp=t[i-1]
+    #    yp=pto_y
+    #    break
+    for i in range(len(y),0,-1):
       if pto_y-y[i]<0:
         rp=t[i-1]
         yp=pto_y
