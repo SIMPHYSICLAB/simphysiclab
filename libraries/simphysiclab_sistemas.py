@@ -1222,7 +1222,7 @@ def eliminarPolosCeros(TF):
     if abs(pl.real)>=6*abs(min_low_freq_pole.real):
       polos.remove(pl)
 
-  TFSimplified=SIS.generarTF("ceros_polos",ceros,polos)
+  TFSimplified=generarTF("ceros_polos",ceros,polos)
   return TFSimplified
 
 def regimenPermanente(G,H,VectorError):
