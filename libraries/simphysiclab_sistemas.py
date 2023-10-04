@@ -1190,7 +1190,7 @@ def polosDominantes(TF, polo):
   return False
 
 def eliminarPolosCeros(TF):
-  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+  ceros,polos,gain=InfoTF("ceros_polos",TF)
 
   # Encontrar el polo de baja frecuencia más cercano
   min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
