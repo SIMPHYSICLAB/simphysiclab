@@ -1183,7 +1183,7 @@ def polosDominantes(TF, polo):
 
  # Verificar si hay un cero cercano al polo
   for c in ceros:
-      if abs(polo - c) < abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
+      if abs(polo - c) < (1/6)*abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
           return False
 
   # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
