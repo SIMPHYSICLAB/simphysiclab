@@ -1737,7 +1737,7 @@ def parametrosTipoRegimen(ax,y,t):
         break
 
   ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
-  ax.annotate('Ts=%s s'%round(rp,3),(rp,0.1),(rp,0.1))
+  ax.annotate('Ts=%s s'%round(rp,3),(rp,0.3),(rp,0.3))
   ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
   ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
   ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
