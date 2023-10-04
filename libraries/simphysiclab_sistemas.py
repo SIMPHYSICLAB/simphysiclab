@@ -1189,6 +1189,42 @@ def polosDominantes(TF, polo):
 
   return False
 
+def eliminarPolosCeros(TF):
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+
+  # Encontrar el polo de baja frecuencia más cercano
+  min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
+
+  # Verificar si hay un cero cercano al polo
+  cerosc=[]
+  polosc=[]
+  for c in ceros:
+    ceroCancelado=0
+    for p in polos:
+      if abs(p - c) < (1/6)*abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
+        if ceroCancelado==0:
+          polosc.append(p)
+        ceroCancelado=1
+    if ceroCancelado==1:
+      cerosc.append(c)
+
+  ceroscopy=copy.deepcopy(ceros)
+  poloscopy=copy.deepcopy(polos)
+  for cc in ceroscopy:
+    if cc in cerosc:
+      ceros.remove(cc)
+  for pc in poloscopy:
+    if pc in polosc:
+      polos.remove(pc)
+
+  # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
+  for pl in polos:
+    if abs(pl.real)>=6*abs(min_low_freq_pole.real):
+      polos.remove(pl)
+
+  TFSimplified=SIS.generarTF("ceros_polos",ceros,polos)
+  return TFSimplified
+
 def regimenPermanente(G,H,VectorError):
   """
   input:
