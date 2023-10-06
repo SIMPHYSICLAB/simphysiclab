@@ -336,7 +336,7 @@ def updateScatterLDRmanual(frame):
 
   M=SIS.realimentacion(Gs,Hs,frame)
   ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
-  print(polos)
+  #print(polos)
   for ptA in polos:
     if ptA.as_real_imag()[0]>xmins:
 
@@ -351,7 +351,7 @@ def updateScatterLDRmanual(frame):
         axs.scatter(p[0],p[1],s=25,c='r', marker="o")
       axs.annotate('K=%s'%round(frame,2),(0,-5),(0,-5))
       for ptA2 in polos:
-        axs.annotate('ts=%s'%round(sympy.pi/ptA2.as_real_imag()[0],2),(ptA2.as_real_imag()[0],ptA2.as_real_imag()[1]),(ptA2.as_real_imag()[0],ptA2.as_real_imag()[1]))
+        axs.annotate('ts=%s'%round(sympy.pi/abs(ptA2.as_real_imag()[0]),2),(ptA2.as_real_imag()[0],ptA2.as_real_imag()[1]),(ptA2.as_real_imag()[0],ptA2.as_real_imag()[1]))
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
