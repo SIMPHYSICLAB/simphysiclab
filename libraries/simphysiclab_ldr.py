@@ -349,7 +349,7 @@ def updateScatterLDRmanual(frame):
       for p in points:
         axs.scatter(p[0],p[1],s=25,c='r', marker="o")
       axs.annotate('K=%s'%round(frame,2),(0,-5),(0,-5))
-      axs.annotate('ts=%s'%round(sympy.pi/ptA.as_real_imag()[0],2),(0,-3),(0,-3))
+      axs.annotate('ts=%s'%round(sympy.pi/ptA.as_real_imag()[0],2),(ptA.as_real_imag()[0],ptA.as_real_imag()[1]),(ptA.as_real_imag()[0],ptA.as_real_imag()[1]))
 
 def barridoCriterios(ax,TF,limites,paso,tolerancia):
 
