@@ -336,6 +336,7 @@ def updateScatterLDRmanual(frame):
 
   M=SIS.realimentacion(Gs,Hs,frame)
   ceros,polos,gain=SIS.InfoTF("ceros_polos",M)
+  print(polos)
   for ptA in polos:
     if ptA.as_real_imag()[0]>xmins:
 
