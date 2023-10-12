@@ -112,19 +112,19 @@ def anguloCuadrante(ceros_polos,punto):
   elif diffTargetSource.real>=0 and diffTargetSource.imag<0:
     print("CuartoCuadrante")
 
-def criterioArgumento(TF,punto,tolerancia=0):
+def criterioArgumento(G,punto,tolerancia=0):
 
   """
   input:
-        TF: función de transferencia.
+        G: función de transferencia.
         punto: cero o polo del sistema, expresado según complex(real,imag).
         tolerancia: rango de validez del angulo a evaluar, 0 por defecto
   output:
         angulos: angulo para el punto dado
         criterio del argumento:
   código:
-        def criterioArgumento(TF,punto,tolerancia=0):
-          ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+        def criterioArgumento(G,punto,tolerancia=0):
+          ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
 
           angulos=0;
           angulosCum=[]
@@ -153,7 +153,7 @@ def criterioArgumento(TF,punto,tolerancia=0):
             return angulos,False
   """
 
-  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
 
   angulos=0;
   angulosCum=[]
@@ -181,16 +181,81 @@ def criterioArgumento(TF,punto,tolerancia=0):
   else:
     return angulos,False
 
-def criterioModulo(TF,punto):
+def dibujarPoloCeroArgumento(ax,G,punto):
+    """
+    input:
+          ax: ventana donde se dibujará la imagen.
+          G: función de transferencia.
+          punto: punto a evaluar, expresado según complex(real,imag).
+    output:
+          dibujar las distancias entre polos y ceros
+    código:
+          ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
+
+          # Plot poles with 'x'
+          for p in polos:
+              ax.plot(np.real(p), np.imag(p), 'rx')
+
+          # Plot zeros with 'o'
+          for z in ceros:
+              ax.plot(np.real(z), np.imag(z), 'go')
+
+          # Plot arrow lines between poles and specific point, and show angles
+          for p in polos:
+              ax.arrow(np.real(p), np.imag(p), np.real(punto)-np.real(p), np.imag(punto)-np.imag(p),
+                        head_width=0.1, head_length=0.1, fc='r', ec='r')
+              angulo = anguloEntrePuntos(p, punto)
+              ax.text(np.real(p), np.imag(p), f'{angulo:.2f}°', fontsize=12, color='r')
+
+          # Plot arrow lines between zeros and specific point, and show angles
+          for z in ceros:
+              ax.arrow(np.real(z), np.imag(z), np.real(punto)-np.real(z), np.imag(punto)-np.imag(z),
+                        head_width=0.1, head_length=0.1, fc='g', ec='g')
+              angulo = anguloEntrePuntos(z, punto)
+              ax.text(np.real(z), np.imag(z), f'{angulo:.2f}°', fontsize=12, color='g')
+
+      def anguloEntrePuntos(p1, p2):
+          angulo = np.angle(p2 - p1, deg=True)
+          return angulo if angulo >= 0 else angulo + 360
+    """
+    ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
+
+    # Plot poles with 'x'
+    for p in polos:
+        ax.plot(np.real(p), np.imag(p), 'rx')
+
+    # Plot zeros with 'o'
+    for z in ceros:
+        ax.plot(np.real(z), np.imag(z), 'go')
+
+    # Plot arrow lines between poles and specific point, and show angles
+    for p in polos:
+        ax.arrow(np.real(p), np.imag(p), np.real(punto)-np.real(p), np.imag(punto)-np.imag(p),
+                  head_width=0.1, head_length=0.1, fc='r', ec='r')
+        angulo = anguloEntrePuntos(p, punto)
+        ax.text(np.real(p), np.imag(p), f'{angulo:.2f}°', fontsize=12, color='r')
+
+    # Plot arrow lines between zeros and specific point, and show angles
+    for z in ceros:
+        ax.arrow(np.real(z), np.imag(z), np.real(punto)-np.real(z), np.imag(punto)-np.imag(z),
+                  head_width=0.1, head_length=0.1, fc='g', ec='g')
+        angulo = anguloEntrePuntos(z, punto)
+        ax.text(np.real(z), np.imag(z), f'{angulo:.2f}°', fontsize=12, color='g')
+
+def anguloEntrePuntos(p1, p2):
+    angulo = np.angle(p2 - p1, deg=True)
+    return angulo if angulo >= 0 else angulo + 360
+
+def criterioModulo(G,punto):
 
   """
   input:
-        TF: función de transferencia.
+        G: función de transferencia.
         punto: punto a evaluar, expresado según complex(real,imag).
   output:
 
   código:
-        ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+        ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
 
         polosden=1;
         cerosnum=1;
@@ -208,7 +273,7 @@ def criterioModulo(TF,punto):
         return polosden/(cerosnum*gain)
   """
 
-  ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+  ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
 
   polosden=1;
   cerosnum=1;
@@ -224,6 +289,53 @@ def criterioModulo(TF,punto):
     cerosnum*=math.sqrt(pow(diff.real, 2)+pow(diff.imag, 2))
 
   return polosden/(cerosnum*gain)
+
+def dibujarPoloCeroModulo(ax,G,punto):
+    """
+    input:
+          ax: ventana donde se dibujará la imagen.
+          G: función de transferencia.
+          punto: punto a evaluar, expresado según complex(real,imag).
+    output:
+          dibujar las distancias entre polos y ceros
+    código:
+          ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
+
+          # Plot poles with 'x'
+          for p in polos:
+              ax.plot(np.real(p), np.imag(p), 'rx')
+
+          # Plot zeros with 'o'
+          for z in ceros:
+              ax.plot(np.real(z), np.imag(z), 'go')
+
+          # Plot arrow lines between poles/zeros and specific point
+          for p in polos:
+              ax.arrow(np.real(p), np.imag(p), np.real(punto)-np.real(p), np.imag(punto)-np.imag(p),
+                        head_width=0.1, head_length=0.1, fc='r', ec='r')
+
+          for z in ceros:
+              ax.arrow(np.real(z), np.imag(z), np.real(punto)-np.real(z), np.imag(punto)-np.imag(z),
+                        head_width=0.1, head_length=0.1, fc='g', ec='g')
+    """
+    ceros,polos,gain=SIS.InfoTF("ceros_polos",G)
+
+    # Plot poles with 'x'
+    for p in polos:
+        ax.plot(np.real(p), np.imag(p), 'rx')
+
+    # Plot zeros with 'o'
+    for z in ceros:
+        ax.plot(np.real(z), np.imag(z), 'go')
+
+    # Plot arrow lines between poles/zeros and specific point
+    for p in polos:
+        ax.arrow(np.real(p), np.imag(p), np.real(punto)-np.real(p), np.imag(punto)-np.imag(p),
+                  head_width=0.1, head_length=0.1, fc='r', ec='r')
+
+    for z in ceros:
+        ax.arrow(np.real(z), np.imag(z), np.real(punto)-np.real(z), np.imag(punto)-np.imag(z),
+                  head_width=0.1, head_length=0.1, fc='g', ec='g')
 
 def LDRmanual(fig,ax,G,H,limites,rangoK):
 
