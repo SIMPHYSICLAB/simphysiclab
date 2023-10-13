@@ -233,7 +233,7 @@ def generarTF(tipo,num,den,simbol=0):
     if (symbolappearance.count(1)!=len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0) or (simbol==1):
       s = sympy.Symbol('s')
       print("dontKnown1")
-      return sympy.factor(sympy.simplify(sympy.Poly(num, s)/sympy.Poly(den, s)))
+      return sympy.Poly(num, s)/sympy.Poly(den, s)
     #Contiene simbolicos#Se puede simplificar la expresión simbolica
     elif symbolappearance.count(1)==len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0:
       numwithoutParameter=[]
