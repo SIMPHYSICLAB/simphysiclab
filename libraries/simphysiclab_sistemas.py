@@ -232,7 +232,6 @@ def generarTF(tipo,num,den,simbol=0):
     #Contiene simbolicos#La expresión simbolica no se puede simplificar
     if (symbolappearance.count(1)!=len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0) or (simbol==1):
       s = sympy.Symbol('s')
-      print("dontKnown1")
       return sympy.Poly(num, s)/sympy.Poly(den, s)
     #Contiene simbolicos#Se puede simplificar la expresión simbolica
     elif symbolappearance.count(1)==len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0:
@@ -252,7 +251,6 @@ def generarTF(tipo,num,den,simbol=0):
       return control.tf(numwithoutParameter, denwithoutParameter)
     #No contiene simbolicos
     else:
-      print("dontKnown2")
       #Este cast es por si simpy guarda los valores en un formato distinto de float
       numcastfloat=[]
       dencastfloat=[]
