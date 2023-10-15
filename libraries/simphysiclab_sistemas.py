@@ -232,8 +232,17 @@ def generarTF(tipo,num,den,simbol=0):
     #Contiene simbolicos#La expresión simbolica no se puede simplificar
     if (symbolappearance.count(1)!=len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0) or (simbol==1):
       s = sympy.Symbol('s')
+
+      numnew=[]
+      dennew=[]
+
+      for n in num:
+        numnew.append(round(n,1))
+      for d in den:
+        dennew.append(round(d,1))
+
       #return sympy.factor(sympy.simplify(sympy.Poly(num, s)/sympy.Poly(den, s)))
-      return sympy.Poly(num, s)/sympy.Poly(den, s)
+      return sympy.Poly(numnew, s)/sympy.Poly(dennew, s)
     #Contiene simbolicos#Se puede simplificar la expresión simbolica
     elif symbolappearance.count(1)==len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0:
       numwithoutParameter=[]
