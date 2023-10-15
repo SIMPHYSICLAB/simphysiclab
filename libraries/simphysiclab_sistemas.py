@@ -237,9 +237,9 @@ def generarTF(tipo,num,den,simbol=0):
       dennew=[]
 
       for n in num:
-        numnew.append(round(n,0))
+        numnew.append(int(n))
       for d in den:
-        dennew.append(round(d,0))
+        dennew.append(int(d))
 
       #return sympy.factor(sympy.simplify(sympy.Poly(num, s)/sympy.Poly(den, s)))
       return sympy.Poly(numnew, s)/sympy.Poly(dennew, s)
