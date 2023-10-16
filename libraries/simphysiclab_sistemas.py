@@ -1442,7 +1442,7 @@ def tipoRespuesta2orden(TF):
     else:
       print('Sistema de 2do orden sobreamortiguado')
       tipo=2
-  else ordenTF(TF)>2:
+  elif ordenTF(TF)>2:
     y,t=SIS.respuestaEscalon(ax1,TF,20)
     b=y[len(t)-1]
     a=max(y)-b
