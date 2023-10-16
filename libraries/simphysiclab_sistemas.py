@@ -1449,8 +1449,7 @@ def tipoRespuesta2orden(TF):
     if a>0:
       print('Sistema subamortiguado')
     else:
-      repeated = list(repeat(polos[0], len(polos)))
-      if repeated == polos:
+      if len(set(polos)) == 1:
         print('Sistema críticamente amortiguado')
       else:
         print('Sistema sobreamortiguado')
