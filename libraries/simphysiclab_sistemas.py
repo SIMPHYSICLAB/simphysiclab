@@ -641,7 +641,7 @@ def inversaLaplace(TF,positivos,G=None):
     newVectorDifference=[]
     for i in range(irange):
       newVectorDifference.append(abs(valuesSystem[i]-yv[i]))
-    if all(v < 0.1 for v in newVectorDifference):
+    if sum(newVectorDifference)/len(newVectorDifference)<0.1:
       return invL,t,"NotError"
     else:
       return invL,t,newVectorDifference
