@@ -1415,20 +1415,37 @@ def tipoRespuesta2orden(TF):
         return tipo
   """
 
-  ceros,polos,gain=InfoTF("ceros_polos",TF)
+  #Forzar libreria control
+  num,den,gain=InfoTF("num_den",TF)
 
-  if (polos[0].real and polos[1].real)==0:
-    print('Sistema de 2do orden inestable')
-    tipo=-1
-  elif (polos[0].real == polos[1].real):
-    print('Sistema de 2do orden subamortiguado')
-    tipo=0
-  elif polos[0]==polos[1]:
-    print('Sistema de 2do orden críticamente amortiguado')
-    tipo=1
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  denc=[]
+  for i in den:
+    denc.append(float(i))
+  TF=generarTF("num_den",numcK,denc)
+  #Forzar libreria control
+
+  if ordenTF(TF)>1:
+    ceros,polos,gain=InfoTF("ceros_polos",TF)
+
+    if (polos[0].real and polos[1].real)==0:
+      print('Sistema de 2do orden inestable')
+      tipo=-1
+    elif (polos[0].real == polos[1].real):
+      print('Sistema de 2do orden subamortiguado')
+      tipo=0
+    elif polos[0]==polos[1]:
+      print('Sistema de 2do orden críticamente amortiguado')
+      tipo=1
+    else:
+      print('Sistema de 2do orden sobreamortiguado')
+      tipo=2
   else:
-    print('Sistema de 2do orden sobreamortiguado')
-    tipo=2
+      print('Sistema de 1er orden')
+      tipo=None
+
   return tipo
 
 def parameterMp(Mp):
