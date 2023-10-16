@@ -634,17 +634,17 @@ def inversaLaplace(TF,positivos,G=None):
     G=generarTF("num_den",numcK,denc)
     #Forzar libreria control
 
-    t,y=control.step_response(G,100)
+    tv,yv=control.step_response(G,100)
     invL=sympy.inverse_laplace_transform(TF, s, t)
     valuesSystem = [invL.subs(t, val) for val in np.arange(0, 100, 0.0423908435777872)]
-    irange=min([len(valuesSystem),len(y)])
+    irange=min([len(valuesSystem),len(yv)])
     newVectorDifference=[]
     for i in range(irange):
       newVectorDifference.append(abs(valuesSystem[i]-y[i]))
     if all(v < 0.1 for v in newVectorDifference):
-      return sympy.inverse_laplace_transform(TF, s, t),t,"NotError"
+      return invL,t,"NotError"
     else:
-      return sympy.inverse_laplace_transform(TF, s, t),t,newVectorDifference
+      return invL,t,newVectorDifference
 
 def estabilidadTF(TF):
 
