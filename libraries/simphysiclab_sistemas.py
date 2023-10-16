@@ -1448,11 +1448,14 @@ def tipoRespuesta2orden(TF):
     a=max(y)-b
     if a>0:
       print('Sistema subamortiguado')
+      tipo=0
     else:
       if len(set(polos)) == 1:
         print('Sistema críticamente amortiguado')
+        tipo=1
       else:
         print('Sistema sobreamortiguado')
+        tipo=2
   else:
       print('Sistema de 1er orden')
       tipo=None
