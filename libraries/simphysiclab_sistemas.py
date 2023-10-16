@@ -640,7 +640,7 @@ def inversaLaplace(TF,positivos,G=None):
     irange=min([len(valuesSystem),len(yv)])
     newVectorDifference=[]
     for i in range(irange):
-      newVectorDifference.append(abs(valuesSystem[i]-y[i]))
+      newVectorDifference.append(abs(valuesSystem[i]-yv[i]))
     if all(v < 0.1 for v in newVectorDifference):
       return invL,t,"NotError"
     else:
