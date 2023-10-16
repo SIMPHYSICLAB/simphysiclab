@@ -569,7 +569,7 @@ def ordenTF(TF):
   orden=len(den)-1
   return orden
 
-def inversaLaplace(TF,positivos):
+def inversaLaplace(TF,positivos,G=None):
 
   '''
     input:
@@ -618,7 +618,33 @@ def inversaLaplace(TF,positivos):
   else:
     s = sympy.symbols('s')
     t = sympy.Symbol('t')
-  return sympy.inverse_laplace_transform(TF, s, t),t
+
+  if G==None:
+    return sympy.inverse_laplace_transform(TF, s, t),t
+  else:
+    #Forzar libreria control
+    num,den,gain=InfoTF("num_den",G)
+
+    numcK=[]
+    for i in num:
+      numcK.append(i*gain)
+    denc=[]
+    for i in den:
+      denc.append(i)
+    G=generarTF("num_den",numcK,denc)
+    #Forzar libreria control
+
+    y,t=respuestaEscalon(ax,G,100)
+    invL=sympy.inverse_laplace_transform(TF, s, t)
+    valuesSystem = [invL.subs(t, val) for val in np.arange(0, 100, 0.0423908435777872)]
+    irange=min([len(valuesSystem),len(y)])
+    newVectorDifference=[]
+    for i in range(irange):
+      newVectorDifference.append(abs(valuesSystem[i]-y[i]))
+    if all(v < 0.1 for v in newVectorDifference):
+      return sympy.inverse_laplace_transform(TF, s, t),t,"NotError"
+    else
+      return sympy.inverse_laplace_transform(TF, s, t),t,newVectorDifference
 
 def estabilidadTF(TF):
 
