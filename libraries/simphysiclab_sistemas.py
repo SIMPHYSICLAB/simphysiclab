@@ -643,7 +643,7 @@ def inversaLaplace(TF,positivos,G=None):
       newVectorDifference.append(abs(valuesSystem[i]-y[i]))
     if all(v < 0.1 for v in newVectorDifference):
       return sympy.inverse_laplace_transform(TF, s, t),t,"NotError"
-    else
+    else:
       return sympy.inverse_laplace_transform(TF, s, t),t,newVectorDifference
 
 def estabilidadTF(TF):
