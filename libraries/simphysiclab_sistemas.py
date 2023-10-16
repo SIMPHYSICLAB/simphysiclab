@@ -1446,7 +1446,7 @@ def tipoRespuesta2orden(TF):
     t,y=control.step_response(TF,20)
     b=y[len(t)-1]
     a=max(y)-b
-    if a>0.1:
+    if (a/b)*100>2:
       print('Sistema subamortiguado')
       tipo=0
     else:
