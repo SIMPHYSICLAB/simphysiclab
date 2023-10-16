@@ -634,7 +634,7 @@ def inversaLaplace(TF,positivos,G=None):
     G=generarTF("num_den",numcK,denc)
     #Forzar libreria control
 
-    y,t=respuestaEscalon(ax,G,100)
+    t,y=control.step_response(G,100)
     invL=sympy.inverse_laplace_transform(TF, s, t)
     valuesSystem = [invL.subs(t, val) for val in np.arange(0, 100, 0.0423908435777872)]
     irange=min([len(valuesSystem),len(y)])
