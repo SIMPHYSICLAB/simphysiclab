@@ -1427,8 +1427,8 @@ def tipoRespuesta2orden(TF):
   TF=generarTF("num_den",numcK,denc)
   #Forzar libreria control
 
-  if ordenTF(TF)>1:
-    ceros,polos,gain=InfoTF("ceros_polos",TF)
+  ceros,polos,gain=InfoTF("ceros_polos",TF)
+  if ordenTF(TF)==2:
 
     if (polos[0].real and polos[1].real)==0:
       print('Sistema de 2do orden inestable')
@@ -1442,6 +1442,18 @@ def tipoRespuesta2orden(TF):
     else:
       print('Sistema de 2do orden sobreamortiguado')
       tipo=2
+  else ordenTF(TF)>2:
+    y,t=SIS.respuestaEscalon(ax1,TF,20)
+    b=y[len(t)-1]
+    a=max(y)-b
+    if a>0:
+      print('Sistema subamortiguado')
+    else:
+      repeated = list(repeat(polos[0], len(polos)))
+      if repeated == polos:
+        print('Sistema críticamente amortiguado')
+      else:
+        print('Sistema sobreamortiguado')
   else:
       print('Sistema de 1er orden')
       tipo=None
@@ -1748,8 +1760,9 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
     ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
     ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
-  elif (y[1] - y[0]) / (t[1] - t[0])>0.2:
 
+  elif (y[1] - y[0]) / (t[1] - t[0])>0.2:
+    #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
     pto_y=0.632*np.max(y)
     round_pto_y=round(pto_y,5)
     round_K=round(np.max(y),5)
