@@ -721,6 +721,17 @@ def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
         return plist, klist
   """
 
+  #Forzar libreria control
+  num,den,gain=SIS.InfoTF("num_den",G)
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  denc=[]
+  for i in den:
+    denc.append(float(i))
+  G=SIS.generarTF("num_den",numcK,denc)
+  #Forzar libreria control
+
   xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
   try:
     if rangeK.any()==None:
