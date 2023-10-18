@@ -733,7 +733,7 @@ def estabilidadCardano(TF):
     lastValue=np.sign(coeffs)
     indices = np.where(lastValue < 0)
     if len(indices[0])==0:
-      print("Cumple los dos criterios de Cardano, se debe analizar la estabilidad según Ruth para asegurar Estabilidad.")
+      print("Cumple los dos criterios de Cardano, se debe analizar la estabilidad según Routh para asegurar Estabilidad.")
     else:
       print("Inestable. No cumple el segundo criterio de Cardano.")
   else:
@@ -1387,7 +1387,7 @@ def errCriterio(err,errPunto):
     print("No cumple el criterio de regimen permanente")
     return False
 
-def tipoRespuesta2orden(TF):
+def tipoRespuestaNorden(TF):
 
   """
   input:
@@ -1429,8 +1429,7 @@ def tipoRespuesta2orden(TF):
 
   ceros,polos,gain=InfoTF("ceros_polos",TF)
   if ordenTF(TF)==2:
-
-    if (polos[0].real and polos[1].real)==0:
+    if estabilidadTF(TF)==0:
       print('Sistema de 2do orden inestable')
       tipo=-1
     elif (polos[0].real == polos[1].real):
@@ -1446,16 +1445,21 @@ def tipoRespuesta2orden(TF):
     t,y=control.step_response(TF,20)
     b=y[len(t)-1]
     a=max(y)-b
-    if (a/b)*100>2:
-      print('Sistema subamortiguado')
-      tipo=0
+    #if (a/b)*100>0.05:
+    if estabilidadTF(TF)==0:
+      print('Sistema de orden superior a 2, tipo inestable')
+      tipo=-1
     else:
-      if len(set(polos)) == 1:
-        print('Sistema críticamente amortiguado')
-        tipo=1
+      if any(abs(pole.imag) > 0.05 for pole in polos):
+        print('Sistema de orden superior a 2, tipo subamortiguado')
+        tipo=0
       else:
-        print('Sistema sobreamortiguado')
-        tipo=2
+        if len(set(polos)) == 1:
+          print('Sistema de orden superior a 2, tipo  críticamente amortiguado')
+          tipo=1
+        else:
+          print('Sistema de orden superior a 2, tipo  sobreamortiguado')
+          tipo=2
   else:
       print('Sistema de 1er orden')
       tipo=None
@@ -1731,7 +1735,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
   print("valor final: ",b)
 
 
-  if a>0:
+  if (a/b)*100>2:
     ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
     ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
     ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
@@ -1763,7 +1767,7 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
     ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
     ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
 
-  elif (y[1] - y[0]) / (t[1] - t[0])>0.2:
+  elif (y[1] - y[0]) / (t[1] - t[0])>0.05:
     #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
     pto_y=0.632*np.max(y)
     round_pto_y=round(pto_y,5)
