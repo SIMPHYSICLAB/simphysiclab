@@ -725,10 +725,10 @@ def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
   num,den,gain=SIS.InfoTF("num_den",TF)
   numcK=[]
   for i in num:
-    numcK.append(float(i)*gain)
+    numcK.append(i*gain)
   denc=[]
   for i in den:
-    denc.append(float(i))
+    denc.append(i)
   TF=SIS.generarTF("num_den",numcK,denc)
   #Forzar libreria control
 
