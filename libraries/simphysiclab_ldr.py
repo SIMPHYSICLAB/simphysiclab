@@ -332,13 +332,13 @@ def dibujarPoloCeroModulo(ax,G,punto):
     for p in polos:
         ax.arrow(np.real(p), np.imag(p), np.real(punto)-np.real(p), np.imag(punto)-np.imag(p),
                   head_width=0.1, head_length=0.1, fc='r', ec='r')
-        distancia = math.sqrt((punto[0] - np.real(p))**2 + (punto[1] - np.imag(p))**2)
+        distancia = math.sqrt((np.real(punto) - np.real(p))**2 + (np.imag(punto) - np.imag(p))**2)
         ax.text(np.real(p), np.imag(p), f'{distancia:.2f}', fontsize=12, color='r')
 
     for z in ceros:
         ax.arrow(np.real(z), np.imag(z), np.real(punto)-np.real(z), np.imag(punto)-np.imag(z),
                   head_width=0.1, head_length=0.1, fc='g', ec='g')
-        distancia = math.sqrt((punto[0] - np.real(z))**2 + (punto[1] - np.imag(z))**2)
+        distancia = math.sqrt((np.real(punto) - np.real(z))**2 + (np.imag(punto) - np.imag(z))**2)
         ax.text(np.real(p), np.imag(p), f'{distancia:.2f}', fontsize=12, color='g')
 
 def LDRmanual(fig,ax,G,H,limites,rangoK):
