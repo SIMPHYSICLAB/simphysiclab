@@ -339,7 +339,7 @@ def dibujarPoloCeroModulo(ax,G,punto):
         ax.arrow(np.real(z), np.imag(z), np.real(punto)-np.real(z), np.imag(punto)-np.imag(z),
                   head_width=0.1, head_length=0.1, fc='g', ec='g')
         distancia = math.sqrt((np.real(punto) - np.real(z))**2 + (np.imag(punto) - np.imag(z))**2)
-        ax.text(np.real(p), np.imag(p), f'{distancia:.2f}', fontsize=12, color='g')
+        ax.text(np.real(z), np.imag(z), f'{distancia:.2f}', fontsize=12, color='g')
 
 def LDRmanual(fig,ax,G,H,limites,rangoK):
 
