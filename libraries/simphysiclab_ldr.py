@@ -722,14 +722,14 @@ def LDRautomatico(ax,TF,limites,gainPlot=False,rangeK=None):
   """
 
   #Forzar libreria control
-  num,den,gain=SIS.InfoTF("num_den",G)
+  num,den,gain=SIS.InfoTF("num_den",TF)
   numcK=[]
   for i in num:
     numcK.append(float(i)*gain)
   denc=[]
   for i in den:
     denc.append(float(i))
-  G=SIS.generarTF("num_den",numcK,denc)
+  TF=SIS.generarTF("num_den",numcK,denc)
   #Forzar libreria control
 
   xmin,xmax,ymin,ymax=SIS.ajustarLimites(limites)
