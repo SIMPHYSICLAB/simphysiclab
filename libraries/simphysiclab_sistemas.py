@@ -311,17 +311,31 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 
-def devolverPolos_Ceros(polosCeros):
-    pole_values = list(polosCeros.keys())
-    multiplicities = list(polosCeros.values())
+def forzarTFSympy(TF)
+  #Forzar libreria sympy
+  num,den,gain=InfoTF("num_den",TF)
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  num=generarTF("num_den",numcK,[1],1)
+  den=generarTF("num_den",den,[1],1)
+  TF=num/den
+  #Forzar libreria sympy
+  return TF
 
-    all_poles = []
-    for i in range(len(pole_values)):
-        current_pole = pole_values[i]
-        current_multiplicity = multiplicities[i]
-        all_poles.extend([current_pole] * current_multiplicity)
+def forzarTFControl(TF)
+  #Forzar libreria control
+  num,den,gain=InfoTF("num_den",TF)
 
-    return all_poles
+  numcK=[]
+  for i in num:
+    numcK.append(i*gain)
+  denc=[]
+  for i in den:
+    denc.append(i)
+  TF=generarTF("num_den",numcK,denc)
+  #Forzar libreria control
+  return TF
 
 def InfoTF(tipo,TF):
 
@@ -428,6 +442,18 @@ def InfoTF(tipo,TF):
         polos=TF.poles()
         polos=[np.round(i,8) for i in polos]
         return ceros,polos,gain
+
+def devolverPolos_Ceros(polosCeros):
+    pole_values = list(polosCeros.keys())
+    multiplicities = list(polosCeros.values())
+
+    all_poles = []
+    for i in range(len(pole_values)):
+        current_pole = pole_values[i]
+        current_multiplicity = multiplicities[i]
+        all_poles.extend([current_pole] * current_multiplicity)
+
+    return all_poles
 
 def realimentacion(G,H,k=1):
 
@@ -600,17 +626,7 @@ def inversaLaplace(TF,positivos,G=None):
           return sympy.inverse_laplace_transform(TF, s, t)
   '''
 
-  #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",TF)
-
-  numcK=[]
-  for i in num:
-    numcK.append(i*gain)
-  denc=[]
-  for i in den:
-    denc.append(i)
-  TF=generarTF("num_den",numcK,denc,1)
-  #Forzar libreria sympy
+  TF=forzarTFSympy(TF)
 
   if positivos==1:
     s = sympy.symbols('s')
@@ -622,17 +638,7 @@ def inversaLaplace(TF,positivos,G=None):
   if G==None:
     return sympy.inverse_laplace_transform(TF, s, t),t
   else:
-    #Forzar libreria control
-    num,den,gain=InfoTF("num_den",G)
-
-    numcK=[]
-    for i in num:
-      numcK.append(i*gain)
-    denc=[]
-    for i in den:
-      denc.append(i)
-    G=generarTF("num_den",numcK,denc)
-    #Forzar libreria control
+    G=forzarTFControl(G)
 
     tv,yv=control.step_response(G,100)
     invL=sympy.inverse_laplace_transform(TF, s, t)
@@ -791,9 +797,7 @@ def estabilidadRouth(TF,simbolo=None):
 
   s = sympy.symbols('s')
 
-  #Forzar libreria sympy
   num,den,gain=InfoTF("num_den",TF)
-  #Forzar libreria sympy
 
   A = routh(sympy.Poly(den, s))
 
@@ -901,9 +905,7 @@ def routhCasoEspecial(TF):
 
   '''
 
-  #Forzar libreria sympy
   num,den,gain=InfoTF("num_den",TF)
-  #Forzar libreria sympy
 
   #pol=generarTF("num_den",den,[1],1)
   pol=den
@@ -995,17 +997,7 @@ def respuestaEscalon(ax,TF,tiempo):
           return y,t
   '''
 
-  #Forzar libreria control
-  num,den,gain=InfoTF("num_den",TF)
-
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  denc=[]
-  for i in den:
-    denc.append(float(i))
-  TF=generarTF("num_den",numcK,denc)
-  #Forzar libreria control
+  TF=forzarTFControl(TF)
 
   t,y=control.step_response(TF,tiempo)
   ax.plot(t,y)
@@ -1166,17 +1158,7 @@ def dibujarPolosCeros(ax,limites,TF,tono=1.0):
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
 
-  #Forzar libreria control
-  num,den,gain=InfoTF("num_den",TF)
-
-  numcK=[]
-  for i in num:
-    numcK.append(i*gain)
-  denc=[]
-  for i in den:
-    denc.append(i)
-  TF=generarTF("num_den",numcK,denc)
-  #Forzar libreria control
+  TF=forzarTFControl(TF)
 
 
   ceros,polos,gain=InfoTF("ceros_polos",TF)
@@ -1321,25 +1303,8 @@ def regimenPermanente(G,H,VectorError):
   """
   s = sympy.Symbol('s')
 
-  #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",G)
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
-  G=num/den
-  #Forzar libreria sympy
-
-  #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",H)
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
-  H=num/den
-  #Forzar libreria sympy
+  G=forzarTFSympy(G)
+  H=forzarTFSympy(H)
 
   Mp=G*H
   Mv=s*G*H
@@ -1415,17 +1380,7 @@ def tipoRespuestaNorden(TF):
         return tipo
   """
 
-  #Forzar libreria control
-  num,den,gain=InfoTF("num_den",TF)
-
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  denc=[]
-  for i in den:
-    denc.append(float(i))
-  TF=generarTF("num_den",numcK,denc)
-  #Forzar libreria control
+  TF=forzarTFControl(TF)
 
   ceros,polos,gain=InfoTF("ceros_polos",TF)
   if ordenTF(TF)==2:
