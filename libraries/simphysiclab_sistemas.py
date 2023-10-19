@@ -1329,7 +1329,7 @@ def regimenPermanente(G,H,VectorError):
 
   return  VectorErrorReturn
 
-def ajustarGanancia(TF1,TF2)
+def ajustarGanancia(TF1,TF2):
   s=sympy.symbols('s')
   K=sympy.symbols('K')
 
