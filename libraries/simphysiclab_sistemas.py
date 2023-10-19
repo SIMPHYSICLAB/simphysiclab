@@ -1103,7 +1103,7 @@ def dibujarEjes(ax,paso,limites):
   ax.spines['right'].set_visible(False)
   # Escribimos el nombre de cada ejes
   ax.set_xlabel('Real', size=6, labelpad=2, x=34.03)
-  ax.set_ylabel('Im', size=6, labelpad=-30, y=15.02, rotation=0)
+  ax.set_ylabel('Im', size=6, labelpad=-60, y=34.02, rotation=0)
   # Creamos las marcas principales personalizadas para determinar la posición
   # de las etiquetas de cada marca
   ticks_frequency = paso
