@@ -311,7 +311,7 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 
-def forzarTFSympy(TF)
+def forzarTFSympy(TF):
   #Forzar libreria sympy
   num,den,gain=InfoTF("num_den",TF)
   numcK=[]
@@ -323,7 +323,7 @@ def forzarTFSympy(TF)
   #Forzar libreria sympy
   return TF
 
-def forzarTFControl(TF)
+def forzarTFControl(TF):
   #Forzar libreria control
   num,den,gain=InfoTF("num_den",TF)
 
