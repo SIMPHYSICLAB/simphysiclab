@@ -1333,8 +1333,8 @@ def ajustarGanancia(TF1,TF2):
   s=sympy.symbols('s')
   K=sympy.symbols('K')
 
-  TF1=SIS.forzarTFSympy(TF1)
-  TF2=SIS.forzarTFSympy(TF2)
+  TF1=forzarTFSympy(TF1)
+  TF2=forzarTFSympy(TF2)
 
   Y1=s*(1/s)*TF1
   Y2=K*s*(1/s)*TF2
