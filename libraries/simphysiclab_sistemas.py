@@ -663,7 +663,7 @@ def inversaLaplacePorPartes(TF):
   factors = term_list
   for j in range(0,len(factors)):
 
-    if SIS.estabilidadTF(term_TF[j])==1:
+    if estabilidadTF(term_TF[j])==1:
       print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Estable.")
     else:
       print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Inestable.")
