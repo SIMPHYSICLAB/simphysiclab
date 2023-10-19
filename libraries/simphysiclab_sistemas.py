@@ -652,7 +652,7 @@ def inversaLaplace(TF,positivos,G=None):
     else:
       return invL,t,newVectorDifference
 
-def inversaLaplacePorPartes(ax,TF,limites)
+def inversaLaplacePorPartes(ax,TF,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
   ax.set_xlim(xmin, xmax)
