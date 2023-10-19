@@ -662,7 +662,7 @@ def inversaLaplacePorPartes(TF):
   term_TF= sympy.Add(TF.apart()).as_ordered_terms()
   factors = term_list
   for j in range(0,len(factors)):
-
+    print("")
     if estabilidadTF(term_TF[j])==1:
       print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Estable.")
     else:
