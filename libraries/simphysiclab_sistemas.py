@@ -652,6 +652,33 @@ def inversaLaplace(TF,positivos,G=None):
     else:
       return invL,t,newVectorDifference
 
+def inversaLaplacePorPartes(ax,TF,limites)
+
+  xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  ax.set_xlim(xmin, xmax)
+  ax.set_ylim(ymin, ymax)
+
+  TF=forzarTFSympy(TF)
+
+  print("Se analiza el sistema por partes.")
+  gt,t=inversaLaplace(TF,1)
+  term_list = sympy.Add(gt).as_ordered_terms()
+  term_TF= sympy.Add(TF.apart()).as_ordered_terms()
+  factors = term_list
+  for j in range(0,len(factors)):
+
+    if SIS.estabilidadTF(term_TF[j])==1:
+      print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Estable.")
+    else:
+      print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Inestable.")
+    x=[]
+    y=[]
+    for i in range(0, 1000):
+        x.append(i*0.1)
+        y.append(float(factors[j].subs(t, i*0.1)))
+    plt.figure()
+    plt.plot(x,y)
+
 def estabilidadTF(TF):
 
   '''
