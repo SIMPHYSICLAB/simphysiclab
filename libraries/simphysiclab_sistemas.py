@@ -523,7 +523,7 @@ def realimentacion(G,H,k=1):
     '''
 
     if (parametrosLibreriaEnTF(G)=="sympy" or parametrosLibreriaEnTF(H)=="sympy") and tipoLibreria(k)=="sympy":
-      #print("1")
+      #Caso en el que el primer sistema es tipo sympy, el segundo también y el parametro K también.
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -535,7 +535,7 @@ def realimentacion(G,H,k=1):
       M=sympy.simplify(M)
       return M
     elif (parametrosLibreriaEnTF(G)=="sympy" or parametrosLibreriaEnTF(H)=="sympy") and tipoLibreria(k)!="sympy":
-      #print("2")
+      #Caso en el que el primer sistema es tipo sympy, el segundo también pero el parametro K no.
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -547,7 +547,7 @@ def realimentacion(G,H,k=1):
       M=sympy.simplify(M)
       return M
     elif (parametrosLibreriaEnTF(G)!="sympy" and parametrosLibreriaEnTF(H)!="sympy") and tipoLibreria(k)=="sympy":
-      #print("3")
+      #Caso en el que el primer sistema no es tipo sympy, el segundo tampoco pero el parametro K sí.
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -559,8 +559,10 @@ def realimentacion(G,H,k=1):
       M=sympy.simplify(M)
       return M
     elif (parametrosLibreriaEnTF(G)!="sympy" and parametrosLibreriaEnTF(H)!="sympy") and tipoLibreria(k)!="sympy":
+      #Caso en el que el primer sistema no es tipo sympy, el segundo tampoco y el parametro K tampoco.
       numG,denG,gainG=InfoTF("num_den",G)
       numH,denH,gainH=InfoTF("num_den",H)
+      #Si no hay parametro pero el sistema se creó con sympy
       if tipoLibreria(G)=="sympy" and tipoLibreria(H)=="sympy":
         numk=[]
         for i in numG:
@@ -569,11 +571,16 @@ def realimentacion(G,H,k=1):
         H=gainH*generarTF("num_den",numH,denH,1)
         M=((G)/(1+(G*H)))
         M=sympy.simplify(M)
-      else:
+      else:#Si el sistema se creó con control
         G=gainG*generarTF("num_den",numG,denG)
         H=gainH*generarTF("num_den",numH,denH)
         K_G=control.series(k,G)
         M=control.feedback(K_G,H)
+
+        M=forzarTFControl(M)
+        M=sympy.simplify(M)
+        M=forzarTFSympy(M)
+
         ceros,polos,gain=InfoTF("ceros_polos",M)
       return M
 
