@@ -949,7 +949,7 @@ def routhCasoEspecial(TF):
       ec=sympy.Poly(res, s)
       print('Polinomio anterior a la fila de ceros:',ec)
       derivative = sympy.diff(ec, s)
-      print('Derivda del polinomio:',derivative)
+      print('Derivada del polinomio:',derivative)
       for pij in range(0,len(derivative.coeffs())):
         A[i,pij]=derivative.coeffs()[pij]
   return A
