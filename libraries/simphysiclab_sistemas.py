@@ -271,7 +271,7 @@ def generarTF(tipo,num,den,simbol=0):
 
       TF=generarTF("num_den",numcastfloat,dencastfloat,1)
       TF=sympy.cancel(TF)
-
+      print("cancel")
       #Forzado manual a control porque sino se entra en bucle
       num,den,gain=InfoTF("num_den",TF)
 
