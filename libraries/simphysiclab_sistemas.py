@@ -946,8 +946,10 @@ def routhCasoEspecial(TF):
       A[i,j]=(-1/A[i-1,0])*np.linalg.det(np.array([[A[i-2,0], A[i-2,j+1]], [A[i-1,0], A[i-1,j+1]]]))
     if((np.count_nonzero(A[i,:] == 0)==len(coefsPar))==True):
       res=ecuacionCaracteristicaRouth(A[i-1,:],len(pol),(i))#ecuacionCaracteristicaRouth(A[i-1,:],len(pol),(i-1))
+      print(res)
       ec=sympy.Poly(res, s)
       derivative = sympy.diff(ec, s)
+      print(derivative)
       for pij in range(0,len(derivative.coeffs())):
         A[i,pij]=derivative.coeffs()[pij]
   return A
