@@ -320,10 +320,11 @@ def generarTF(tipo,num,den,simbol=0):
         denc=[]
         for i in den:
           denc.append(float(i))
+        TF=generarTF("num_den",numcK,denc,1)
+        TF=sympy.cancel(TF)
         #Forzado manual a control porque sino se entra en bucle
 
-        #Crear la función de transferencia con los valores guardados en formato float
-        return control.tf(numcK, denc)
+        return forzarTFControl(TF)
       elif simbol==1:
         s=sympy.symbols('s')
         numcp = 1
