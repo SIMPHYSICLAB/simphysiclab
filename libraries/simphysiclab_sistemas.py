@@ -277,7 +277,7 @@ def generarTF(tipo,num,den,simbol=0):
 
       numcK=[]
       for i in num:
-        numcK.append(float(i)*gain)
+        numcK.append(float(i)*float(gain))
       denc=[]
       for i in den:
         denc.append(float(i))
