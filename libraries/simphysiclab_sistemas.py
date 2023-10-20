@@ -271,7 +271,7 @@ def generarTF(tipo,num,den,simbol=0):
 
       TF=generarTF("num_den",numcastfloat,dencastfloat,1)
       TF=sympy.cancel(TF)
-      print("cancel")
+
       #Forzado manual a control porque sino se entra en bucle
       num,den,gain=InfoTF("num_den",TF)
 
@@ -310,7 +310,23 @@ def generarTF(tipo,num,den,simbol=0):
             numcp = numcp * (s - num[i])
           for j in range(len(den)):
             dencp = dencp * (s - den[j])
-          TF=numcp/dencp
+
+        #Forzado manual a control porque sino se entra en bucle
+        TF=generarTF("num_den",numcp,dencp,1)
+        TF=sympy.cancel(TF)
+
+        num,den,gain=InfoTF("num_den",TF)
+
+        numcK=[]
+        for i in num:
+          numcK.append(float(i)*float(gain))
+        denc=[]
+        for i in den:
+          denc.append(float(i))
+        #Forzado manual a control porque sino se entra en bucle
+
+        #Crear la función de transferencia con los valores guardados en formato float
+        return control.tf(numcK, denc)
       elif simbol==1:
         s=sympy.symbols('s')
         numcp = 1
