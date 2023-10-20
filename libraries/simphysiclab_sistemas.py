@@ -271,14 +271,20 @@ def generarTF(tipo,num,den,simbol=0):
 
       TF=generarTF("num_den",numcastfloat,dencastfloat,1)
       TF=sympy.simplify(TF)
-      TF=forzarTFControl(TF)
+
+      #Forzado manual a control porque sino se entra en bucle
       num,den,gain=InfoTF("num_den",TF)
-      numgain=[]
+
+      numcK=[]
       for i in num:
-        numgain.append(i*gain)
+        numcK.append(i*gain)
+      denc=[]
+      for i in den:
+        denc.append(i)
+      #Forzado manual a control porque sino se entra en bucle
 
       #Crear la función de transferencia con los valores guardados en formato float
-      return control.tf(numgain, den)
+      return control.tf(numcK, denc)
   elif tipo =="ceros_polos":
     if parametrosLibereriaEnPol(num,den)=="sympy":
       s=sympy.symbols('s')
