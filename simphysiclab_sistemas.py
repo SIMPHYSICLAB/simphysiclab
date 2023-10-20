@@ -75,8 +75,9 @@ def tipoLibreria(TF):
   output:
         libreria: nombre de la librería principal de la función de transferencia.
   código:
-        libreria=type(TF).__module__.split('.')[0]
-        return libreria
+        def tipoLibreria(TF):
+          libreria=type(TF).__module__.split('.')[0]
+          return libreria
   '''
   libreria=type(TF).__module__.split('.')[0]
   return libreria
@@ -231,7 +232,17 @@ def generarTF(tipo,num,den,simbol=0):
     #Contiene simbolicos#La expresión simbolica no se puede simplificar
     if (symbolappearance.count(1)!=len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0) or (simbol==1):
       s = sympy.Symbol('s')
+
+      #numnew=[]
+      #dennew=[]
+
+      #for n in num:
+      #  numnew.append(int(n))
+      #for d in den:
+      #  dennew.append(int(d))
+
       return sympy.factor(sympy.simplify(sympy.Poly(num, s)/sympy.Poly(den, s)))
+      #return sympy.Poly(numnew, s)/sympy.Poly(dennew, s)
     #Contiene simbolicos#Se puede simplificar la expresión simbolica
     elif symbolappearance.count(1)==len(np.concatenate((num, den), axis=0)) and symbolappearance.count(1)>0:
       numwithoutParameter=[]
@@ -261,8 +272,17 @@ def generarTF(tipo,num,den,simbol=0):
       return control.tf(numcastfloat, dencastfloat)
   elif tipo =="ceros_polos":
     if parametrosLibereriaEnPol(num,den)=="sympy":
-      print("Error")
-      return "Error."
+      s=sympy.symbols('s')
+      numcp = 1
+      dencp = 1
+      if len(num)==0 and len(den)==0:
+        TF=sympy.factor(numcp/dencp)
+      else:
+        for i in range(len(num)):
+          numcp = numcp * (s - num[i])
+        for j in range(len(den)):
+          dencp = dencp * (s - den[j])
+        TF=sympy.factor(numcp/dencp)
     else:
       if simbol==0:
         s = control.tf('s')
@@ -291,17 +311,31 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 
-def devolverPolos_Ceros(polosCeros):
-    pole_values = list(polosCeros.keys())
-    multiplicities = list(polosCeros.values())
+def forzarTFSympy(TF):
+  #Forzar libreria sympy
+  num,den,gain=InfoTF("num_den",TF)
+  numcK=[]
+  for i in num:
+    numcK.append(float(i)*gain)
+  num=generarTF("num_den",numcK,[1],1)
+  den=generarTF("num_den",den,[1],1)
+  TF=num/den
+  #Forzar libreria sympy
+  return TF
 
-    all_poles = []
-    for i in range(len(pole_values)):
-        current_pole = pole_values[i]
-        current_multiplicity = multiplicities[i]
-        all_poles.extend([current_pole] * current_multiplicity)
+def forzarTFControl(TF):
+  #Forzar libreria control
+  num,den,gain=InfoTF("num_den",TF)
 
-    return all_poles
+  numcK=[]
+  for i in num:
+    numcK.append(i*gain)
+  denc=[]
+  for i in den:
+    denc.append(i)
+  TF=generarTF("num_den",numcK,denc)
+  #Forzar libreria control
+  return TF
 
 def InfoTF(tipo,TF):
 
@@ -409,6 +443,18 @@ def InfoTF(tipo,TF):
         polos=[np.round(i,8) for i in polos]
         return ceros,polos,gain
 
+def devolverPolos_Ceros(polosCeros):
+    pole_values = list(polosCeros.keys())
+    multiplicities = list(polosCeros.values())
+
+    all_poles = []
+    for i in range(len(pole_values)):
+        current_pole = pole_values[i]
+        current_multiplicity = multiplicities[i]
+        all_poles.extend([current_pole] * current_multiplicity)
+
+    return all_poles
+
 def realimentacion(G,H,k=1):
 
     '''
@@ -477,7 +523,7 @@ def realimentacion(G,H,k=1):
     '''
 
     if (parametrosLibreriaEnTF(G)=="sympy" or parametrosLibreriaEnTF(H)=="sympy") and tipoLibreria(k)=="sympy":
-      #print("1")
+      #Caso en el que el primer sistema es tipo sympy, el segundo también y el parametro K también.
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -489,7 +535,7 @@ def realimentacion(G,H,k=1):
       M=sympy.simplify(M)
       return M
     elif (parametrosLibreriaEnTF(G)=="sympy" or parametrosLibreriaEnTF(H)=="sympy") and tipoLibreria(k)!="sympy":
-      #print("2")
+      #Caso en el que el primer sistema es tipo sympy, el segundo también pero el parametro K no.
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -501,7 +547,7 @@ def realimentacion(G,H,k=1):
       M=sympy.simplify(M)
       return M
     elif (parametrosLibreriaEnTF(G)!="sympy" and parametrosLibreriaEnTF(H)!="sympy") and tipoLibreria(k)=="sympy":
-      #print("3")
+      #Caso en el que el primer sistema no es tipo sympy, el segundo tampoco pero el parametro K sí.
       num,den,gain=InfoTF("num_den",G)
       numk=[]
       for i in num:
@@ -513,8 +559,10 @@ def realimentacion(G,H,k=1):
       M=sympy.simplify(M)
       return M
     elif (parametrosLibreriaEnTF(G)!="sympy" and parametrosLibreriaEnTF(H)!="sympy") and tipoLibreria(k)!="sympy":
+      #Caso en el que el primer sistema no es tipo sympy, el segundo tampoco y el parametro K tampoco.
       numG,denG,gainG=InfoTF("num_den",G)
       numH,denH,gainH=InfoTF("num_den",H)
+      #Si no hay parametro pero el sistema se creó con sympy
       if tipoLibreria(G)=="sympy" and tipoLibreria(H)=="sympy":
         numk=[]
         for i in numG:
@@ -523,11 +571,16 @@ def realimentacion(G,H,k=1):
         H=gainH*generarTF("num_den",numH,denH,1)
         M=((G)/(1+(G*H)))
         M=sympy.simplify(M)
-      else:
+      else:#Si el sistema se creó con control
         G=gainG*generarTF("num_den",numG,denG)
         H=gainH*generarTF("num_den",numH,denH)
         K_G=control.series(k,G)
         M=control.feedback(K_G,H)
+
+        M=forzarTFSympy(M)
+        M=sympy.simplify(M)
+        M=forzarTFControl(M)
+
         ceros,polos,gain=InfoTF("ceros_polos",M)
       return M
 
@@ -549,7 +602,7 @@ def ordenTF(TF):
   orden=len(den)-1
   return orden
 
-def inversaLaplace(TF,positivos):
+def inversaLaplace(TF,positivos,G=None):
 
   '''
     input:
@@ -559,6 +612,18 @@ def inversaLaplace(TF,positivos):
           inverse_laplace_transform: devuelve la transformada inversa de laplace
 
     código:
+          #Forzar libreria sympy
+          num,den,gain=InfoTF("num_den",TF)
+
+          numcK=[]
+          for i in num:
+            numcK.append(float(i)*gain)
+          denc=[]
+          for i in den:
+            denc.append(float(i))
+          TF=generarTF("num_den",numcK,denc,1)
+          #Forzar libreria sympy
+
           if positivos==1:
             s = sympy.symbols('s')
             t = sympy.Symbol('t', positive=True)
@@ -568,13 +633,54 @@ def inversaLaplace(TF,positivos):
           return sympy.inverse_laplace_transform(TF, s, t)
   '''
 
+  TF=forzarTFSympy(TF)
+
   if positivos==1:
     s = sympy.symbols('s')
-    t = sympy.Symbol('t', positive=True)
+    t = sympy.Symbol('t',real=True,positive=True)
   else:
     s = sympy.symbols('s')
     t = sympy.Symbol('t')
-  return sympy.inverse_laplace_transform(TF, s, t)
+
+  if G==None:
+    return sympy.inverse_laplace_transform(TF, s, t),t
+  else:
+    G=forzarTFControl(G)
+
+    tv,yv=control.step_response(G,100)
+    invL=sympy.inverse_laplace_transform(TF, s, t)
+    valuesSystem = [invL.subs(t, val) for val in np.arange(0, 100, 0.0423908435777872)]
+    irange=min([len(valuesSystem),len(yv)])
+    newVectorDifference=[]
+    for i in range(irange):
+      newVectorDifference.append(abs(valuesSystem[i]-yv[i]))
+    if sum(newVectorDifference)/len(newVectorDifference)<0.1:
+      return invL,t,"NotError"
+    else:
+      return invL,t,newVectorDifference
+
+def inversaLaplacePorPartes(TF):
+
+  TF=forzarTFSympy(TF)
+
+  print("Se analiza el sistema por partes.")
+  gt,t=inversaLaplace(TF,1)
+  term_list = sympy.Add(gt).as_ordered_terms()
+  term_TF= sympy.Add(TF.apart()).as_ordered_terms()
+  factors = term_list
+  for j in range(0,len(factors)):
+    print("")
+    if estabilidadTF(term_TF[j])==1:
+      print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Estable.")
+    else:
+      print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Inestable.")
+    x=[]
+    y=[]
+    for i in range(0, 1000):
+        x.append(i*0.1)
+        y.append(float(factors[j].subs(t, i*0.1)))
+    plt.figure()
+    plt.plot(x,y)
 
 def estabilidadTF(TF):
 
@@ -588,8 +694,8 @@ def estabilidadTF(TF):
             print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
           else:
             ceros,polos,gain=InfoTF("ceros_polos",TF)
-            ceros=[np.round(i,2) for i in ceros]
-            polos=[np.round(i,2) for i in polos]
+            ceros=[np.round(float(i),2) for i in ceros]
+            polos=[np.round(float(i),2) for i in polos]
             EstableInestable=0
             for i in polos:
               if i.real>=0:
@@ -605,8 +711,8 @@ def estabilidadTF(TF):
     print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
   else:
     ceros,polos,gain=InfoTF("ceros_polos",TF)
-    ceros=[np.round(i,2) for i in ceros]
-    polos=[np.round(i,2) for i in polos]
+    ceros=[np.round(float(i),2) for i in ceros]
+    polos=[np.round(float(i),2) for i in polos]
     EstableInestable=0
     for i in polos:
       if i.real>=0:
@@ -616,6 +722,58 @@ def estabilidadTF(TF):
         print("Polo inestable en:",i,", ")
     if EstableInestable==0:
       print("Sistema Estable")
+      return 1
+    else:
+      return 0
+
+def estabilidadCardano(TF):
+
+  '''
+    input:
+          TF: función de transferencia.
+    output:
+
+    código:
+          num,den,gain=SIS.InfoTF("num_den",TF)
+
+          coeffs = []
+          for d in den:
+            if d.atoms(sympy.Number)==set():
+              coeffs.append(1)
+            else:
+              coeffs.append(d)
+
+          has_zero = any(x == 0 for x in coeffs)
+          if has_zero!=True:
+            lastValue=np.sign(coeffs)
+            indices = np.where(lastValue < 0)
+            if len(indices)==0:
+              print("Pasa los dos criterios de Cardano, se debe analizar la estabilidad según Ruth para asegurar Estabilidad.")
+            else:
+              print("Inestable. Falló el segundo criterio de Cardano.")
+          else:
+            print("Inestable. Falló el primer criterio de Cardano.")
+  '''
+
+  num,den,gain=InfoTF("num_den",TF)
+
+  coeffs = []
+  for d in den:
+    if d.atoms(sympy.Number)==set():
+      coeffs.append(1)
+    else:
+      coeffs.append(d)
+
+  has_zero = any(x == 0 for x in coeffs)
+  if has_zero!=True:
+    lastValue=np.sign(coeffs)
+    indices = np.where(lastValue < 0)
+    if len(indices[0])==0:
+      print("Cumple los dos criterios de Cardano, se debe analizar la estabilidad según Routh para asegurar Estabilidad.")
+    else:
+      print("Inestable. No cumple el segundo criterio de Cardano.")
+  else:
+    print("Inestable. No cumple el primer criterio de Cardano.")
 
 def estabilidadRouth(TF,simbolo=None):
 
@@ -669,9 +827,7 @@ def estabilidadRouth(TF,simbolo=None):
 
   s = sympy.symbols('s')
 
-  #Forzar libreria sympy
   num,den,gain=InfoTF("num_den",TF)
-  #Forzar libreria sympy
 
   A = routh(sympy.Poly(den, s))
 
@@ -779,9 +935,7 @@ def routhCasoEspecial(TF):
 
   '''
 
-  #Forzar libreria sympy
   num,den,gain=InfoTF("num_den",TF)
-  #Forzar libreria sympy
 
   #pol=generarTF("num_den",den,[1],1)
   pol=den
@@ -800,7 +954,9 @@ def routhCasoEspecial(TF):
     if((np.count_nonzero(A[i,:] == 0)==len(coefsPar))==True):
       res=ecuacionCaracteristicaRouth(A[i-1,:],len(pol),(i))#ecuacionCaracteristicaRouth(A[i-1,:],len(pol),(i-1))
       ec=sympy.Poly(res, s)
+      print('Polinomio anterior a la fila de ceros:',ec)
       derivative = sympy.diff(ec, s)
+      print('Derivada del polinomio:',derivative)
       for pij in range(0,len(derivative.coeffs())):
         A[i,pij]=derivative.coeffs()[pij]
   return A
@@ -873,17 +1029,7 @@ def respuestaEscalon(ax,TF,tiempo):
           return y,t
   '''
 
-  #Forzar libreria control
-  num,den,gain=InfoTF("num_den",TF)
-
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  denc=[]
-  for i in den:
-    denc.append(float(i))
-  TF=generarTF("num_den",numcK,denc)
-  #Forzar libreria control
+  TF=forzarTFControl(TF)
 
   t,y=control.step_response(TF,tiempo)
   ax.plot(t,y)
@@ -980,8 +1126,8 @@ def dibujarEjes(ax,paso,limites):
   ax.spines['top'].set_visible(False)
   ax.spines['right'].set_visible(False)
   # Escribimos el nombre de cada ejes
-  ax.set_xlabel('Real', size=14, labelpad=-24, x=1.03)
-  ax.set_ylabel('Im', size=14, labelpad=-21, y=1.02, rotation=0)
+  ax.set_xlabel('Im', size=6, labelpad=23, x=34.03)
+  ax.set_ylabel('Real', size=6, labelpad=-60, y=34.02, rotation=0)
   # Creamos las marcas principales personalizadas para determinar la posición
   # de las etiquetas de cada marca
   ticks_frequency = paso
@@ -1022,8 +1168,8 @@ def zoom(figOrAx,limites):
   cx.set_ylim(ymin, ymax)  # Set the y-axis limits
   return cx
 
-def dibujarPolosCeros(ax,limites,TF):
-
+def dibujarPolosCeros(ax,limites,TF,tono=1.0):
+  #REVISAR EDUARDO#
   """
   input:
         ax: ventana donde se dibujará la imagen.
@@ -1044,12 +1190,15 @@ def dibujarPolosCeros(ax,limites,TF):
   ax.set_xlim(xmin, xmax)
   ax.set_ylim(ymin, ymax)
 
+  TF=forzarTFControl(TF)
+
+
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
   for i in range(len(polos)) :
-    ax.scatter(polos[i].real, polos[i].imag, s=200,c='r', marker="x")
+    ax.scatter(polos[i].real, polos[i].imag, s=200,color=(tono, 0, 0), marker="x")
   for j in range(len(ceros)) :
-    ax.scatter(ceros[j].real, ceros[j].imag, s=200,c='b', marker="o")
+    ax.scatter(ceros[j].real, ceros[j].imag, s=200,color=(0, 0, tono), marker="o")
 
 def polosDominantes(TF, polo):
   """
@@ -1076,19 +1225,55 @@ def polosDominantes(TF, polo):
   """
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
-  # Verificar si hay un cero cercano al polo
+  # Encontrar el polo de baja frecuencia más cercano
+  min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
+
+ # Verificar si hay un cero cercano al polo
   for c in ceros:
-      if abs(polo - c) < 0.01:  # Ajusta el valor de tolerancia según sea necesario
+      if abs(polo - c) < (1/6)*abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
           return False
+
+  # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
+  if abs(polo.real)<=6*abs(min_low_freq_pole.real):
+      return True
+
+  return False
+
+def eliminarPolosCeros(TF):
+  ceros,polos,gain=InfoTF("ceros_polos",TF)
 
   # Encontrar el polo de baja frecuencia más cercano
   min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
 
-  # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
-  if polo.real<3*min_low_freq_pole.real:
-      return True
+  # Verificar si hay un cero cercano al polo
+  cerosc=[]
+  polosc=[]
+  for c in ceros:
+    ceroCancelado=0
+    for p in polos:
+      if abs(p - c) < (1/6)*abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
+        if ceroCancelado==0:
+          polosc.append(p)
+        ceroCancelado=1
+    if ceroCancelado==1:
+      cerosc.append(c)
 
-  return False
+  ceroscopy=copy.deepcopy(ceros)
+  poloscopy=copy.deepcopy(polos)
+  for cc in ceroscopy:
+    if cc in cerosc:
+      ceros.remove(cc)
+  for pc in poloscopy:
+    if pc in polosc:
+      polos.remove(pc)
+
+  # Verificar si la parte real del polo es al menos 10 veces mayor que la parte real del polo de baja frecuencia más cercano
+  for pl in polos:
+    if abs(pl.real)>=6*abs(min_low_freq_pole.real):
+      polos.remove(pl)
+
+  TFSimplified=generarTF("ceros_polos",ceros,polos)
+  return TFSimplified
 
 def regimenPermanente(G,H,VectorError):
   """
@@ -1150,25 +1335,8 @@ def regimenPermanente(G,H,VectorError):
   """
   s = sympy.Symbol('s')
 
-  #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",G)
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
-  G=num/den
-  #Forzar libreria sympy
-
-  #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",H)
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
-  H=num/den
-  #Forzar libreria sympy
+  G=forzarTFSympy(G)
+  H=forzarTFSympy(H)
 
   Mp=G*H
   Mv=s*G*H
@@ -1193,6 +1361,19 @@ def regimenPermanente(G,H,VectorError):
 
   return  VectorErrorReturn
 
+def ajustarGanancia(TF1,TF2):
+  s=sympy.symbols('s')
+  K=sympy.symbols('K')
+
+  TF1=forzarTFSympy(TF1)
+  TF2=forzarTFSympy(TF2)
+
+  Y1=s*(1/s)*TF1
+  Y2=K*s*(1/s)*TF2
+
+  K=sympy.solve((Y1.subs(s,0)/Y2.subs(s,0)-1),K)
+  return K
+
 def errCriterio(err,errPunto):
   """
   input:
@@ -1216,7 +1397,7 @@ def errCriterio(err,errPunto):
     print("No cumple el criterio de regimen permanente")
     return False
 
-def tipoRespuesta2orden(TF):
+def tipoRespuestaNorden(TF):
 
   """
   input:
@@ -1244,20 +1425,45 @@ def tipoRespuesta2orden(TF):
         return tipo
   """
 
-  ceros,polos,gain=InfoTF("ceros_polos",TF)
+  TF=forzarTFControl(TF)
 
-  if (polos[0].real and polos[1].real)==0:
-    print('Sistema de 2do orden inestable')
-    tipo=-1
-  elif (polos[0].real == polos[1].real):
-    print('Sistema de 2do orden subamortiguado')
-    tipo=0
-  elif polos[0]==polos[1]:
-    print('Sistema de 2do orden críticamente amortiguado')
-    tipo=1
+  ceros,polos,gain=InfoTF("ceros_polos",TF)
+  if ordenTF(TF)==2:
+    if estabilidadTF(TF)==0:
+      print('Sistema de 2do orden inestable')
+      tipo=-1
+    elif (polos[0].real == polos[1].real):
+      print('Sistema de 2do orden subamortiguado')
+      tipo=0
+    elif polos[0]==polos[1]:
+      print('Sistema de 2do orden críticamente amortiguado')
+      tipo=1
+    else:
+      print('Sistema de 2do orden sobreamortiguado')
+      tipo=2
+  elif ordenTF(TF)>2:
+    t,y=control.step_response(TF,20)
+    b=y[len(t)-1]
+    a=max(y)-b
+    #if (a/b)*100>0.05:
+    if estabilidadTF(TF)==0:
+      print('Sistema de orden superior a 2, tipo inestable')
+      tipo=-1
+    else:
+      if any(abs(pole.imag) > 0.05 for pole in polos):
+        print('Sistema de orden superior a 2, tipo subamortiguado')
+        tipo=0
+      else:
+        if len(set(polos)) == 1:
+          print('Sistema de orden superior a 2, tipo  críticamente amortiguado')
+          tipo=1
+        else:
+          print('Sistema de orden superior a 2, tipo  sobreamortiguado')
+          tipo=2
   else:
-    print('Sistema de 2do orden sobreamortiguado')
-    tipo=2
+      print('Sistema de 1er orden')
+      tipo=None
+
   return tipo
 
 def parameterMp(Mp):
@@ -1518,36 +1724,131 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
   a=max(y)-b
   errp=1-y[len(t)-1]
 
+  ax.set(xlim=(-6.5, t[len(t)-1]+0.2), ylim=(-0.2, max(y)+0.2))
 
   ax.plot([0, 0], [0, y[len(t)-1]], c='green', ls='--', lw=1, alpha=1)
   ax.annotate('b=%s'%round(b,3),(0,b/2),(0,b/2))
-  ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
-  ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
-  ax.annotate('a+b=%s'%round(a+b,3),(0,b+a),(0,b+a))
   ax.annotate('vf=%s'%round(b,3),(t[len(t)-1],b),(t[len(t)-1],b))
 
-  print("Sobreoscilacion: ",100*(a/b),"%")
-  print("Errp: ",errp)
-  print("b: ",b)
-  print("a: ",a)
-  print("valor final: ",b)
-  print("max: ",a+b)
 
-  if a>0:
+  print("Errp: ",errp)
+  print("valor final: ",b)
+
+
+  if (a/b)*100>2:
+    ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
+    ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
+    ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
+    ax.annotate('Mp=%s%%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
+
+    print("Sobreoscilacion: ",100*(a/b),"%")
+    print("b: ",b)
+    print("a: ",a)
+    print("Mp: ",(a/b)*100)
+    print("max: ",a+b)
 
     tp=t[np.argmax(y)]
     print("tp: ",tp,"s")
+
+    tr=[]
+    ytr=[]
+    vfind=y[len(t)-1]
+    for i in range(len(y)):
+      if vfind-y[i]<0:
+        tr=t[i-1]
+        ytr=y[i]
+        break
+
     ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
+    ax.annotate('tr=%s s'%round(tr,3),(tr,-0.1),(tr,-0.1))
+    ax.plot([tr, tr], [0, ytr], c='green', ls='--', lw=1, alpha=1)
     ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
     ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
-    ax.plot([tp, tp], [0, y[np.argmax(y)]], c='red', ls='--', lw=1, alpha=1)
+    ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
     ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
-  else:
+
+  elif (y[1] - y[0]) / (t[1] - t[0])>0.05:
+    #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
     pto_y=0.632*np.max(y)
     round_pto_y=round(pto_y,5)
     round_K=round(np.max(y),5)
     for i in range(len(y)):
       if pto_y-y[i]<0:
-        ts=t[i-1]
+        T=t[i-1]
         break
-    ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
+    ax.plot([0, T], [0, np.max(y)], c='y', ls='--', lw=1, alpha=1)
+    ax.annotate('/=%s'%round(np.max(y)/T,3),(-5,np.max(y)/2),(-5,np.max(y)/2))
+    ax.plot([0, T], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
+    ax.plot([T, T], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
+    ax.annotate('T=%s s'%round(T,3),(T,pto_y-0.1),(T,pto_y-0.1))
+
+def parametrosTipoRegimen(ax,y,t):
+
+
+  """
+  input:
+        y: valores de la señal para la respuesta en regimen permanente
+        t: vector de tiempos correspondiente a los valores de la señal en regimen permanente
+  output:
+
+  código:
+        fv=y[len(t)-1]
+
+        max5fv=fv+fv*(5/100)
+        min5fv=fv-fv*(5/100)
+
+        rp=[]
+        yp=[]
+        pto_y=max5fv
+        for i in range(len(y)):
+          if pto_y-y[i]<0:
+            rp=t[i-1]
+            yp=pto_y
+            break
+        if rp!=None:
+          pto_y=min5fv
+          for i in range(len(y)):
+            if pto_y-y[i]<0:
+              rp=t[i-1]
+              yp=pto_y
+              break
+
+        ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
+        ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
+        ax.plot([rp, len(t)], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+        ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
+        ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
+  """
+
+  fv=y[len(t)-1]
+
+  max5fv=fv+fv*(5/100)
+  min5fv=fv-fv*(5/100)
+
+  rp=[]
+  yp=[]
+  pto_y=max5fv
+  for i in range(len(y)):
+    if pto_y-y[i]<0:
+      rp=t[i-1]
+      yp=pto_y
+      break
+  if rp!=None:
+    pto_y=min5fv
+    #for i in range(len(y)):
+    #  if pto_y-y[i]<0:
+    #    rp=t[i-1]
+    #    yp=pto_y
+    #    break
+    for i in range(len(y)-1,1,-1):
+      if y[i]<=pto_y:
+        rp=t[i-1]
+        yp=pto_y
+        break
+
+  ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
+  ax.annotate('Ts=%s s'%round(rp,3),(rp,0.3),(rp,0.3))
+  ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
+  ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+  ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
+  ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
