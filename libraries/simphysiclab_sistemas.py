@@ -268,8 +268,17 @@ def generarTF(tipo,num,den,simbol=0):
         numcastfloat.append(float(i))
       for i in den:
         dencastfloat.append(float(i))
+
+      TF=generarTF("num_den",numcastfloat,dencastfloat,1)
+      TF=sympy.simplify(TF)
+      TF=forzarTFControl(TF)
+      num,den,gain=InfoTF("num_den",TF)
+      numgain=[]
+      for i in num:
+        numgain.append(i*gain)
+
       #Crear la función de transferencia con los valores guardados en formato float
-      return control.tf(numcastfloat, dencastfloat)
+      return control.tf(numgain, den)
   elif tipo =="ceros_polos":
     if parametrosLibereriaEnPol(num,den)=="sympy":
       s=sympy.symbols('s')
@@ -577,9 +586,9 @@ def realimentacion(G,H,k=1):
         K_G=control.series(k,G)
         M=control.feedback(K_G,H)
 
-        M=forzarTFControl(M)
-        M=sympy.simplify(M)
         M=forzarTFSympy(M)
+        M=sympy.simplify(M)
+        M=forzarTFControl(M)
 
         ceros,polos,gain=InfoTF("ceros_polos",M)
       return M
