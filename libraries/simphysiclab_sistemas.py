@@ -947,9 +947,9 @@ def routhCasoEspecial(TF):
     if((np.count_nonzero(A[i,:] == 0)==len(coefsPar))==True):
       res=ecuacionCaracteristicaRouth(A[i-1,:],len(pol),(i))#ecuacionCaracteristicaRouth(A[i-1,:],len(pol),(i-1))
       ec=sympy.Poly(res, s)
-      print(ec)
+      print('Polinomio anterior a la fila de ceros:',ec)
       derivative = sympy.diff(ec, s)
-      print(derivative)
+      print('Derivda del polinomio:',derivative)
       for pij in range(0,len(derivative.coeffs())):
         A[i,pij]=derivative.coeffs()[pij]
   return A
