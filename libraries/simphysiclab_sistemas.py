@@ -311,12 +311,9 @@ def generarTF(tipo,num,den,simbol=0):
           for j in range(len(den)):
             dencp = dencp * (s - den[j])
 
+
         #Forzado manual a control porque sino se entra en bucle
-        TF=generarTF("num_den",numcp,dencp,1)
-        TF=sympy.cancel(TF)
-
-        num,den,gain=InfoTF("num_den",TF)
-
+        num,den,gain=InfoTF("num_den",numcp/dencp)
         numcK=[]
         for i in num:
           numcK.append(float(i)*float(gain))
