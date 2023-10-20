@@ -277,10 +277,10 @@ def generarTF(tipo,num,den,simbol=0):
 
       numcK=[]
       for i in num:
-        numcK.append(i*gain)
+        numcK.append(float(i)*gain)
       denc=[]
       for i in den:
-        denc.append(i)
+        denc.append(float(i))
       #Forzado manual a control porque sino se entra en bucle
 
       #Crear la función de transferencia con los valores guardados en formato float
