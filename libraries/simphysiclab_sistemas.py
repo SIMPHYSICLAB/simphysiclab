@@ -58,6 +58,9 @@ sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
 import matplotlib.colors as colors
+from matplotlib.animation import FuncAnimation
+from IPython.display import HTML
+
 
 from google.colab import output
 output.enable_custom_widget_manager()
