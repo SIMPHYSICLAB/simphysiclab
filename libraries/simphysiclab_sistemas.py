@@ -1915,7 +1915,7 @@ def parametrosTipoRegimenVideo(y,t):
       break
 
   ani = FuncAnimation(fig, updateScatterTipoRegimen, frames=len(yp), interval=0.00000000000000001, repeat=False)
-
+  return HTML(ani.to_jshtml())
 def updateScatterTipoRegimen(frame):
   global axs
   global figs
