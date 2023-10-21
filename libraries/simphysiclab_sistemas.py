@@ -1906,6 +1906,7 @@ def parametrosTipoRegimenVideo(y,t):
     print(t[i-1],y[i-1])
     ys.append(y[i-1])
     ts.append(t[i-1])
+    axs.scatter(t[i-1],y[i-1],s=7,c='r', marker="o")
     if pto_ymax-y[i]<0:
       rp=t[i-1]
       yp=pto_ymax
@@ -1922,4 +1923,4 @@ def updateScatterTipoRegimen(frame):
   global figs
   global ys
   global ts
-  axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
+  #axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
