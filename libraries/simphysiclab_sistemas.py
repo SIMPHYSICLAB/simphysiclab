@@ -716,7 +716,7 @@ def inversaLaplacePorPartes(TF):
 
   x=[]
   y=[]
-  invLG,t=inversaLaplace(G,1)
+  invLG,t=inversaLaplace(TF,1)
 
   for i in range(0, 1000):
     x.append(i*0.1)
