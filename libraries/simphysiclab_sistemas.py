@@ -1857,12 +1857,12 @@ def parametrosTipoRegimen(ax,y,t):
   rp=[]
   yp=[]
   pto_y=max5fv
-  for i in range(len(y)):
+  for i in range(len(y)-1,1,-1):
     if pto_y-y[i]<0:
       rp=t[i-1]
       yp=pto_y
       break
-  if rp!=None:
+  if rp==None:
     pto_y=min5fv
     #for i in range(len(y)):
     #  if pto_y-y[i]<0:
