@@ -1862,16 +1862,13 @@ def parametrosTipoRegimen(ax,y,t):
   pto_ymax=max5fv
   pto_ymin=min5fv
   for i in range(len(y)-1,1,-1):
-    print(t[i-1],y[i-1])
     if pto_ymax-y[i]<0:
       rp=t[i-1]
       yp=pto_ymax
-      print(111111111111111111111111111)
       break
     if y[i]<=pto_ymin:
       rp=t[i-1]
       yp=pto_ymin
-      print(222222222222222222222222222)
       break
 
   ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
@@ -1903,15 +1900,11 @@ def parametrosTipoRegimenVideo(y,t):
   yp=[]
   ts=[]
   ys=[]
-  y2=copy.deepcopy(y)
-  t2=copy.deepcopy(t)
   pto_ymax=max5fv
   pto_ymin=min5fv
   for i in range(len(y)-1,1,-1):
-    print(t2[i-1],y2[i-1])
-    ys.append(y2[i-1])
-    ts.append(t2[i-1])
-    axs.scatter(t2[i-1],y2[i-1],s=7,c='r', marker="o")
+    ys.append(y[i-1])
+    ts.append(t[i-1])
     if pto_ymax-y[i]<0:
       rp=t[i-1]
       yp=pto_ymax
@@ -1920,6 +1913,8 @@ def parametrosTipoRegimenVideo(y,t):
       rp=t[i-1]
       yp=pto_ymin
       break
+  ys.reverse()
+  ts.reverse()
   ani = FuncAnimation(fig, updateScatterTipoRegimen, frames=len(ys), interval=0.00000000000000001, repeat=False)
   return HTML(ani.to_jshtml())
 def updateScatterTipoRegimen(frame):
@@ -1927,4 +1922,4 @@ def updateScatterTipoRegimen(frame):
   global figs
   global ys
   global ts
-  #axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
+  axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
