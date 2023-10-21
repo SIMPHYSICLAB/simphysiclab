@@ -1866,10 +1866,12 @@ def parametrosTipoRegimen(ax,y,t):
     if pto_ymax-y[i]<0:
       rp=t[i-1]
       yp=pto_ymax
+      prin(111111111111111111111111111)
       break
     if y[i]<=pto_ymin:
       rp=t[i-1]
       yp=pto_ymin
+      prin(222222222222222222222222222)
       break
 
   ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
