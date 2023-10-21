@@ -1913,8 +1913,8 @@ def parametrosTipoRegimenVideo(y,t):
       rp=t[i-1]
       yp=pto_ymin
       break
-  ys=ys.reverse()
-  ts=ts.reverse()
+  #ys=ys.reverse()
+  #ts=ts.reverse()
   ani = FuncAnimation(fig, updateScatterTipoRegimen, frames=len(ys), interval=0.00000000000000001, repeat=False)
   return HTML(ani.to_jshtml())
 def updateScatterTipoRegimen(frame):
