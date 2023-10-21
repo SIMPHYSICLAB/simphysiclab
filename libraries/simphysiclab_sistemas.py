@@ -1885,8 +1885,6 @@ def parametrosTipoRegimenVideo(y,t):
   fig = plt.figure(figsize = (5,5))
   ax = fig.add_subplot(1,1,1)
 
-  ys=y
-  ts=t
   axs=ax
   figs=fig
 
@@ -1897,15 +1895,18 @@ def parametrosTipoRegimenVideo(y,t):
 
   rp=[]
   yp=[]
+  ts=[]
+  ys=[]
   pto_ymax=max5fv
   pto_ymin=min5fv
   for i in range(len(ys)-1,1,-1):
-    axs.scatter(p[0],p[1],s=7,c='r', marker="o")
-    if pto_y-ys[i]<0:
+    ys.append(ys[i])
+    ts.append(t[i-1])
+    if pto_ymax-ys[i]<0:
       rp=t[i-1]
       yp=pto_ymax
       break
-    if ys[i]<=pto_y:
+    if ys[i]<=pto_ymin:
       rp=ts[i-1]
       yp=pto_ymin
       break
