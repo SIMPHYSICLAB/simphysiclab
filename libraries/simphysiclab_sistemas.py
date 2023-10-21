@@ -701,18 +701,29 @@ def inversaLaplacePorPartes(TF):
   term_TF= sympy.Add(TF.apart()).as_ordered_terms()
   factors = term_list
   for j in range(0,len(factors)):
-    print("")
+
     if estabilidadTF(term_TF[j])==1:
-      print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Estable.")
+      print("Factor: "+str(j+1),"Parte de G: ",term_TF[j],"Inversa Laplace: ",factors[j],".Estable.")
     else:
-      print("Parte de G: ",term_TF[j],"Factor Impulsional: ",factors[j],".Inestable.")
+      print("Factor: "+str(j+1),"Parte de G: ",term_TF[j],"Inversa Laplace: ",factors[j],".Inestable.")
     x=[]
     y=[]
     for i in range(0, 1000):
         x.append(i*0.1)
         y.append(float(factors[j].subs(t, i*0.1)))
-    plt.figure()
+    plt.figure("Inversa Laplace de factor: "+str(j+1))
     plt.plot(x,y)
+
+  x=[]
+  y=[]
+  invLG,t=inversaLaplace(G,1)
+
+  for i in range(0, 1000):
+    x.append(i*0.1)
+    ff=invLG.subs(t, i*0.1)
+    y.append(float(ff))
+  plt.figure("Inversa de Laplace de todo el sistema")
+  plt.plot(x,y)
 
 def estabilidadTF(TF):
 
