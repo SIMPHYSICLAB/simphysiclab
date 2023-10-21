@@ -1856,24 +1856,17 @@ def parametrosTipoRegimen(ax,y,t):
 
   rp=[]
   yp=[]
-  pto_y=max5fv
+  pto_ymax=max5fv
+  pto_ymin=min5fv
   for i in range(len(y)-1,1,-1):
     if pto_y-y[i]<0:
       rp=t[i-1]
-      yp=pto_y
+      yp=pto_ymax
       break
-  if rp==None:
-    pto_y=min5fv
-    #for i in range(len(y)):
-    #  if pto_y-y[i]<0:
-    #    rp=t[i-1]
-    #    yp=pto_y
-    #    break
-    for i in range(len(y)-1,1,-1):
-      if y[i]<=pto_y:
-        rp=t[i-1]
-        yp=pto_y
-        break
+    if y[i]<=pto_y:
+      rp=t[i-1]
+      yp=pto_ymin
+      break
 
   ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
   ax.annotate('Ts=%s s'%round(rp,3),(rp,0.3),(rp,0.3))
@@ -1881,3 +1874,49 @@ def parametrosTipoRegimen(ax,y,t):
   ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
   ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
   ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
+
+def parametrosTipoRegimenVideo(y,t):
+
+  global axs
+  global figs
+  global ys
+  global ts
+
+  fig = plt.figure(figsize = (5,5))
+  ax = fig.add_subplot(1,1,1)
+
+  ys=y
+  ts=t
+  axs=ax
+  figs=fig
+
+  fv=ys[len(ts)-1]
+
+  max5fv=fv+fv*(5/100)
+  min5fv=fv-fv*(5/100)
+
+  rp=[]
+  yp=[]
+  pto_ymax=max5fv
+  pto_ymin=min5fv
+  for i in range(len(ys)-1,1,-1):
+    axs.scatter(p[0],p[1],s=7,c='r', marker="o")
+    if pto_y-ys[i]<0:
+      rp=t[i-1]
+      yp=pto_ymax
+      break
+    if ys[i]<=pto_y:
+      rp=ts[i-1]
+      yp=pto_ymin
+      break
+
+  ani = FuncAnimation(fig, updateScatterTipoRegimen, frames=len(yp), interval=0.00000000000000001, repeat=False)
+
+def updateScatterTipoRegimen(frame):
+  global axs
+  global figs
+  global ys
+  global ts
+
+  axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
+
