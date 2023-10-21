@@ -1878,15 +1878,20 @@ def parametrosTipoRegimen(ax,y,t):
   ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
   ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
 
-def parametrosTipoRegimenVideo(y,t):
+def parametrosTipoRegimenVideo(y,t,limites):
 
   global axs
   global figs
   global ys
   global ts
 
+
   fig = plt.figure(figsize = (5,5))
   ax = fig.add_subplot(1,1,1)
+
+  xmin,xmax,ymin,ymax=ajustarLimites(limites)
+
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
 
   axs=ax
   figs=fig
