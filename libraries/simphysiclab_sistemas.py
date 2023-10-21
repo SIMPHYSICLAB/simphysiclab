@@ -1888,7 +1888,7 @@ def parametrosTipoRegimenVideo(y,t):
   axs=ax
   figs=fig
 
-  fv=y[len(ts)-1]
+  fv=y[len(t)-1]
 
   max5fv=fv+fv*(5/100)
   min5fv=fv-fv*(5/100)
