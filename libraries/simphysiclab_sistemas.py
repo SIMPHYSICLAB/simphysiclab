@@ -1891,10 +1891,7 @@ def parametrosTipoRegimenVideo(y,t,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
-  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
-
-  axs=ax
-  figs=fig
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   fv=y[len(t)-1]
 
@@ -1918,6 +1915,16 @@ def parametrosTipoRegimenVideo(y,t,limites):
       rp=t[i-1]
       yp=pto_ymin
       break
+  ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
+  ax.annotate('Ts=%s s'%round(rp,3),(rp,0.3),(rp,0.3))
+  ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
+  ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+  ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
+  ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
+
+  axs=ax
+  figs=fig
+
   #ys=ys.reverse()
   #ts=ts.reverse()
   ani = FuncAnimation(fig, updateScatterTipoRegimen, frames=len(ys), interval=0.00000000000000001, repeat=False)
