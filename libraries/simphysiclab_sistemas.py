@@ -1903,6 +1903,7 @@ def parametrosTipoRegimenVideo(y,t):
   pto_ymax=max5fv
   pto_ymin=min5fv
   for i in range(len(ys)-1,1,-1):
+    print("i",i)
     ys.append(ys[i])
     ts.append(t[i-1])
     if pto_ymax-ys[i]<0:
