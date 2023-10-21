@@ -1859,11 +1859,11 @@ def parametrosTipoRegimen(ax,y,t):
   pto_ymax=max5fv
   pto_ymin=min5fv
   for i in range(len(y)-1,1,-1):
-    if pto_y-y[i]<0:
+    if pto_ymax-y[i]<0:
       rp=t[i-1]
       yp=pto_ymax
       break
-    if y[i]<=pto_y:
+    if y[i]<=pto_ymin:
       rp=t[i-1]
       yp=pto_ymin
       break
@@ -1919,4 +1919,3 @@ def updateScatterTipoRegimen(frame):
   global ts
 
   axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
-
