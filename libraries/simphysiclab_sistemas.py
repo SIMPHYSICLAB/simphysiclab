@@ -1476,13 +1476,13 @@ def tipoRespuestaNorden(TF):
       print('Sistema de 2do orden inestable')
       tipo=-1
     elif (polos[0].real == polos[1].real):
-      print('Sistema de 2do orden subamortiguado')
+      print('Sistema de 2do orden subamortiguado (polo conjugado)')
       tipo=0
     elif polos[0]==polos[1]:
-      print('Sistema de 2do orden críticamente amortiguado')
+      print('Sistema de 2do orden críticamente amortiguado (polo real doble igual)')
       tipo=1
     else:
-      print('Sistema de 2do orden sobreamortiguado')
+      print('Sistema de 2do orden sobreamortiguado (polos reales distintos)')
       tipo=2
   elif ordenTF(TF)>2:
     t,y=control.step_response(TF,20)
