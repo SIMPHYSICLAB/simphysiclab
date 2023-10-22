@@ -130,7 +130,7 @@ def parametrosLibereriaEnPol(num,den):
   symbolappearance=[]
   for i in np.concatenate((num, den), axis=0):
       try:
-        testrealnumber=float(i)
+        testrealnumber=float(np.real(i))
         symbolappearance.append(0)
       except:
         symbolappearance.append(1)
@@ -227,7 +227,7 @@ def generarTF(tipo,num,den,simbol=0):
     #Comprobar si contiene algun simbolico la expresión
     for i in np.concatenate((num, den), axis=0):
       try:
-        testrealnumber=float(i)
+        testrealnumber=float(np.real(i))
         symbolappearance.append(0)
       except:
         symbolappearance.append(1)
@@ -754,8 +754,8 @@ def estabilidadTF(TF):
     print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
   else:
     ceros,polos,gain=InfoTF("ceros_polos",TF)
-    ceros=[np.round(float(abs(i)),2) for i in ceros]
-    polos=[np.round(float(abs(i)),2) for i in polos]
+    ceros=[np.round(float(np.real(i)),2) for i in ceros]
+    polos=[np.round(float(np.real(i)),2) for i in polos]
     EstableInestable=0
     for i in polos:
       if i>=0:
