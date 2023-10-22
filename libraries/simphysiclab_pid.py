@@ -301,7 +301,7 @@ def comprobarLimitesConRestriccionesLDR(TF,theta=None,wd=None,sgm=None,maxK=1000
   """
   x,y=puntosEnAreaValidaSegunRestricciones(TF,theta,wd,sgm,maxK,paso)
 
-  if x.any()!=[]:
+  if len(x) != 0:
     findElement=[element for element in y if element != 0][0]
     findLastElement=[element for element in reversed(y) if element != 0][0]
     firstElementComplex=np.where(y == findElement)[0][0]
@@ -466,11 +466,11 @@ def calculoParteDiferencial(TF,pto_interes):
   K=LDR.criterioModulo(PD*TF,pto_interes)
   return [K,pd,zd,PD]
 
-def calculoZi(pt_interes):
+def calculoZi(pto_interes):
   try:
-    return pt_interes.real/6
+    return pto_interes.real/6
   except:
-    return pt_interes/6
+    return pto_interes/6
 
 def calculoPi(TF,Zi,tipo_error,valor_error):
   b = sympy.Symbol('b')
@@ -499,10 +499,11 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
     if errValue==False:
       zi=calculoZi(Kpunto)
       pi=calculoPi(float(Kpunto)*G*H,zi,tipo_error,valor_error/100)
-      PI=SIS.generarTF("num_den",[1,-zi],[1-pi])
-      return float(Kpunto),None,PI
+      PIi=SIS.generarTF("num_den",[1,-zi],[1, 0])
+      PIr=SIS.generarTF("num_den",[1,-zi],[1,-pi])
+      return float(Kpunto),None,[PIi,PIr],[float(Kpunto)*PIi,float(Kpunto)*PIr]
     else:
-      return float(Kpunto),None,None
+      return float(Kpunto),None,None,float(Kpunto)
   else:
     #PD
     #  #calculoZi
@@ -518,7 +519,9 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       #PI controlador real e ideal
       zi=calculoZi(pto_interes)
       pi=calculoPi(float(K)*G*PD,zi,tipo_error,valor_error/100)
-      PI=SIS.generarTF("num_den",[1,-zi],[1,-pi])
-      return float(K),PD,PI
+      PIi=SIS.generarTF("num_den",[1,-zi],[1, 0])
+      PIr=SIS.generarTF("num_den",[1,-zi],[1,-pi])
+
+      return float(K),PD,[PIi,PIr],[float(Kpunto)*PD*PIi,float(Kpunto)*PD*PIr]
     else:
-      return float(K),PD,None
+      return float(K),PD,None,float(K)*PD
