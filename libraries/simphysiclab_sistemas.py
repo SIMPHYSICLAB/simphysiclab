@@ -754,8 +754,8 @@ def estabilidadTF(TF):
     print("La estabilidad con esta función solo se puede estudiar sin parametros variables.")
   else:
     ceros,polos,gain=InfoTF("ceros_polos",TF)
-    ceros=[np.round(float(i.real),2) for i in ceros]
-    polos=[np.round(float(i.real),2) for i in polos]
+    ceros=[np.round(float(abs(i)),2) for i in ceros]
+    polos=[np.round(float(abs(i)),2) for i in polos]
     EstableInestable=0
     for i in polos:
       if i>=0:
