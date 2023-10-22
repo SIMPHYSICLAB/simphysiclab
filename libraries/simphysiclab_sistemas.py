@@ -280,10 +280,10 @@ def generarTF(tipo,num,den,simbol=0):
 
       numcK=[]
       for i in num:
-        numcK.append(float(i)*float(gain))
+        numcK.append(float(np.real(i))*float(gain))
       denc=[]
       for i in den:
-        denc.append(float(i))
+        denc.append(float(np.real(i)))
       #Forzado manual a control porque sino se entra en bucle
 
       #Crear la función de transferencia con los valores guardados en formato float
@@ -319,10 +319,10 @@ def generarTF(tipo,num,den,simbol=0):
         num,den,gain=InfoTF("num_den",numcp/dencp)
         numcK=[]
         for i in num:
-          numcK.append(float(i)*float(gain))
+          numcK.append(float(np.real(i))*float(gain))
         denc=[]
         for i in den:
-          denc.append(float(i))
+          denc.append(float(np.real(i)))
         TF=generarTF("num_den",numcK,denc,1)
         TF=sympy.cancel(TF)
         #Forzado manual a control porque sino se entra en bucle
@@ -1398,7 +1398,7 @@ def regimenPermanente(G,H,VectorError):
     VectorErrorReturn.append([kv,ev])
 
   ka=Ma.subs(s, 0)
-  ea=1/(Ma.subs(s, 0))
+  ea=100*(1/(Ma.subs(s, 0)))
   if VectorError.count("errA") > 0:
     VectorErrorReturn.append([ka,ea])
 
