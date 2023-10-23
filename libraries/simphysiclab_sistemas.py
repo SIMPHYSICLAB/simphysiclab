@@ -325,6 +325,15 @@ def generarTF(tipo,num,den,simbol=0):
           denc.append(float(np.real(i)))
         TF=generarTF("num_den",numcK,denc,1)
         TF=sympy.cancel(TF)
+        num,den,gain=InfoTF("num_den",TF)
+        #
+        numcK=[]
+        for i in num:
+          numcK.append(float(np.real(i))*float(gain))
+        denc=[]
+        for i in den:
+          denc.append(float(np.real(i)))
+        TF=generarTF("num_den",numcK,denc,1)
         #Forzado manual a control porque sino se entra en bucle
 
         return forzarTFControl(TF)
