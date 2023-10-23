@@ -1178,7 +1178,8 @@ def dibujarEjes(ax,paso,limites):
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
 
-  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
+  #ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
   # Establecemos en 0,0 el origen del eje de coordenadas para representar
   # las marcas de la escala de los ejes
   ax.spines['bottom'].set_position('zero')
