@@ -280,7 +280,7 @@ def generarTF(tipo,num,den,simbol=0):
 
       numcK=[]
       for i in num:
-        numcK.append(float(np.real(i))*float(gain))
+        numcK.append(float(np.real(i))*float(np.real(gain)))
       denc=[]
       for i in den:
         denc.append(float(np.real(i)))
@@ -319,21 +319,12 @@ def generarTF(tipo,num,den,simbol=0):
         num,den,gain=InfoTF("num_den",numcp/dencp)
         numcK=[]
         for i in num:
-          numcK.append(float(np.real(i))*float(gain))
+          numcK.append(float(np.real(i))*float(np.real(gain)))
         denc=[]
         for i in den:
           denc.append(float(np.real(i)))
         TF=generarTF("num_den",numcK,denc,1)
         TF=sympy.cancel(TF)
-        num,den,gain=InfoTF("num_den",TF)
-        #
-        numcK=[]
-        for i in num:
-          numcK.append(float(np.real(i))*float(gain))
-        denc=[]
-        for i in den:
-          denc.append(float(np.real(i)))
-        TF=generarTF("num_den",numcK,denc,1)
         #Forzado manual a control porque sino se entra en bucle
 
         return forzarTFControl(TF)
@@ -449,24 +440,39 @@ def InfoTF(tipo,TF):
         numSimplify=[]
         denSimplify=[]
 
+        #!!Cambio en el denominador
+        #for i in num:
+        #  numSimplify.append(i/gain)
+        #for i in den:
+        #  denSimplify.append(i)
+
         for i in num:
-          numSimplify.append(i/gain)
+          numSimplify.append((i/gain)/denCoeff)
         for i in den:
-          denSimplify.append(i)
+          denSimplify.append((i)/denCoeff)
         return numSimplify,denSimplify,gain
       else:
+        #!!Cambio en el denominador
+        #gain=TF.num[0][0][0]
+        #for i in TF.num[0][0]:
+        #  num.append(i.real/gain)
+        #for i in TF.den[0][0]:
+        #  den.append(i.real)
+        #return num,den,gain
 
         gain=TF.num[0][0][0]
 
         for i in TF.num[0][0]:
-          num.append(i.real/gain)
+          num.append((i.real/gain)/denCoeff)
         for i in TF.den[0][0]:
-          den.append(i.real)
+          den.append((i.real)/denCoeff)
         return num,den,gain
     elif tipo =="ceros_polos":
       if tipoLibreria(TF)=="sympy":
         n,d = sympy.fraction(TF)
-        gain=sympy.Poly(n, sympy.symbols('s')).coeffs()[0]
+        #!!Cambio en el denominador
+        #gain=sympy.Poly(n, sympy.symbols('s')).coeffs()[0]
+        gain=sympy.Poly(n, sympy.symbols('s')).coeffs()[0]/sympy.Poly(d, sympy.symbols('s')).coeffs()[0]
         num=sympy.Poly(n, sympy.symbols('s'))
         den=sympy.Poly(d, sympy.symbols('s'))
 
@@ -477,7 +483,9 @@ def InfoTF(tipo,TF):
 
         return ceros,polos,gain
       else:
-        gain=TF.num[0][0][0]
+        #!!Cambio en el denominador
+        #gain=TF.num[0][0][0]
+        gain=TF.num[0][0][0]/TF.den[0][0][0]
         ceros=TF.zeros()
         ceros=[np.round(i,8) for i in ceros]
         polos=TF.poles()
