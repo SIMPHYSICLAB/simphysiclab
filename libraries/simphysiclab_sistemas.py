@@ -461,6 +461,7 @@ def InfoTF(tipo,TF):
         #return num,den,gain
 
         gain=TF.num[0][0][0]
+        denCoeff=TF.den[0][0][0]
 
         for i in TF.num[0][0]:
           num.append((i.real/gain)/denCoeff)
