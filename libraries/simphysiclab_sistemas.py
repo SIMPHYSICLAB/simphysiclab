@@ -308,6 +308,7 @@ def generarTF(tipo,num,den,simbol=0):
         dencp = 1
         if len(num)==0 and len(den)==0:
           TF=control.tf(1, 1)
+          return TF
         else:
           for i in range(len(num)):
             numcp = numcp * (s - num[i])
