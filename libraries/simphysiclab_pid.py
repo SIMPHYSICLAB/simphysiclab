@@ -169,7 +169,7 @@ def puntoEnAreaValidaSegunRestricciones(TF,punto,theta=None,wd=None,sgm=None,max
 
   xD=[]
   yD=[]
-  print("antes de polos Dominantes")
+  print("antes de polos Dominantes",punto,len(xI))
   for intrf in range(0,len(xI)):
     print("polosDominantes",(TF, complex(xI[intrf],yI[intrf])),SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf])))
     if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
