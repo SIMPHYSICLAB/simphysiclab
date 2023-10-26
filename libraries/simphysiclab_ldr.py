@@ -176,7 +176,7 @@ def criterioArgumento(G,punto,tolerancia=0):
 
   q=sympy.Symbol('q')
 
-  if abs(round(angulos))!=0 and abs(abs(round(angulos%360))-180)<=tolerancia:
+  if abs(round(angulos,1))!=0 and abs(abs(round(angulos%360,1))-180)<=tolerancia:
     return angulos,True
   else:
     return angulos,False
