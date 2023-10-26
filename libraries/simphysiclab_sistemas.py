@@ -1295,6 +1295,7 @@ def polosDominantes(TF, polo):
 
         return False
   """
+  TF=forzarTFControl(TF)
   ceros,polos,gain=InfoTF("ceros_polos",TF)
 
   # Encontrar el polo de baja frecuencia más cercano
