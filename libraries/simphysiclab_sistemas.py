@@ -268,9 +268,9 @@ def generarTF(tipo,num,den,simbol=0):
       numcastfloat=[]
       dencastfloat=[]
       for i in num:
-        numcastfloat.append(round(float(i),2))
+        numcastfloat.append(round(float(i),1))
       for i in den:
-        dencastfloat.append(round(float(i),2))
+        dencastfloat.append(round(float(i),1))
 
       TF=generarTF("num_den",numcastfloat,dencastfloat,1)
       print("TFfactor",TF.factor())
