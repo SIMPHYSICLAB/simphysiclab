@@ -142,6 +142,8 @@ def puntoEnAreaValidaSegunRestricciones(TF,punto,theta=None,wd=None,sgm=None,max
   x.append(float(punto.real))
   y.append(float(punto.imag))
 
+  print("Antes del False")
+
   if LDR.criterioArgumento(TF,punto)[1]==True:
     x = np.array(x)
     y = np.array(y)
