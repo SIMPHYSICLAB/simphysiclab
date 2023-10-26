@@ -346,7 +346,7 @@ def generarTF(tipo,num,den,simbol=0):
 
 def forzarTFSympy(TF):
   #Forzar libreria sympy
-  if SIS.parametrosLibreriaEnTF(TF)=="sympy":
+  if parametrosLibreriaEnTF(TF)=="sympy":
     num,den,gain=InfoTF("num_den",TF)
     numcK=[]
     for i in num:
