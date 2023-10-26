@@ -268,13 +268,13 @@ def generarTF(tipo,num,den,simbol=0):
       numcastfloat=[]
       dencastfloat=[]
       for i in num:
-        numcastfloat.append(round(float(i)))
+        numcastfloat.append(round(float(i),2))
       for i in den:
-        dencastfloat.append(round(float(i)))
+        dencastfloat.append(round(float(i),2))
 
       TF=generarTF("num_den",numcastfloat,dencastfloat,1)
       print("TFfactor",TF.factor())
-      TF=sympy.cancel(TF.factor()).simplify()
+      TF=sympy.cancel(TF.simplify().factor())
       ceros,polos,gain=InfoTF("ceros_polos",TF)
       print("ceros_polos:",ceros,polos)
       #Forzado manual a control porque sino se entra en bucle
