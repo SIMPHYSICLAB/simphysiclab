@@ -142,8 +142,6 @@ def puntoEnAreaValidaSegunRestricciones(TF,punto,theta=None,wd=None,sgm=None,max
   x.append(float(punto.real))
   y.append(float(punto.imag))
 
-  print("Antes del False")
-
   if LDR.criterioArgumento(TF,punto)[1]==True:
     x = np.array(x)
     y = np.array(y)
@@ -172,9 +170,7 @@ def puntoEnAreaValidaSegunRestricciones(TF,punto,theta=None,wd=None,sgm=None,max
 
   xD=[]
   yD=[]
-  print("antes de polos Dominantes",punto,len(xI))
   for intrf in range(0,len(xI)):
-    print("polosDominantes",(TF, complex(xI[intrf],yI[intrf])),SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf])))
     if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
       xD.append(xI[intrf])
       yD.append(yI[intrf])
