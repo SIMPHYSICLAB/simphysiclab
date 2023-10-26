@@ -175,11 +175,11 @@ def criterioArgumento(G,punto,tolerancia=0):
     angulos+=angle
 
   q=sympy.Symbol('q')
-
+  print('MIRARLO: ',round(angulos,1)),abs(abs(round(angulos%360,1))-180))
   if abs(round(angulos,1))!=0 and abs(abs(round(angulos%360,1))-180)<=tolerancia:
-    return angulos,True
+    return round(angulos,1),True
   else:
-    return angulos,False
+    return round(angulos,1),False
 
 def dibujarPoloCeroArgumento(ax,G,punto):
     """
