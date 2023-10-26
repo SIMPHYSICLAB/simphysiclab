@@ -64,6 +64,9 @@ sympy.init_printing()
 import matplotlib.pyplot as plt
 import matplotlib.path as mpath
 import matplotlib.colors as colors
+from matplotlib.animation import FuncAnimation
+from IPython.display import HTML
+
 
 from google.colab import output
 output.enable_custom_widget_manager()
@@ -164,7 +167,7 @@ def puntoEnAreaValidaSegunRestricciones(TF,punto,theta=None,wd=None,sgm=None,max
 
   xD=[]
   yD=[]
-
+  print("antes de polos Dominantes")
   for intrf in range(0,len(xI)):
     if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
       xD.append(xI[intrf])
