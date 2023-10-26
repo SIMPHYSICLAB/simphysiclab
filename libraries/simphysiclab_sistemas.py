@@ -1300,6 +1300,7 @@ def polosDominantes(TF, polo):
   # Encontrar el polo de baja frecuencia más cercano
   min_low_freq_pole = min(polos, key=lambda p: abs(p - 0j))
 
+  print(abs(min_low_freq_pole.real),polo.real)
  # Verificar si hay un cero cercano al polo
   for c in ceros:
       if abs(polo - c) < (1/6)*abs(min_low_freq_pole.real):  # Ajusta el valor de tolerancia según sea necesario
