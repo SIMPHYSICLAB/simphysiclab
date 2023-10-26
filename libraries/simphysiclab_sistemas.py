@@ -346,13 +346,22 @@ def generarTF(tipo,num,den,simbol=0):
 
 def forzarTFSympy(TF):
   #Forzar libreria sympy
-  num,den,gain=InfoTF("num_den",TF)
-  numcK=[]
-  for i in num:
-    numcK.append(float(i)*gain)
-  num=generarTF("num_den",numcK,[1],1)
-  den=generarTF("num_den",den,[1],1)
-  TF=num/den
+  if SIS.parametrosLibreriaEnTF(TF)=="sympy":
+    num,den,gain=InfoTF("num_den",TF)
+    numcK=[]
+    for i in num:
+      numcK.append(i*gain)
+    num=generarTF("num_den",numcK,[1],1)
+    den=generarTF("num_den",den,[1],1)
+    TF=num/den
+  else:
+    num,den,gain=InfoTF("num_den",TF)
+    numcK=[]
+    for i in num:
+      numcK.append(float(i)*float(gain))
+    num=generarTF("num_den",numcK,[1],1)
+    den=generarTF("num_den",den,[1],1)
+    TF=num/den
   #Forzar libreria sympy
   return TF
 
