@@ -342,8 +342,26 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
+
     print("///////////////")
     print("ceros_polos:",ceros,polos)
+    cerosLibreria=[]
+    polosLibreria=[]
+    for c in ceros:
+      if tipoLibreria(c)=="sympy":
+        cerosLibreria.append((round(c.as_real_imag()[0],4)+round(c.as_real_imag()[1],4)*sympy.I))
+      else:
+        cerosLibreria.append(round(complex(np.real(c)),4)+round(complex(np.imag(c)),4))
+    for p in polos:
+      if tipoLibreria(p)=="sympy":
+        polosLibreria.append((round(p.as_real_imag()[0],4)+round(p.as_real_imag()[1],4)*sympy.I))
+      else:
+        polosLibreria.append(round(complex(np.real(p)),4)+round(complex(np.imag(p)),4))
+      else:
+
+    ceros=cerosLibreria
+    polos=polosLibreria
+
     ceros_a_remover = []
     polos_a_remover = []
     print(ceros,polos)
