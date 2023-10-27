@@ -342,6 +342,8 @@ def generarTF(tipo,num,den,simbol=0):
 
     return TF
 def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
+    print("///////////////")
+    print("ceros_polos:",ceros,polos)
     ceros_a_remover = []
     polos_a_remover = []
     print(ceros,polos)
@@ -360,7 +362,7 @@ def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
 
       for polo in polos_a_remover:
           polos.remove(polo)
-
+      print("///////////////")
     return ceros, polos
 
 def forzarTFSympy(TF):
