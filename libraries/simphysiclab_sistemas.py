@@ -351,12 +351,12 @@ def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
       if tipoLibreria(c)=="sympy":
         cerosLibreria.append((round(c.as_real_imag()[0],4)+round(c.as_real_imag()[1],4)*sympy.I))
       else:
-        cerosLibreria.append(round(complex(np.real(c)),4)+round(complex(np.imag(c)),4))
+        cerosLibreria.append(complex(round(np.real(c),4),round(np.imag(c),4)))
     for p in polos:
       if tipoLibreria(p)=="sympy":
         polosLibreria.append((round(p.as_real_imag()[0],4)+round(p.as_real_imag()[1],4)*sympy.I))
       else:
-        polosLibreria.append(round(complex(np.real(p)),4)+round(complex(np.imag(p)),4))
+        polosLibreria.append(complex(round(np.real(p),4),round(np.imag(p),4)))
 
     ceros=cerosLibreria
     polos=polosLibreria
