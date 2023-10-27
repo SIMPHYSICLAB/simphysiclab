@@ -268,28 +268,21 @@ def generarTF(tipo,num,den,simbol=0):
       numcastfloat=[]
       dencastfloat=[]
       for i in num:
-        numcastfloat.append(round(float(i),2))
+        numcastfloat.append(float(i))
       for i in den:
-        dencastfloat.append(round(float(i),2))
+        dencastfloat.append(float(i))
 
+      #Cancelación en base a sympy
       TF=generarTF("num_den",numcastfloat,dencastfloat,1)
-      print("TFfactor",TF.factor())
-      TF=sympy.cancel(TF.factor().apart())
-      ceros,polos,gain=InfoTF("ceros_polos",TF)
-      print("ceros_polos:",ceros,polos)
-      #Forzado manual a control porque sino se entra en bucle
-      num,den,gain=InfoTF("num_den",TF)
+      TF=sympy.cancel(TF)
 
-      numcK=[]
-      for i in num:
-        numcK.append(float(np.real(i))*float(np.real(gain)))
-      denc=[]
-      for i in den:
-        denc.append(float(np.real(i)))
-      #Forzado manual a control porque sino se entra en bucle
+      #Cancelación en base a ceros polos
+      ceros,polos,gain=InfoTF("ceros_polos",TF)
+      ceros,polos=cancelar_ceros_y_polos(ceros, polos)
+      TF=gain*generarTF("ceros_polos",ceros,polos)
 
       #Crear la función de transferencia con los valores guardados en formato float
-      return control.tf(numcK, denc)
+      return TF
   elif tipo =="ceros_polos":
     if parametrosLibereriaEnPol(num,den)=="sympy":
       s=sympy.symbols('s')
@@ -345,6 +338,25 @@ def generarTF(tipo,num,den,simbol=0):
           TF=sympy.factor(numcp/dencp)
 
     return TF
+def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
+    ceros_a_remover = []
+    polos_a_remover = []
+
+    for cero in ceros:
+        for polo in polos:
+            if abs(cero - polo) < tolerancia:
+                ceros_a_remover.append(cero)
+                polos_a_remover.append(polo)
+                break  # Salir después de encontrar una coincidencia para evitar múltiples cancelaciones
+
+    # Remover los ceros y polos coincidentes
+    for cero in ceros_a_remover:
+        ceros.remove(cero)
+
+    for polo in polos_a_remover:
+        polos.remove(polo)
+
+    return ceros, polos
 
 def forzarTFSympy(TF):
   #Forzar libreria sympy
