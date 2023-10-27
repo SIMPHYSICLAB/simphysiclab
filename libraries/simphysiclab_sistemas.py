@@ -357,7 +357,6 @@ def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
         polosLibreria.append((round(p.as_real_imag()[0],4)+round(p.as_real_imag()[1],4)*sympy.I))
       else:
         polosLibreria.append(round(complex(np.real(p)),4)+round(complex(np.imag(p)),4))
-      else:
 
     ceros=cerosLibreria
     polos=polosLibreria
