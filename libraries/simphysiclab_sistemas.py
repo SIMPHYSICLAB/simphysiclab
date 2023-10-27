@@ -279,7 +279,8 @@ def generarTF(tipo,num,den,simbol=0):
       #Cancelación en base a ceros polos
       ceros,polos,gain=InfoTF("ceros_polos",TF)
       ceros,polos=cancelar_ceros_y_polos(ceros, polos)
-      TF=gain*generarTF("ceros_polos",ceros,polos)
+      print("ceros,polos",ceros,polos)
+      TF=float(gain)*generarTF("ceros_polos",ceros,polos)
 
       #Crear la función de transferencia con los valores guardados en formato float
       return TF
