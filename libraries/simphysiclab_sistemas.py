@@ -345,19 +345,20 @@ def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
     ceros_a_remover = []
     polos_a_remover = []
 
-    for cero in ceros:
-        for polo in polos:
-            if abs(cero - polo) < tolerancia:
-                ceros_a_remover.append(cero)
-                polos_a_remover.append(polo)
-                break  # Salir después de encontrar una coincidencia para evitar múltiples cancelaciones
+    if len(ceros)!=0:
+      for cero in ceros:
+          for polo in polos:
+              if abs(cero - polo) < tolerancia:
+                  ceros_a_remover.append(cero)
+                  polos_a_remover.append(polo)
+                  break  # Salir después de encontrar una coincidencia para evitar múltiples cancelaciones
 
-    # Remover los ceros y polos coincidentes
-    for cero in ceros_a_remover:
-        ceros.remove(cero)
+      # Remover los ceros y polos coincidentes
+      for cero in ceros_a_remover:
+          ceros.remove(cero)
 
-    for polo in polos_a_remover:
-        polos.remove(polo)
+      for polo in polos_a_remover:
+          polos.remove(polo)
 
     return ceros, polos
 
