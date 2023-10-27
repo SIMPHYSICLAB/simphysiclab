@@ -281,8 +281,17 @@ def generarTF(tipo,num,den,simbol=0):
       ceros,polos=cancelar_ceros_y_polos(ceros, polos)
       TF=float(gain)*generarTF("ceros_polos",ceros,polos,1)
 
+      #Forzado manual a control porque sino se entra en bucle
+      num,den,gain=InfoTF("num_den",TF)
+      numcK=[]
+      for i in num:
+        numcK.append(float(np.real(i))*float(np.real(gain)))
+      denc=[]
+      for i in den:
+        denc.append(float(np.real(i)))
+
       #Crear la función de transferencia con los valores guardados en formato float
-      return forzarTFControl(TF)
+      return control.tf(numcK, denc)
   elif tipo =="ceros_polos":
     if parametrosLibereriaEnPol(num,den)=="sympy":
       s=sympy.symbols('s')
@@ -312,15 +321,9 @@ def generarTF(tipo,num,den,simbol=0):
 
 
         #Forzado manual a control porque sino se entra en bucle
-        num,den,gain=InfoTF("num_den",numcp/dencp)
-        numcK=[]
-        for i in num:
-          numcK.append(float(np.real(i))*float(np.real(gain)))
-        denc=[]
-        for i in den:
-          denc.append(float(np.real(i)))
-        TF=generarTF("num_den",numcK,denc,1)
-        TF=sympy.cancel(TF)
+        ceros,polos,gain=InfoTF("ceros_polos",numcp/dencp)
+        ceros,polos=cancelar_ceros_y_polos(ceros, polos)
+        TF=float(gain)*generarTF("ceros_polos",ceros,polos,1)
         #Forzado manual a control porque sino se entra en bucle
 
         return forzarTFControl(TF)
