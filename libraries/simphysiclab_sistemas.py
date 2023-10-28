@@ -342,15 +342,15 @@ def generarTF(tipo,num,den,simbol=0):
             dencp = dencp * (s - den[j])
           TF=sympy.factor(numcp/dencp)
           #Forzado manual a sympy porque sino se entra en bucle
-          #ceros,polos,gain=InfoTF("ceros_polos",TF)
-          #ceros,polos=cancelar_ceros_y_polos(ceros, polos)
-          #numcp = 1
-          #dencp = 1
-          #for i in range(len(ceros)):
-          #  numcp = numcp * (s - ceros[i])
-          #for j in range(len(polos)):
-          #  dencp = dencp * (s - polos[j])
-          #TF=sympy.factor(numcp/dencp)
+          ceros,polos,gain=InfoTF("ceros_polos",TF)
+          ceros,polos=cancelar_ceros_y_polos(ceros, polos)
+          numcp = 1
+          dencp = 1
+          for i in range(len(ceros)):
+            numcp = numcp * (s - ceros[i])
+          for j in range(len(polos)):
+            dencp = dencp * (s - polos[j])
+          TF=sympy.factor(numcp/dencp)
           #Forzado manual a sympy porque sino se entra en bucle
     return TF
 def cancelar_ceros_y_polos(ceros, polos, roundnumber=4,tolerancia=1e-4):
@@ -543,9 +543,9 @@ def InfoTF(tipo,TF):
         #gain=TF.num[0][0][0]
         gain=TF.num[0][0][0]/TF.den[0][0][0]
         ceros=TF.zeros()
-        #ceros=[np.round(i,4) for i in ceros]
+        ceros=[np.round(i,4) for i in ceros]
         polos=TF.poles()
-        #polos=[np.round(i,4) for i in polos]
+        polos=[np.round(i,4) for i in polos]
         return ceros,polos,gain
 
 def devolverPolos_Ceros(polosCeros):
