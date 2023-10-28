@@ -330,6 +330,8 @@ def generarTF(tipo,num,den,simbol=0):
       elif simbol==1:
         s=sympy.symbols('s')
         if len(num)==0 and len(den)==0:
+          numcp = 1
+          dencp = 1
           TF=sympy.factor(numcp/dencp)
         else:
           numcp = 1
