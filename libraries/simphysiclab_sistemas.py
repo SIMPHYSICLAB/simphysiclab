@@ -329,21 +329,27 @@ def generarTF(tipo,num,den,simbol=0):
         return forzarTFControl(TF)
       elif simbol==1:
         s=sympy.symbols('s')
-        numcp = 1
-        dencp = 1
         if len(num)==0 and len(den)==0:
           TF=sympy.factor(numcp/dencp)
         else:
+          numcp = 1
+          dencp = 1
           for i in range(len(num)):
             numcp = numcp * (s - num[i])
           for j in range(len(den)):
             dencp = dencp * (s - den[j])
           TF=sympy.factor(numcp/dencp)
-      #Forzado manual a sympy porque sino se entra en bucle
-      ceros,polos,gain=InfoTF("ceros_polos",TF)
-      ceros,polos=cancelar_ceros_y_polos(ceros, polos)
-      TF=float(gain)*generarTF("ceros_polos",ceros,polos,1)
-      #Forzado manual a sympy porque sino se entra en bucle
+          #Forzado manual a sympy porque sino se entra en bucle
+          ceros,polos,gain=InfoTF("ceros_polos",TF)
+          ceros,polos=cancelar_ceros_y_polos(ceros, polos)
+          numcp = 1
+          dencp = 1
+          for i in range(len(ceros)):
+            numcp = numcp * (s - ceros[i])
+          for j in range(len(polos)):
+            dencp = dencp * (s - polos[j])
+          TF=sympy.factor(numcp/dencp)
+          #Forzado manual a sympy porque sino se entra en bucle
     return TF
 def cancelar_ceros_y_polos(ceros, polos, roundnumber=4,tolerancia=1e-4):
 
