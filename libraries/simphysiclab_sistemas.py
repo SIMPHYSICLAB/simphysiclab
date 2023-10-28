@@ -339,22 +339,26 @@ def generarTF(tipo,num,den,simbol=0):
           for j in range(len(den)):
             dencp = dencp * (s - den[j])
           TF=sympy.factor(numcp/dencp)
-
+      #Forzado manual a sympy porque sino se entra en bucle
+      ceros,polos,gain=InfoTF("ceros_polos",TF)
+      ceros,polos=cancelar_ceros_y_polos(ceros, polos)
+      TF=float(gain)*generarTF("ceros_polos",ceros,polos,1)
+      #Forzado manual a sympy porque sino se entra en bucle
     return TF
-def cancelar_ceros_y_polos(ceros, polos, tolerancia=1e-4):
+def cancelar_ceros_y_polos(ceros, polos, roundnumber=4,tolerancia=1e-4):
 
     cerosLibreria=[]
     polosLibreria=[]
     for c in ceros:
       if tipoLibreria(c)=="sympy":
-        cerosLibreria.append((round(c.as_real_imag()[0],4)+round(c.as_real_imag()[1],4)*sympy.I))
+        cerosLibreria.append((round(c.as_real_imag()[0],roundnumber)+round(c.as_real_imag()[1],roundnumber)*sympy.I))
       else:
-        cerosLibreria.append(complex(round(np.real(c),4),round(np.imag(c),4)))
+        cerosLibreria.append(complex(round(np.real(c),roundnumber),round(np.imag(c),roundnumber)))
     for p in polos:
       if tipoLibreria(p)=="sympy":
-        polosLibreria.append((round(p.as_real_imag()[0],4)+round(p.as_real_imag()[1],4)*sympy.I))
+        polosLibreria.append((round(p.as_real_imag()[0],roundnumber)+round(p.as_real_imag()[1],roundnumber)*sympy.I))
       else:
-        polosLibreria.append(complex(round(np.real(p),4),round(np.imag(p),4)))
+        polosLibreria.append(complex(round(np.real(p),roundnumber),round(np.imag(p),roundnumber)))
 
     ceros=cerosLibreria
     polos=polosLibreria
@@ -531,9 +535,9 @@ def InfoTF(tipo,TF):
         #gain=TF.num[0][0][0]
         gain=TF.num[0][0][0]/TF.den[0][0][0]
         ceros=TF.zeros()
-        ceros=[np.round(i,8) for i in ceros]
+        #ceros=[np.round(i,4) for i in ceros]
         polos=TF.poles()
-        polos=[np.round(i,8) for i in polos]
+        #polos=[np.round(i,4) for i in polos]
         return ceros,polos,gain
 
 def devolverPolos_Ceros(polosCeros):
