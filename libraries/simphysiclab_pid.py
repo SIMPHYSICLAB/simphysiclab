@@ -247,19 +247,16 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   for k in rlist:
     for kindx in range(0,len(k)):
       x.append(k[kindx].real)
-      y.append(abs(k[kindx].imag))
+      y.append(k[kindx].imag)
     countK=countK+1
   x = np.array(x)
   y = np.array(y)
-
-  print(x,y)
 
   xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
   xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
   path2N = mpath.Path(np.column_stack([nxTp,nyTp]))
-  print("path2N",path2N,[nxTp,nyTp])
   xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
@@ -287,12 +284,6 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
 
   xI=x[intersectionf]
   yI=y[intersectionf]
-
-  print("puntos_dentro2N",puntos_dentro2N)
-  yu = [i for i in puntos_dentro2N if i ==True]
-  print("puntos_dentro2NTrue",yu)
-  yu = [i for i in y if i <-3]
-  print("parte negativa",yu)
 
   for intrf in range(0,len(xI)):
     if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
