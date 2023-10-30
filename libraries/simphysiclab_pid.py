@@ -285,6 +285,8 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   xI=x[intersectionf]
   yI=y[intersectionf]
 
+  print("parte negativa",xI,yI)
+
   for intrf in range(0,len(xI)):
     if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
       xD.append(xI[intrf])
