@@ -1738,8 +1738,8 @@ def dibujarRestriccionTp(ax,wd,limites):
     y22 = [-ymax,-ymax,-ymax,-ymax]
 
   if ax!=None:
-    ax.fill(x21,y21,alpha=0.3,color='green',hatch='|')
-    ax.fill(x22,y22,alpha=0.3,color='green',hatch='|')
+    ax.fill(x21,y21,alpha=0.3,color='green',hatch='-')
+    ax.fill(x22,y22,alpha=0.3,color='green',hatch='-')
   return x21,y21,x22,y22
 
 def dibujarRestriccionTs(ax,sigma,limites):
