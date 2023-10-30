@@ -1668,7 +1668,8 @@ def dibujarRestriccionMp(ax,theta,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
-  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
+  if ax!=None:
+    ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   xmin=10000*xmin
   xmax=10000*xmax
@@ -1681,6 +1682,7 @@ def dibujarRestriccionMp(ax,theta,limites):
   else:
     x1 = [-xmax,0,0,-xmax]
     y1 = [ymax,ymax,-ymax,-ymax]
+
   if ax!=None:
     ax.plot(x1, y1, c='brown', ls='--', lw=1, alpha=1)
     ax.fill(x1, y1, alpha=0.2, color='r', hatch='/')
@@ -1721,7 +1723,8 @@ def dibujarRestriccionTp(ax,wd,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
-  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
+  if ax!=None:
+    ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   xmin=10000*xmin
   xmax=10000*xmax
@@ -1742,6 +1745,7 @@ def dibujarRestriccionTp(ax,wd,limites):
   if ax!=None:
     ax.fill(x21,y21,alpha=0.3,color='green',hatch='-')
     ax.fill(x22,y22,alpha=0.3,color='green',hatch='-')
+
   return x21,y21,x22,y22
 
 def dibujarRestriccionTs(ax,sigma,limites):
@@ -1770,7 +1774,8 @@ def dibujarRestriccionTs(ax,sigma,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
-  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
+  if ax!=None:
+    ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   xmin=10000*xmin
   xmax=10000*xmax
@@ -1783,8 +1788,10 @@ def dibujarRestriccionTs(ax,sigma,limites):
   else:
     x3= [-xmax,0,0,-xmax]
     y3= [ymax,ymax,-ymax,-ymax]
+
   if ax!=None:
     ax.fill(x3,y3,alpha=0.3,color='orange',hatch='|')
+
   return x3,y3
 
 def parametrosRespuestaTemporal(ax,valores,tiempo):
