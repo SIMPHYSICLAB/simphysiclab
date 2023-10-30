@@ -1668,6 +1668,7 @@ def dibujarRestriccionMp(ax,theta,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   xmin=10000*xmin
   xmax=10000*xmax
@@ -1720,6 +1721,7 @@ def dibujarRestriccionTp(ax,wd,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   xmin=10000*xmin
   xmax=10000*xmax
@@ -1768,6 +1770,7 @@ def dibujarRestriccionTs(ax,sigma,limites):
   """
 
   xmin,xmax,ymin,ymax=ajustarLimites(limites)
+  ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1))
 
   xmin=10000*xmin
   xmax=10000*xmax
