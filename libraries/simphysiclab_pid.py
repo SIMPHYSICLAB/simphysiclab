@@ -255,15 +255,14 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   xMp,yMp=SIS.dibujarRestriccionMp(None,theta,[[-1,1],[-1,1]])
   path1  = mpath.Path(np.column_stack([xMp,yMp]))
   xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
-  if punto.imag>=0:
-    path2 = mpath.Path(np.column_stack([xTp,yTp]))
-  else:
-    path2 = mpath.Path(np.column_stack([nxTp,nyTp]))
+  path2 = mpath.Path(np.column_stack([xTp,yTp]))
+  path2N = mpath.Path(np.column_stack([nxTp,nyTp]))
   xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
   puntos_dentro3 = path3.contains_points(np.column_stack([x, y]))
   puntos_dentro2 = path2.contains_points(np.column_stack([x, y]))
+  puntos_dentro2N = path2N.contains_points(np.column_stack([x, y]))
   puntos_dentro = path1.contains_points(np.column_stack([x, y]))
 
   intersection= np.logical_and(puntos_dentro3, puntos_dentro2)
@@ -274,6 +273,17 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
 
   xD=[]
   yD=[]
+
+  for intrf in range(0,len(xI)):
+    if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
+      xD.append(xI[intrf])
+      yD.append(yI[intrf])
+
+  intersection= np.logical_and(puntos_dentro3, puntos_dentro2N)
+  intersectionf= np.logical_and(intersection, puntos_dentro)
+
+  xI=x[intersectionf]
+  yI=y[intersectionf]
 
   for intrf in range(0,len(xI)):
     if (SIS.polosDominantes(TF, complex(xI[intrf],yI[intrf]))==True):
