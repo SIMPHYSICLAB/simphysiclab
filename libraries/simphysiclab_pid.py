@@ -287,6 +287,8 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   xI=x[intersectionf]
   yI=y[intersectionf]
 
+
+  yu = [i for i in yI if i <-3]
   print("parte negativa",xI,yI)
 
   for intrf in range(0,len(xI)):
