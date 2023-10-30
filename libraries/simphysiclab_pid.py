@@ -291,7 +291,7 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   print("puntos_dentro2N",puntos_dentro2N)
   yu = [i for i in puntos_dentro2N if i ==True]
   print("puntos_dentro2NTrue",yu)
-  yu = [i for i in yI if i <-3]
+  yu = [i for i in y if i <-3]
   print("parte negativa",yu)
 
   for intrf in range(0,len(xI)):
