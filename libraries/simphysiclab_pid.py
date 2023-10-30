@@ -259,6 +259,7 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   xTp,yTp,nxTp,nyTp=SIS.dibujarRestriccionTp(None,wd,[[-1,1],[-1,1]])
   path2 = mpath.Path(np.column_stack([xTp,yTp]))
   path2N = mpath.Path(np.column_stack([nxTp,nyTp]))
+  print("path2N",path2N,[nxTp,nyTp])
   xTs,yTs=SIS.dibujarRestriccionTs(None,sgm,[[-1,1],[-1,1]])
   path3 = mpath.Path(np.column_stack([xTs,yTs]))
 
