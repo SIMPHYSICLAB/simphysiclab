@@ -246,7 +246,7 @@ def puntosEnAreaValidaSegunRestricciones(TF,theta=None,wd=None,sgm=None,maxK=100
   countK=0
   for k in rlist:
     for kindx in range(0,len(k)):
-      if k[kindx].real>-100 and k[kindx].imag<100
+      if k[kindx].real>-100 and k[kindx].imag<100:
         x.append(k[kindx].real)
         y.append(k[kindx].imag)
     countK=countK+1
