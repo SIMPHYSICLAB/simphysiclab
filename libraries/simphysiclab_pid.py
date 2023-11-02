@@ -458,10 +458,9 @@ def calculoCeroZd(TF):
   polosNoConjugados=[]
   for p in polos:
     try:
-      if p.imag==0:
-        polosNoConjugados.append(p)
+      polosNoConjugados.append(p.real)
     except:
-        polosNoConjugados.append(p)
+      polosNoConjugados.append(p.as_real_imag()[0])
   ceroCancelaPolo=max(polosNoConjugados)
   return ceroCancelaPolo
 
