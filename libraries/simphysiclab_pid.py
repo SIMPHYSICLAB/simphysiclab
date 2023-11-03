@@ -540,6 +540,6 @@ def calculoParteProporcionalIntegradoraDiferencial(G,H,theta,wd,sgm,tipo_error,v
       PIi=SIS.generarTF("num_den",[1,-zi],[1, 0])
       PIr=SIS.generarTF("num_den",[1,-zi],[1,-pi])
 
-      return float(K),PD,[PIi,PIr],[float(Kpunto)*PD*PIi,float(Kpunto)*PD*PIr]
+      return float(K),PD,[PIi,PIr],[float(K)*PD*PIi,float(K)*PD*PIr]
     else:
       return float(K),PD,None,float(K)*PD
