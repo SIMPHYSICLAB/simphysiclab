@@ -504,7 +504,7 @@ def plot_cipiPD(Pd, phi):
     slope_Pd_C = (Pd[1] - bisector_y) / (Pd[0] - bisector_x)
 
     # Calculate slope of the second line using the angle
-    tan_angle = np.tan(np.radians(35/2))
+    tan_angle = np.tan(np.radians(phi/2))
     slope_second_line1 = (slope_Pd_C - tan_angle) / (1 + slope_Pd_C * tan_angle)
     slope_second_line = (slope_Pd_C + tan_angle) / (1 - slope_Pd_C * tan_angle)
 
