@@ -453,16 +453,110 @@ def calculoParteProporcional(G,H,theta=None,wd=None,sgm=None):
       return None,None,None
   return None,None,None
 
-def calculoCeroZd(TF):
+def calculoCeroZd(TF,caseM=0,pto_interes=None):
   ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
   polosNoConjugados=[]
-  for p in polos:
-    try:
-      polosNoConjugados.append(p.real)
-    except:
-      polosNoConjugados.append(p.as_real_imag()[0])
-  ceroCancelaPolo=max(polosNoConjugados)
-  return ceroCancelaPolo
+  if caseM==0:
+    for p in polos:
+      try:
+        if round(p.imag,4)==0:
+          polosNoConjugados.append(p.real)
+      except:
+        if round(p.as_real_imag()[0],4)==0:
+          polosNoConjugados.append(p.as_real_imag()[0])
+    if polosNoConjugados==None:
+      print("Cambia a otra metodología")
+      return []
+    ceroCancelaPolo=max(polosNoConjugados)
+    return ceroCancelaPolo
+  elif caseM==1:
+    for p in polos:
+      try:
+        polosNoConjugados.append(p.real)
+      except:
+        polosNoConjugados.append(p.as_real_imag()[0])
+    ceroCancelaPolo=max(polosNoConjugados)
+    return ceroCancelaPolo
+  elif caseM==2:
+    angulos,valid=LDR.criterioArgumento(TF,pto_interes)
+    print(angulos)#TODO ESTE ANGULO NO SE SI ES EL CORRECTO
+    cero,polo=plot_cipiPD([pto_interes.real,pto_interes.imag], angulos)
+    return [cero,polo]
+
+def plot_cipiPD(Pd, phi):
+    fig, ax = plt.subplots()
+    ax.set_aspect('equal', 'box')
+
+    # Draw red lines
+    ax.plot([0, Pd[0]], [0, Pd[1]], 'r-')
+    ax.plot([Pd[0], Pd[0]-5], [Pd[1], Pd[1]], 'r-') # Horizontal red line from Pd to the left
+
+    # Bisector calculation
+    c,bs=find_downward_bisector([Pd[0]-5,Pd[1]], [Pd[0],Pd[1]],[Pd[0],Pd[1]],[0,0])
+
+    # Drawing bisector (in red)
+    bisector_x = bs[0]
+    bisector_y = bs[1]
+    ax.plot([c[0], bs[0]], [c[1], bs[1]], 'r-')
+
+
+    # Calculate slope of the line Pd to X
+    slope_Pd_C = (Pd[1] - bisector_y) / (Pd[0] - bisector_x)
+
+    # Calculate slope of the second line using the angle
+    tan_angle = np.tan(np.radians(35/2))
+    slope_second_line1 = (slope_Pd_C - tan_angle) / (1 + slope_Pd_C * tan_angle)
+    slope_second_line = (slope_Pd_C + tan_angle) / (1 - slope_Pd_C * tan_angle)
+
+    # Calculate y-intercept of the second line
+    c = Pd[1] - slope_second_line1 * Pd[0]
+    b = Pd[1] - slope_second_line * Pd[0]
+
+    # Find the x-coordinate of the point O (y = 0)
+    X_x = -c / slope_second_line1
+    O_x = -b / slope_second_line
+
+    # Draw the second line from Pd to O
+    ax.plot([Pd[0], X_x], [Pd[1], 0], 'y-')
+    ax.plot([Pd[0], O_x], [Pd[1], 0], 'y-')
+
+    # Mark the points X and O
+    ax.text(X_x, 0, 'X', color='red', fontsize=12, ha='center', va='center')
+    ax.text(O_x, 0, 'O', color='red', fontsize=12, ha='center', va='center')
+
+    ax.set_xlim(-10, 10)
+    ax.set_ylim(-10, 10)
+    ax.grid(True)
+    plt.axhline(0, color='black',linewidth=0.5)
+    plt.axvline(0, color='black',linewidth=0.5)
+    plt.show()
+
+    return complex(X_x,0),complex(O_x,0)
+
+def find_downward_bisector(A, B, C, D):
+    # Calculate direction vectors from the common point B to A and from C to D
+    v1 = np.array(A) - np.array(B)
+    v2 = np.array(D) - np.array(C)
+
+    # Normalize the direction vectors
+    unit_v1 = v1 / np.linalg.norm(v1)
+    unit_v2 = v2 / np.linalg.norm(v2)
+
+    # Calculate the bisector's direction vector
+    bisector_vector = unit_v1 + unit_v2
+
+    # Since we want the downward bisector, we ensure the y-component is negative
+    if bisector_vector[1] > 0:
+        bisector_vector[1] = -bisector_vector[1]
+
+    # Normalize the bisector's direction vector
+    unit_bisector_vector = bisector_vector / np.linalg.norm(bisector_vector)
+
+    # Calculate another point on the bisector using the common point and the bisector's direction vector
+    # We want this point to be close to (-1, -1), so we can scale the bisector vector accordingly
+    bisector_point = np.array(B) + unit_bisector_vector * np.linalg.norm(np.array([-1, -1]) - np.array(B))
+
+    return B, bisector_point.tolist()
 
 def calculoPoloPd(TF,Zd,pto_interes):
 
@@ -484,11 +578,56 @@ def calculoParteDiferencial(TF,pto_interes):
   K=LDR.criterioModulo(PD*TF,pto_interes)
   return [K,pd,zd,PD]
 
-def calculoZi(pto_interes):
-  try:
-    return pto_interes.real/6
-  except:
-    return pto_interes/6
+def calculoZi(pto_interes,caseM=0):
+  if caseM==0:
+    try:
+      return pto_interes.real/6
+    except:
+      return pto_interes.as_real_imag()[0]/6
+  elif caseM==1:
+    try:
+      return pto_interes.real/10
+    except:
+      return pto_interes.as_real_imag()[0]/10
+  elif caseM==2:
+    return plot_cipiPI(pto_interes, [-1,0], angle_degrees=5)#EDUARDO TODO, NO TENGO CLARO COMO DETERMINAR x
+def plot_cipiPI(Pd, X, angle_degrees=5):
+    fig, ax = plt.subplots()
+    ax.set_aspect('equal', 'box')
+
+    # Draw the line from Pd to X
+    ax.plot([Pd[0], X[0]], [Pd[1], X[1]], 'y-')
+
+    # Calculate slope of the line Pd to X
+    slope_Pd_X = (Pd[1] - X[1]) / (Pd[0] - X[0])
+
+    # Calculate slope of the second line using the angle
+    tan_angle = np.tan(np.radians(angle_degrees))
+    slope_second_line = (slope_Pd_X + tan_angle) / (1 - slope_Pd_X * tan_angle)
+
+    # Calculate y-intercept of the second line
+    b = Pd[1] - slope_second_line * Pd[0]
+
+    # Find the x-coordinate of the point O (y = 0)
+    O_x = -b / slope_second_line
+
+    # Draw the second line from Pd to O
+    ax.plot([Pd[0], O_x], [Pd[1], 0], 'y-')
+
+    # Mark the points X and O
+    ax.text(X[0], 0, 'X', color='red', fontsize=12, ha='center', va='center')
+    ax.text(O_x, 0, 'O', color='red', fontsize=12, ha='center', va='center')
+
+    # Angle notation
+    ax.text((Pd[0] + X[0]) / 2, (Pd[1] + X[1]) / 2, str(angle_degrees) + "°", color='black', fontsize=12, va='bottom')
+
+    ax.set_xlim(-10, 10)
+    ax.set_ylim(-10, 10)
+    ax.grid(True)
+    plt.axhline(0, color='black',linewidth=0.5)
+    plt.axvline(0, color='black',linewidth=0.5)
+    plt.show()
+    return complex(X[0],0),complex(O_x,0)
 
 def calculoPi(TF,Zi,tipo_error,valor_error):
   b = sympy.Symbol('b')
