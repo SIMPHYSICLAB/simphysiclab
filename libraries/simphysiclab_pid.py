@@ -480,7 +480,7 @@ def calculoCeroZd(TF,caseM=0,pto_interes=None):
   elif caseM==2:
     angulos,valid=LDR.criterioArgumento(TF,pto_interes)
     print(angulos)#TODO ESTE ANGULO NO SE SI ES EL CORRECTO
-    cero,polo=plot_cipiPD([pto_interes.real,pto_interes.imag], angulos)
+    cero,polo=plot_cipiPD([pto_interes.real,pto_interes.imag], 360+angulos)
     return [cero,polo]
 
 def plot_cipiPD(Pd, phi):
