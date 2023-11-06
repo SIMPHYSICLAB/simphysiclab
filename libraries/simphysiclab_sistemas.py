@@ -552,7 +552,7 @@ def InfoTF(tipo,TF):
 
 def devolverPolos_Ceros(polosCeros):
     all_cerosOrpoles = []
-
+    print("polosCeros",polosCeros)
     if hasattr(polosCeros, 'keys') and hasattr(polosCeros, 'values'):
       pole_values = list(polosCeros.keys())
       multiplicities = list(polosCeros.values())
