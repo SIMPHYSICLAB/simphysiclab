@@ -479,9 +479,11 @@ def calculoCeroZd(TF,caseM=0,pto_interes=None):
     return ceroCancelaPolo
   elif caseM==2:
     angulos,valid=LDR.criterioArgumento(TF,pto_interes)
-    print(angulos)#TODO ESTE ANGULO NO SE SI ES EL CORRECTO
-    cero,polo=plot_cipiPD([pto_interes.real,pto_interes.imag], angulos)
-    return [cero,polo]
+    try:
+      ceros,polos=plot_cipiPD([pto_interes.real,pto_interes.imag], angulos)
+    except:
+      ceros,polos=plot_cipiPD([pto_interes.as_real_imag()[0],pto_interes.as_real_imag()[1]], angulos)
+    return [ceros,polos]
 
 def plot_cipiPD(Pd, phi):
     fig, ax = plt.subplots()
@@ -590,7 +592,11 @@ def calculoZi(pto_interes,caseM=0):
     except:
       return pto_interes.as_real_imag()[0]/10
   elif caseM==2:
-    return plot_cipiPI(pto_interes, [-1,0], angle_degrees=5)#EDUARDO TODO, NO TENGO CLARO COMO DETERMINAR x
+    try:
+      return plot_cipiPI([pto_interes.real,pto_interes.imag], [-1,0], angle_degrees=5)#EDUARDO TODO, NO TENGO CLARO COMO DETERMINAR x
+    except:
+      return plot_cipiPI([pto_interes.as_real_imag()[0],pto_interes.as_real_imag()[1]], [-1,0], angle_degrees=5)#EDUARDO TODO, NO TENGO CLARO COMO DETERMINAR x
+
 def plot_cipiPI(Pd, X, angle_degrees=5):
     fig, ax = plt.subplots()
     ax.set_aspect('equal', 'box')
