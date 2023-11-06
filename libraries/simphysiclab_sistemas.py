@@ -551,16 +551,18 @@ def InfoTF(tipo,TF):
         return ceros,polos,gain
 
 def devolverPolos_Ceros(polosCeros):
-    pole_values = list(polosCeros.keys())
-    multiplicities = list(polosCeros.values())
+    all_cerosOrpoles = []
 
-    all_poles = []
-    for i in range(len(pole_values)):
-        current_pole = pole_values[i]
-        current_multiplicity = multiplicities[i]
-        all_poles.extend([current_pole] * current_multiplicity)
-
-    return all_poles
+    if hasattr(polosCeros, 'keys') and hasattr(polosCeros, 'values'):
+      pole_values = list(polosCeros.keys())
+      multiplicities = list(polosCeros.values())
+      for i in range(len(pole_values)):
+          current_pole = pole_values[i]
+          current_multiplicity = multiplicities[i]
+          all_cerosOrpoles.extend([current_pole] * current_multiplicity)
+    else:
+      all_cerosOrpoles=polosCeros
+    return all_cerosOrpoles
 
 def realimentacion(G,H,k=1):
 
