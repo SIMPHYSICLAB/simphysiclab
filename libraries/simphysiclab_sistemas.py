@@ -533,11 +533,24 @@ def InfoTF(tipo,TF):
         den=sympy.Poly(d, sympy.symbols('s'))
 
         #cerossympy=sympy.solve(num,sympy.symbols('s'))
-        cerossympy=sympy.nroots(num)
-        ceros = devolverPolos_Ceros(cerossympy)
+        try:
+          cerossympy=sympy.roots(num,sympy.symbols('s'))
+          ceros = devolverPolos_Ceros(cerossympy)
+        except:
+          TF=forzarTFControl(TF)
+          ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+
+
+
         #polossympy=sympy.solve(den,sympy.symbols('s'))
-        polossympy=sympy.nroots(den)
-        polos = devolverPolos_Ceros(polossympy)
+        try:
+          polossympy=sympy.roots(den,sympy.symbols('s'))
+          polos = devolverPolos_Ceros(polossympy)
+        except:
+          TF=forzarTFControl(TF)
+          ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+
+
 
         return ceros,polos,gain
       else:
@@ -552,7 +565,6 @@ def InfoTF(tipo,TF):
 
 def devolverPolos_Ceros(polosCeros):
     all_cerosOrpoles = []
-    print("polosCeros",polosCeros)
     if hasattr(polosCeros, 'keys') and hasattr(polosCeros, 'values'):
       pole_values = list(polosCeros.keys())
       multiplicities = list(polosCeros.values())
