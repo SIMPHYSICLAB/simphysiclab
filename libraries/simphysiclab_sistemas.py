@@ -536,29 +536,6 @@ def InfoTF(tipo,TF):
         try:
           cerossympy=sympy.roots(num,sympy.symbols('s'))
           ceros = devolverPolos_Ceros(cerossympy)
-        except:
-          ## Crear la función a mano para no entrar en un bucle
-          numcK=[]
-          for i in num.coeffs():
-            numcK.append(float(np.real(i)))
-          denc=[]
-          for i in den.coeffs():
-            denc.append(float(np.real(i)))
-
-          #Crear la función de transferencia con los valores guardados en formato float
-          TF=control.tf(numcK, denc)
-          ## Crear la función a mano para no entrar en un bucle
-
-          gain=TF.num[0][0][0]/TF.den[0][0][0]
-          ceros=TF.zeros()
-          ceros=[np.round(i,4) for i in ceros]
-          polos=TF.poles()
-          polos=[np.round(i,4) for i in polos]
-
-
-
-        #polossympy=sympy.solve(den,sympy.symbols('s'))
-        try:
           polossympy=sympy.roots(den,sympy.symbols('s'))
           polos = devolverPolos_Ceros(polossympy)
         except:
@@ -570,7 +547,6 @@ def InfoTF(tipo,TF):
           for i in den.coeffs():
             denc.append(float(np.real(i)))
 
-
           #Crear la función de transferencia con los valores guardados en formato float
           TF=control.tf(numcK, denc)
           ## Crear la función a mano para no entrar en un bucle
@@ -580,6 +556,15 @@ def InfoTF(tipo,TF):
           ceros=[np.round(i,4) for i in ceros]
           polos=TF.poles()
           polos=[np.round(i,4) for i in polos]
+
+          cerossympy=[]
+          for c in ceros:
+            cerossympy.append(c.real+c.imag*sympy.I)
+          polossympy=[]
+          for p in polos:
+            polossympy.append(p.real+p.imag*sympy.I)
+          ceros=cerossympy
+          polos=polossympy
 
         return ceros,polos,gain
       else:
