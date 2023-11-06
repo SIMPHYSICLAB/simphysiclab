@@ -2032,11 +2032,7 @@ def updateScatterTipoRegimen(frame):
   global ts
   axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
 
-def errorRegimenPermanenteVisualizacion(y,t):
-
-  fig = plt.figure(figsize = (5,5))
-  ax = fig.add_subplot(1,1,1)
-
+def errorRegimenPermanenteVisualizacion(ax,y,t):
 
   for i in np.arange(0,len(t),2):
     if i<1:
