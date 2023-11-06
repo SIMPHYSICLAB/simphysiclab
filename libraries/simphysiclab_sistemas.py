@@ -2031,3 +2031,19 @@ def updateScatterTipoRegimen(frame):
   global ys
   global ts
   axs.scatter(ts[frame],ys[frame],s=7,c='r', marker="o")
+
+def errorRegimenPermanenteVisualizacion(y,t):
+
+  fig = plt.figure(figsize = (5,5))
+  ax = fig.add_subplot(1,1,1)
+
+
+  for i in np.arange(0,len(t),2):
+    if i<1:
+      ax.plot([t[i], t[i]], [1, y[i]], c='red', ls='--', lw=1, alpha=1)
+    elif i>1:
+      ax.plot([t[i], t[i]], [y[i],1], c='red', ls='--', lw=1, alpha=1)
+
+  ax.plot([t[len(t)-1], t[len(t)-1]], [1, y[len(y)-1]], c='green', ls='--', lw=1, alpha=1)
+
+  ax.annotate('err=%s'%round((1-y[len(y)-1])*100,3),(t[len(t)-1],y[len(y)-1]+(1-y[len(y)-1])/2),(t[len(t)-1],y[len(y)-1]+(1-y[len(y)-1])/2))
