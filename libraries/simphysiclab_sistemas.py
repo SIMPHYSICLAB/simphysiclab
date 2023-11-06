@@ -536,7 +536,7 @@ def InfoTF(tipo,TF):
         try:
           cerossympy=sympy.roots(num,sympy.symbols('s'))
           ceros = devolverPolos_Ceros(cerossympy)
-        except:
+        except Exception as e:
           TF=forzarTFControl(TF)
           gain=TF.num[0][0][0]/TF.den[0][0][0]
           ceros=TF.zeros()
@@ -550,7 +550,7 @@ def InfoTF(tipo,TF):
         try:
           polossympy=sympy.roots(den,sympy.symbols('s'))
           polos = devolverPolos_Ceros(polossympy)
-        except:
+        except Exception as e:
           TF=forzarTFControl(TF)
           gain=TF.num[0][0][0]/TF.den[0][0][0]
           ceros=TF.zeros()
