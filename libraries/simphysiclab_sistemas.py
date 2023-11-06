@@ -538,7 +538,11 @@ def InfoTF(tipo,TF):
           ceros = devolverPolos_Ceros(cerossympy)
         except:
           TF=forzarTFControl(TF)
-          ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
+          gain=TF.num[0][0][0]/TF.den[0][0][0]
+          ceros=TF.zeros()
+          ceros=[np.round(i,4) for i in ceros]
+          polos=TF.poles()
+          polos=[np.round(i,4) for i in polos]
 
 
 
@@ -548,9 +552,11 @@ def InfoTF(tipo,TF):
           polos = devolverPolos_Ceros(polossympy)
         except:
           TF=forzarTFControl(TF)
-          ceros,polos,gain=SIS.InfoTF("ceros_polos",TF)
-
-
+          gain=TF.num[0][0][0]/TF.den[0][0][0]
+          ceros=TF.zeros()
+          ceros=[np.round(i,4) for i in ceros]
+          polos=TF.poles()
+          polos=[np.round(i,4) for i in polos]
 
         return ceros,polos,gain
       else:
