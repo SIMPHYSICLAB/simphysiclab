@@ -539,10 +539,10 @@ def InfoTF(tipo,TF):
         except:
           ## Crear la función a mano para no entrar en un bucle
           numcK=[]
-          for i in n:
+          for i in num.coeffs():
             numcK.append(float(np.real(i)))
           denc=[]
-          for i in d:
+          for i in den.coeffs():
             denc.append(float(np.real(i)))
 
           #Crear la función de transferencia con los valores guardados en formato float
@@ -564,11 +564,12 @@ def InfoTF(tipo,TF):
         except:
           ## Crear la función a mano para no entrar en un bucle
           numcK=[]
-          for i in n:
+          for i in num.coeffs():
             numcK.append(float(np.real(i)))
           denc=[]
-          for i in d:
+          for i in den.coeffs():
             denc.append(float(np.real(i)))
+
 
           #Crear la función de transferencia con los valores guardados en formato float
           TF=control.tf(numcK, denc)
