@@ -532,11 +532,11 @@ def InfoTF(tipo,TF):
         num=sympy.Poly(n, sympy.symbols('s'))
         den=sympy.Poly(d, sympy.symbols('s'))
 
-        cerossympy=sympy.solve(num,sympy.symbols('s'))
-        #sympy.roots(num,sympy.symbols('s'))
+        #cerossympy=sympy.solve(num,sympy.symbols('s'))
+        cerossympy=sympy.roots(num,sympy.symbols('s'))
         ceros = devolverPolos_Ceros(cerossympy)
-        polossympy=sympy.solve(den,sympy.symbols('s'))
-        #sympy.roots(den,sympy.symbols('s'))
+        #polossympy=sympy.solve(den,sympy.symbols('s'))
+        polossympy=sympy.roots(den,sympy.symbols('s'))
         polos = devolverPolos_Ceros(polossympy)
 
         return ceros,polos,gain
