@@ -1924,6 +1924,7 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
       ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
       ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
+    print((a/b)*100, tp,tr,errp)
     return (a/b)*100, tp,tr,errp
   elif (y[1] - y[0]) / (t[1] - t[0])>0.05:
     #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
