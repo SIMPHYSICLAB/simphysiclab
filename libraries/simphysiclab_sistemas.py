@@ -1941,6 +1941,7 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.plot([0, T], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
       ax.plot([T, T], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
       ax.annotate('T=%s s'%round(T,3),(T,pto_y-0.1),(T,pto_y-0.1))
+    print(123)
     return T
 
 def parametrosTipoRegimen(ax,y,t):
