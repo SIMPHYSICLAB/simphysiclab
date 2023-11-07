@@ -1824,7 +1824,7 @@ def dibujarRestriccionTs(ax,sigma,limites):
 
   return x3,y3
 
-def parametrosRespuestaTemporal(ax,valores,tiempo):
+def parametrosRespuestaTemporal(ax,y,t):
 
   """
   input:
@@ -1875,18 +1875,16 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
           ax.annotate('T=%s s'%round(ts,3),(ts,pto_y-0.1),(ts,pto_y-0.1))
   """
 
-  t=tiempo
-  y=valores
-
   b=y[len(t)-1]
   a=max(y)-b
   errp=1-y[len(t)-1]
 
-  ax.set(xlim=(-6.5, t[len(t)-1]+0.2), ylim=(-0.2, max(y)+0.2))
+  if ax!=None:
+    ax.set(xlim=(-6.5, t[len(t)-1]+0.2), ylim=(-0.2, max(y)+0.2))
 
-  ax.plot([0, 0], [0, y[len(t)-1]], c='green', ls='--', lw=1, alpha=1)
-  ax.annotate('b=%s'%round(b,3),(0,b/2),(0,b/2))
-  ax.annotate('vf=%s'%round(b,3),(t[len(t)-1],b),(t[len(t)-1],b))
+    ax.plot([0, 0], [0, y[len(t)-1]], c='green', ls='--', lw=1, alpha=1)
+    ax.annotate('b=%s'%round(b,3),(0,b/2),(0,b/2))
+    ax.annotate('vf=%s'%round(b,3),(t[len(t)-1],b),(t[len(t)-1],b))
 
 
   print("Errp: ",errp)
@@ -1894,10 +1892,11 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
 
 
   if (a/b)*100>2:
-    ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
-    ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
-    ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
-    ax.annotate('Mp=%s%%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
+    if ax!=None:
+      ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
+      ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
+      ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
+      ax.annotate('Mp=%s%%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
 
     print("Sobreoscilacion: ",100*(a/b),"%")
     print("b: ",b)
@@ -1916,15 +1915,15 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
         tr=t[i-1]
         ytr=y[i]
         break
-
-    ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
-    ax.annotate('tr=%s s'%round(tr,3),(tr,-0.1),(tr,-0.1))
-    ax.plot([tr, tr], [0, ytr], c='green', ls='--', lw=1, alpha=1)
-    ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
-    ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
-    ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
-    ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
-
+    if ax!=None:
+      ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
+      ax.annotate('tr=%s s'%round(tr,3),(tr,-0.1),(tr,-0.1))
+      ax.plot([tr, tr], [0, ytr], c='green', ls='--', lw=1, alpha=1)
+      ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
+      ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
+      ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
+      ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
+    return (a/b)*100, tp,tr,errp
   elif (y[1] - y[0]) / (t[1] - t[0])>0.05:
     #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
     pto_y=0.632*np.max(y)
@@ -1934,11 +1933,13 @@ def parametrosRespuestaTemporal(ax,valores,tiempo):
       if pto_y-y[i]<0:
         T=t[i-1]
         break
-    ax.plot([0, T], [0, np.max(y)], c='y', ls='--', lw=1, alpha=1)
-    ax.annotate('/=%s'%round(np.max(y)/T,3),(-5,np.max(y)/2),(-5,np.max(y)/2))
-    ax.plot([0, T], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
-    ax.plot([T, T], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
-    ax.annotate('T=%s s'%round(T,3),(T,pto_y-0.1),(T,pto_y-0.1))
+    if ax!=None:
+      ax.plot([0, T], [0, np.max(y)], c='y', ls='--', lw=1, alpha=1)
+      ax.annotate('/=%s'%round(np.max(y)/T,3),(-5,np.max(y)/2),(-5,np.max(y)/2))
+      ax.plot([0, T], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
+      ax.plot([T, T], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
+      ax.annotate('T=%s s'%round(T,3),(T,pto_y-0.1),(T,pto_y-0.1))
+    return T
 
 def parametrosTipoRegimen(ax,y,t):
 
@@ -1996,13 +1997,14 @@ def parametrosTipoRegimen(ax,y,t):
       rp=t[i-1]
       yp=pto_ymin
       break
-
-  ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
-  ax.annotate('Ts=%s s'%round(rp,3),(rp,0.3),(rp,0.3))
-  ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
-  ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
-  ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
-  ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
+  if ax!=None:
+    ax.plot([rp, rp], [0, yp], c='green', ls='--', lw=1, alpha=1)
+    ax.annotate('Ts=%s s'%round(rp,3),(rp,0.3),(rp,0.3))
+    ax.plot([0, rp], [yp, yp], c='red', ls='--', lw=1, alpha=1)
+    ax.plot([rp, t[len(t)-1]], [yp, yp], c='blue', ls='--', lw=1, alpha=1)
+    ax.annotate('Régimen \n transitorio',(rp/2,yp-0.1),(rp/2,yp-0.1))
+    ax.annotate('Régimen \n permanente',(t[len(t)-1]/2,yp-0.1),(t[len(t)-1]/2,yp-0.1))
+  return rp
 
 def parametrosTipoRegimenVideo(y,t,limites):
 
