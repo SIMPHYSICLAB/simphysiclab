@@ -1177,7 +1177,7 @@ def respuestaEscalon(ax,TF,tiempo):
 
   TF=forzarTFControl(TF)
 
-  t,y=control.step_response(TF,tiempo,X0=0)
+  t,y=control.step_response(TF,tiempo)
   if ax!=None:
     ax.plot(t,y)
   return y,t
