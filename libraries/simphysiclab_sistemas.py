@@ -1178,7 +1178,8 @@ def respuestaEscalon(ax,TF,tiempo):
   TF=forzarTFControl(TF)
 
   t,y=control.step_response(TF,tiempo)
-  ax.plot(t,y)
+  if ax!=None:
+    ax.plot(t,y)
   return y,t
 
 def ajustarLimites(limites):
