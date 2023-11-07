@@ -1891,7 +1891,6 @@ def parametrosRespuestaTemporal(ax,y,t):
   print("Errp: ",errp)
   print("valor final: ",b)
 
-  (a/b)*100
   if (a/b)*100>2:
     if ax!=None:
       ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
