@@ -1926,6 +1926,7 @@ def parametrosRespuestaTemporal(ax,y,t):
     return (a/b)*100, tp,tr,errp
   elif (y[1] - y[0]) / (t[1] - t[0])>0.05:
     #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
+    print("canuto")
     pto_y=0.632*np.max(y)
     round_pto_y=round(pto_y,5)
     round_K=round(np.max(y),5)
