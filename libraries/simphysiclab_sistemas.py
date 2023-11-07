@@ -1891,7 +1891,7 @@ def parametrosRespuestaTemporal(ax,y,t):
   print("Errp: ",errp)
   print("valor final: ",b)
 
-
+  (a/b)*100
   if (a/b)*100>2:
     if ax!=None:
       ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
@@ -1924,7 +1924,6 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
       ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
       ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
-    print((a/b)*100, tp,tr,errp)
     return (a/b)*100, tp,tr,errp
   elif (y[1] - y[0]) / (t[1] - t[0])>0.05:
     #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
@@ -1941,8 +1940,40 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.plot([0, T], [pto_y, pto_y], c='r', ls='--', lw=1, alpha=1)
       ax.plot([T, T], [0, pto_y], c='g', ls='--', lw=1, alpha=1)
       ax.annotate('T=%s s'%round(T,3),(T,pto_y-0.1),(T,pto_y-0.1))
-    print(123)
     return T
+  else:
+    if ax!=None:
+      ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
+      ax.annotate('a=%s'%round(a,3),(0,b+a/2),(0,b+a/2))
+      ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
+      ax.annotate('Mp=%s%%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
+
+    print("Sobreoscilacion: ",100*(a/b),"%")
+    print("b: ",b)
+    print("a: ",a)
+    print("Mp: ",(a/b)*100)
+    print("max: ",a+b)
+
+    tp=t[np.argmax(y)]
+    print("tp: ",tp,"s")
+
+    tr=[]
+    ytr=[]
+    vfind=y[len(t)-1]
+    for i in range(len(y)):
+      if vfind-y[i]<0:
+        tr=t[i-1]
+        ytr=y[i]
+        break
+    if ax!=None:
+      ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
+      ax.annotate('tr=%s s'%round(tr,3),(tr,-0.1),(tr,-0.1))
+      ax.plot([tr, tr], [0, ytr], c='green', ls='--', lw=1, alpha=1)
+      ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
+      ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
+      ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
+      ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
+    return (a/b)*100, tp,tr,errp
 
 def parametrosTipoRegimen(ax,y,t):
 
