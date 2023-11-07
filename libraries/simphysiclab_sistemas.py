@@ -1977,9 +1977,9 @@ def parametrosRespuestaTemporal(ax,y,t):
 
 def parametrosRespuestaTemporalSistema(TF):
 
-  tipo=SIS.tipoRespuestaNorden(TF)
+  tipo=tipoRespuestaNorden(TF)
 
-  y,t=SIS.respuestaEscalon(None,TF,20)
+  y,t=respuestaEscalon(None,TF,20)
 
   if tipo!=None and tipo !=-1:
 
