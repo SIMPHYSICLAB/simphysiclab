@@ -1887,10 +1887,6 @@ def parametrosRespuestaTemporal(ax,y,t):
     ax.annotate('b=%s'%round(b,3),(0,b/2),(0,b/2))
     ax.annotate('vf=%s'%round(b,3),(t[len(t)-1],b),(t[len(t)-1],b))
 
-
-  print("Errp: ",errp)
-  print("valor final: ",b)
-
   if (a/b)*100>2:
     if ax!=None:
       ax.plot([0, 0], [y[len(t)-1], max(y)], c='blue', ls='--', lw=1, alpha=1)
@@ -1898,14 +1894,7 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
       ax.annotate('Mp=%s%%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
 
-    print("Sobreoscilacion: ",100*(a/b),"%")
-    print("b: ",b)
-    print("a: ",a)
-    print("Mp: ",(a/b)*100)
-    print("max: ",a+b)
-
     tp=t[np.argmax(y)]
-    print("tp: ",tp,"s")
 
     tr=[]
     ytr=[]
@@ -1926,7 +1915,6 @@ def parametrosRespuestaTemporal(ax,y,t):
     return (a/b)*100, tp,tr,errp
   elif (y[1] - y[0]) / (t[1] - t[0])>1:
     #EDUARDO!!!, ESTA CONDICION ES PORQUE ES SOLO PARA PRIMER ORDEN
-    print("canuto,",(y[1] - y[0]) / (t[1] - t[0]))
     pto_y=0.632*np.max(y)
     round_pto_y=round(pto_y,5)
     round_K=round(np.max(y),5)
@@ -1948,14 +1936,7 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.annotate('a+b=%s'%round(a+b,3),(-6,(b+a)/2),(-6,(b+a)/2))
       ax.annotate('Mp=%s%%'%round((a/b)*100),(-6,((b+a)/2)-0.3),(-6,((b+a)/2)-0.3))
 
-    print("Sobreoscilacion: ",100*(a/b),"%")
-    print("b: ",b)
-    print("a: ",a)
-    print("Mp: ",(a/b)*100)
-    print("max: ",a+b)
-
     tp=t[np.argmax(y)]
-    print("tp: ",tp,"s")
 
     tr=[]
     ytr=[]
@@ -1987,17 +1968,7 @@ def parametrosRespuestaTemporalSistemaOrdenSuperior(TF):
     a=max(y)-b
     errp=1-y[len(t)-1]
 
-    print("Errp: ",errp)
-    print("valor final: ",b)
-
-    print("Sobreoscilacion: ",100*(a/b),"%")
-    print("b: ",b)
-    print("a: ",a)
-    print("Mp: ",(a/b)*100)
-    print("max: ",a+b)
-
     tp=t[np.argmax(y)]
-    print("tp: ",tp,"s")
 
     tr=[]
     ytr=[]
