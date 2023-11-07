@@ -1975,7 +1975,7 @@ def parametrosRespuestaTemporal(ax,y,t):
       ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
     return (a/b)*100, tp,tr,errp
 
-def parametrosRespuestaTemporalSistema(TF):
+def parametrosRespuestaTemporalSistemaOrdenSuperior(TF):
 
   tipo=tipoRespuestaNorden(TF)
 
@@ -2007,14 +2007,6 @@ def parametrosRespuestaTemporalSistema(TF):
         tr=t[i-1]
         ytr=y[i]
         break
-    if ax!=None:
-      ax.annotate('tp=%s s'%round(tp,3),(tp,0.1),(tp,0.1))
-      ax.annotate('tr=%s s'%round(tr,3),(tr,-0.1),(tr,-0.1))
-      ax.plot([tr, tr], [0, ytr], c='green', ls='--', lw=1, alpha=1)
-      ax.plot([0, tp], [y[len(t)-1], y[len(t)-1]], c='red', ls='--', lw=1, alpha=1)
-      ax.plot([0, tp], [a+b, a+b], c='b', ls='--', lw=1, alpha=1)
-      ax.plot([tp, tp], [0, y[np.argmax(y)]], c='green', ls='--', lw=1, alpha=1)
-      ax.plot([tp, t[len(t)-1]], [y[len(t)-1], y[len(t)-1]], c='black', ls='--', lw=1, alpha=1)
     return (a/b)*100, tp,tr,errp
 
 def parametrosTipoRegimen(ax,y,t):
