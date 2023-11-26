@@ -1182,6 +1182,26 @@ def respuestaEscalon(ax,TF,tiempo):
     ax.plot(t,y)
   return y,t
 
+def respuestaRampa(ax,TF,tiempo,paso=0.1):
+  TF=forzarTFControl(TF)
+  lineatiempo = np.linspace(0, paso, tiempo)
+  ramp_input = lineatiempo
+  t, y = control.forced_response(TF, T=lineatiempo, U=ramp_input)
+  if ax!=None:
+    ax.plot(t,y)
+  return y,t
+
+def respuestaParabola(ax,TF,tiempo,paso=0.1):
+  TF=forzarTFControl(TF)
+  lineatiempo = np.linspace(0, paso, tiempo)
+  parabola_input = lineatiempo**2
+  t, y = control.forced_response(TF, T=lineatiempo, U=parabola_input)
+  if ax!=None:
+    ax.plot(t,y)
+  return y,t
+
+def respuestaParabola(ax,TF,tiempo):
+
 def ajustarLimites(limites):
   """
   input:
