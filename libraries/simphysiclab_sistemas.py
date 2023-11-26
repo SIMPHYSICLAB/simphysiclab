@@ -1200,8 +1200,6 @@ def respuestaParabola(ax,TF,tiempo,paso=0.1):
     ax.plot(t,y)
   return y,t
 
-def respuestaParabola(ax,TF,tiempo):
-
 def ajustarLimites(limites):
   """
   input:
